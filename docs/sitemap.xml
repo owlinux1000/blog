@@ -8,6 +8,10 @@
   </url>
   
   <url>
+    <loc>https://owlinux1000.github.io/blog/archives/</loc>
+  </url>
+  
+  <url>
     <loc>https://owlinux1000.github.io/blog/categories/</loc>
     <priority>0</priority>
   </url>
