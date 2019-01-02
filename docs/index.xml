@@ -12,12 +12,51 @@
     
     
     <item>
-      <title>新年なのでHugo でGitHub Pages にデプロイしてみた</title>
+      <title>新年なのでHugo でGitHub Pages にデプロイ</title>
       <link>https://owlinux1000.github.io/blog/posts/helloworld/</link>
       <pubDate>Wed, 02 Jan 2019 22:27:14 +0900</pubDate>
       
       <guid>https://owlinux1000.github.io/blog/posts/helloworld/</guid>
-      <description>&lt;p&gt;テスト&lt;/p&gt;
+      <description>
+
+&lt;ul&gt;
+&lt;li&gt;あけましておめでとうございます。本年もよろしくお願いいたします。&lt;br /&gt;
+新年なので、Hugo で技術ブログを作成してみました。私ははてなブログやMedium などいろいろサイトを持っているわけですが、このブログには自分の備忘録的なことを書いて行こうと思います。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;1-hugo-のインストールと事前準備&#34;&gt;1. Hugo のインストールと事前準備&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub に&lt;code&gt;blog&lt;/code&gt; というリポジトリを作成(アクセスする際には、&lt;code&gt;https://owlinux1000.github.io/blog/&lt;/code&gt;) して、GitHubの設定で &lt;strong&gt;masterブランチのdocs/&lt;/strong&gt; を公開対象として設定する。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;config.toml&lt;/code&gt; を編集する際には、&lt;code&gt;publishDir = &amp;quot;docs&amp;quot;&lt;/code&gt; を追加しておく。これはGitHub 側で公開するディレクトリを&lt;code&gt;docs&lt;/code&gt; にしているから。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ brew install hugo
+$ hugo new site blog
+$ cd blog
+$ git init
+$ cd themes
+$ git submodule add https://github.com/resugary/hugo-theme-one one
+$ cp one/exampleSite/config.toml ../../../
+$ emacs config.toml # 適宜パラメータを修正する&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;2-記事作成&#34;&gt;2. 記事作成&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;hugo コマンドで記事を作成してまずは、server サブコマンドを使ってPreview を見てみる。大丈夫そうならGitHub にpushする&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;$ hugo new posts/helloworld &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# この記事&lt;/span&gt;
+$ emacs content/posts/helloworld.md &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# draft: false に変更&lt;/span&gt;
+$ hugo &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# Webページを生成。これでdocsに吐かれる&lt;/span&gt;
+$ hugo server &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# アクセスして見れるか確認する&lt;/span&gt;
+$ git add .
+$ git commit -m &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1st commit!&amp;#34;&lt;/span&gt;
+$ git remote add origin git@github.com:owlinux1000/blog.git
+$ git push -u origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Hugo を初めて使ってみた感想として結構めんどくさくなかったと思った。ネット上見てるとCIでがんばったりいろいろ見ていたので、プロジェクトサイトでのデプロイにした。毎月1本程度では継続していきたい。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
