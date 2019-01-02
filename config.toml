@@ -1,10 +1,9 @@
 # End your baseURL with a `/` trailing slash, e.g. `https://example.com/`.
-baseURL = "https://example.com/"
+baseURL = "https://owlinux1000.github.com/blog/"
 
 languageCode = "en-us"
-title = "Hugo Theme One"
+title = "OwLinux1000's Blog"
 theme = "one"
-googleAnalytics = "UA-123-45"
 publishDir = "docs"
 
 # Chroma Syntax Highlighting
