@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>フォレンジックのためのシステム時刻入門</title>
+	
+	<meta name="description" content="">
+	<meta name="image" content="">
+	
+	<meta itemprop="name" content="フォレンジックのためのシステム時刻入門">
+	<meta itemprop="description" content="">
+	<meta itemprop="image" content="">
+	
+	<meta name="og:title" content="フォレンジックのためのシステム時刻入門">
+	<meta name="og:description" content="">
+	
+	<meta name="og:url" content="https://owlinux1000.github.io/blog/posts/system_time_for_forensics/">
+	<meta name="og:site_name" content="フォレンジックのためのシステム時刻入門">
+	<meta name="og:type" content="article">
+	
+	<meta name="article:tag" content="">
+	<link rel="stylesheet" type="text/css" href="https://owlinux1000.github.io/blog/css/style.css">
+	
+	
+</head>
+
+<body>
+
+<header>
+	
+	<a href="https://owlinux1000.github.io/blog/" style="float: left;color:#ff3b30;">OwLinux1000&#39;s Blog</a>
+	
+	&nbsp;&nbsp;<a href="https://owlinux1000.github.io/blog/archives/" style="color:#777;">Archives</a>&nbsp;&nbsp;
+	
+	<a href="https://owlinux1000.github.io/blog/posts/index.xml" style="color:#777;float: right;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a>
+</header>
+
+
+<div class="content">
+  <h1>フォレンジックのためのシステム時刻入門</h1>
+  <aside></aside>
+  <p>
+
+<ul>
+<li>フォレンジックなどをやっていると様々な時刻形式と直面することがあります。いざ調べてみると時刻形式は、プラットフォームによって異なる場合が多いことに気づきました。時刻の情報はタイムライン作成では、とても重要な要因となってくるので、適切に時刻を解釈することが必要です。本記事では、よく見る3つの時刻表記についてご紹介します。</li>
+</ul>
+
+<h2 id="unix-time">UNIX time</h2>
+
+<ul>
+<li>UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。<strong>UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#008000">require</span> <span style="color:#ba2121">&#39;time&#39;</span>
+<span style="color:#800">JST_OFFSET</span> <span style="color:#666">=</span> <span style="color:#666">3600</span> <span style="color:#666">*</span> <span style="color:#666">9</span>
+<span style="color:#008000">puts</span> <span style="color:#800">Time</span><span style="color:#666">.</span>parse(<span style="color:#ba2121">&#34;1970-01-01 00:00:00&#34;</span>)<span style="color:#666">.</span>to_i <span style="color:#666">+</span> <span style="color:#800">JST_OFFSET</span> <span style="color:#408080;font-style:italic">#=&gt; 0</span>
+<span style="color:#008000">puts</span> <span style="color:#800">Time</span><span style="color:#666">.</span>at(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic">#=&gt; 1970-01-01 09:00:00 +0900</span></code></pre></div>
+<h2 id="apple-cocoa-core-data-timestamp">Apple Cocoa Core Data timestamp</h2>
+
+<ul>
+<li>Apple Cocoa Core Data timestampは、主にMac OSやiOSで見かける時刻形式です。Cocoaとは、macOS用のフレームワークです。また、<strong>Mac absolute time</strong>と表記されることもあります。本時刻形式は、<strong>UTCの2001年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。UNIX timeとの差分は、<strong>978307200</strong>なので、これを考慮すればUNIX timeからすぐ算出することができます。</li>
+</ul>
+
+<h2 id="webkit-chrome-time">WebKit/Chrome time</h2>
+
+<ul>
+<li>WebKit/Chrome timeは、Google Chrome、OperaやSafariなどのデータで使われている時刻形式です。本時刻形式は、<strong>UTCの1601年1月1日0時0分0秒からの経過マイクロ秒</strong>で表す時刻形式です。UNIX timeなどと異なりマイクロ秒なので値が大きいという特徴があります。</li>
+</ul>
+
+<h2 id="便利なツールやサイト">便利なツールやサイト</h2>
+
+<p>以下の2つは、システム時刻変換をする際に、使いやすかったツールです。</p>
+
+<ul>
+<li><a href="https://www.epochconverter.com/">Epoch Converter</a>
+
+<ul>
+<li>本記事で説明した時刻形式などは概ねカバーしているツールです</li>
+</ul></li>
+<li><a href="https://www.digital-detective.net/dcode/">DCode</a>
+
+<ul>
+<li>Epoch Converterと同様の機能を有しているWindowsアプリケーション</li>
+</ul></li>
+</ul>
+
+<h2 id="参考文献">参考文献</h2>
+
+<ul>
+<li><a href="https://www.packtpub.com/networking-and-servers/practical-mobile-forensics-third-edition">Practical Mobile Forensics - Third Edition</a></li>
+</ul>
+</p>
+</div>
+
+
+  <p>Written on Feb 23, 2019.</p>
+
+
+<footer>
+	<p>&copy; 2019 All rights reserved.</p>
+</footer>
+</body>
+</html>

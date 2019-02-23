@@ -6,10 +6,68 @@
     <description>Recent content on OwLinux1000&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Jan 2019 22:27:14 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 23 Feb 2019 20:37:24 +0900</lastBuildDate>
     
         <atom:link href="https://owlinux1000.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>フォレンジックのためのシステム時刻入門</title>
+      <link>https://owlinux1000.github.io/blog/posts/system_time_for_forensics/</link>
+      <pubDate>Sat, 23 Feb 2019 20:37:24 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/posts/system_time_for_forensics/</guid>
+      <description>
+
+&lt;ul&gt;
+&lt;li&gt;フォレンジックなどをやっていると様々な時刻形式と直面することがあります。いざ調べてみると時刻形式は、プラットフォームによって異なる場合が多いことに気づきました。時刻の情報はタイムライン作成では、とても重要な要因となってくるので、適切に時刻を解釈することが必要です。本記事では、よく見る3つの時刻表記についてご紹介します。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;unix-time&#34;&gt;UNIX time&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。&lt;strong&gt;UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数&lt;/strong&gt;で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;time&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#800&#34;&gt;JST_OFFSET&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;3600&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;9&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Time&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;parse(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1970-01-01 00:00:00&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_i &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;JST_OFFSET&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#=&amp;gt; 0&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Time&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;at(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#=&amp;gt; 1970-01-01 09:00:00 +0900&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;apple-cocoa-core-data-timestamp&#34;&gt;Apple Cocoa Core Data timestamp&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Apple Cocoa Core Data timestampは、主にMac OSやiOSで見かける時刻形式です。Cocoaとは、macOS用のフレームワークです。また、&lt;strong&gt;Mac absolute time&lt;/strong&gt;と表記されることもあります。本時刻形式は、&lt;strong&gt;UTCの2001年1月1日0時0分0秒からの経過秒数&lt;/strong&gt;で表す時刻形式です。UNIX timeとの差分は、&lt;strong&gt;978307200&lt;/strong&gt;なので、これを考慮すればUNIX timeからすぐ算出することができます。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;webkit-chrome-time&#34;&gt;WebKit/Chrome time&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WebKit/Chrome timeは、Google Chrome、OperaやSafariなどのデータで使われている時刻形式です。本時刻形式は、&lt;strong&gt;UTCの1601年1月1日0時0分0秒からの経過マイクロ秒&lt;/strong&gt;で表す時刻形式です。UNIX timeなどと異なりマイクロ秒なので値が大きいという特徴があります。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;便利なツールやサイト&#34;&gt;便利なツールやサイト&lt;/h2&gt;
+
+&lt;p&gt;以下の2つは、システム時刻変換をする際に、使いやすかったツールです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.epochconverter.com/&#34;&gt;Epoch Converter&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;本記事で説明した時刻形式などは概ねカバーしているツールです&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.digital-detective.net/dcode/&#34;&gt;DCode&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Epoch Converterと同様の機能を有しているWindowsアプリケーション&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.packtpub.com/networking-and-servers/practical-mobile-forensics-third-edition&#34;&gt;Practical Mobile Forensics - Third Edition&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>新年なのでHugo でGitHub Pages にデプロイ</title>
