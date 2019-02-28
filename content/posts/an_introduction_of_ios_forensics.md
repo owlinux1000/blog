@@ -38,8 +38,9 @@ iOSデバイスにおけるデータを抽出する方法としては、物理�
 
 iOSデバイスのバックアップデータは、以下の場所に格納されます。  
 
-* Mac：`\AppData\Roaming\Apple Computer\MobileSync\Backup\`
-* Windows 10：`/Users/chihiro/Library/Application Support/MobileSync/Backup`
+* Mac：`/User/ユーザ名/Library/Application Support/MobileSync/Backup`
+* Windows：`\AppData\Roaming\Apple Computer\MobileSync\Backup\`
+* Windowsストアアプリ経由でiTunesを入れた場合：`%USERPROFILE%\Apple\MobileSync\Backup`
 
 バックアップを行っている状態で、上記フォルダにアクセスするとハッシュ値が名前のフォルダがあると思います。それがバックアップデータの本体です。バックアップデータのフォルダの中には、主に以下のファイルやフォルダが格納されていると思います。
 
@@ -72,7 +73,8 @@ Info.plistは、主にバックアップ対象のデバイス情報について�
 $ plutil -t convert xml1 Info.plist -o Info.xml
 ```
 
-`-o`オプションを忘れてしまうとplistファイル自体の中身が書き換わってしまうので注意してください。
+`-o`オプションを忘れてしまうとplistファイル自体の中身が書き換わってしまうので注意してください。  
+その他Pythonが利用できる環境であれば、`plistlib`ライブラリが利用できるので、これを用いてプログラマブルに解析することも可能です。
 
 ### iExplorer
 
