@@ -3,7 +3,8 @@ baseURL = "https://owlinux1000.github.io/blog/"
 
 languageCode = "en-us"
 title = "OwLinux1000's Blog"
-theme = "one"
+# theme = "one"
+theme = "hugo-flex"
 publishDir = "docs"
 
 # Chroma Syntax Highlighting
