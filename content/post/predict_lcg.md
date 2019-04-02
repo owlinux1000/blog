@@ -2,6 +2,9 @@
 title: "線形合同法で生成される乱数値を予測する"
 date: 2019-04-01T22:33:26+09:00
 draft: false
+categories:
+- cryptography
+
 ---
 
 ## はじめに

@@ -2,6 +2,10 @@
 title: "iOSデバイスフォレンジック入門"
 date: 2019-02-28T21:00:00+09:00
 draft: false
+categories:
+- forensics
+tags:
+- mobile
 ---
 
 ## はじめに

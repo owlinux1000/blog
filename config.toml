@@ -2,7 +2,7 @@
 baseURL = "https://owlinux1000.github.io/blog/"
 
 languageCode = "en-us"
-title = "OwLinux1000's Blog"
+title = "$ make life"
 # theme = "one"
 theme = "hugo-flex"
 publishDir = "docs"
@@ -11,7 +11,3 @@ publishDir = "docs"
 pygmentsCodefences = true
 pygmentsCodefencesGuessSyntax = true
 pygmentsStyle = "pygments"
-
-[params]
-    navigation = ["archives.md", "about.md"]
-

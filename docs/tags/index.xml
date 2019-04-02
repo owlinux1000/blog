@@ -11,7 +11,7 @@
       <html lang="en-us">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Tags RSS | OwLinux1000&#39;s Blog</title>
+          <title>Tags RSS | $ make life</title>
           <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=" />
         </head>
         <body>
@@ -19,7 +19,7 @@
   <div class="u-wrapper">
     <ul class="Banner">
       <li class="Banner-item Banner-item--title">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">OwLinux1000&#39;s Blog</a>
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
       </li>
       
       <li class="Banner-item">
@@ -75,11 +75,12 @@
     </xsl:template>
   </xsl:stylesheet>
   <channel>
-    <title>Tags on OwLinux1000&#39;s Blog</title>
+    <title>Tags on $ make life</title>
     <link>https://owlinux1000.github.io/blog/tags/</link>
-    <description>Recent content in Tags on OwLinux1000&#39;s Blog</description>
+    <description>Recent content in Tags on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Wed, 06 Mar 2019 23:10:49 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

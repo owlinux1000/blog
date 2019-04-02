@@ -2,6 +2,10 @@
 title: binarycookiesファイル解析ツールbincookie
 date: 2019-03-06T23:10:49+09:00
 draft: false
+categories:
+- forensics
+tags:
+- mobile
 ---
 
 ## はじめに
