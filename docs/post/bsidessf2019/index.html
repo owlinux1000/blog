@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
     
-    $ make life
+    BesidesCTF 2019 writeup | $ make life
     
   </title>
   
@@ -60,94 +60,45 @@
 <article>
   <header class="Heading">
   <h2 class="Heading-title">
-    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/about/" rel="bookmark"></a>
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/bsidessf2019/" rel="bookmark">BesidesCTF 2019 writeup</a>
   </h2>
+  
+  <time datetime="2019-03-10T22:43:52&#43;09:00">
+    10 March, 2019
+  </time>
   
 </header>
   
 
-<h2 id="profile">Profile</h2>
+<h2 id="blink">blink</h2>
 
 <ul>
-<li>Chihiro Hasegawa</li>
-<li>1996/03/28</li>
-<li>Kanagawa, Japan</li>
-<li>encry1024[at]gmail.com</li>
-<li>Security Engineer at XXX (since 2018/04/01)</li>
+<li>apkが渡されるのでunzipして、<code>classes.dex</code>をdex2jarでjarファイルに変換</li>
+<li>jarファイルをunzipして、classファイルをjadで一括逆コンパイル</li>
+<li>適当にファイルを眺めていると<code>/com/example/blink/r2d2.jad</code>にbase64でエンコードされた文字列があるのでデコード</li>
+<li><code>CTF{PUCKMAN}</code>と書かれた画像が出てくる</li>
 </ul>
 
-<h2 id="interest">Interest</h2>
+<h2 id="zippy">zippy</h2>
 
 <ul>
-<li>Binary Exploitation</li>
-<li>Malware Analysis</li>
-<li>DFIR
-
-<ul>
-<li>Mobile Forensics-<br /></li>
-</ul></li>
+<li>pcapngが渡されるのでFollo TCP Streamをすると<code>supercomplexpassword</code>がzipのパスワードだとわかる</li>
+<li>パケットからzipファイルを通信してるパケットを見つけて抽出</li>
+<li>パスワードを使ってunzipすると中のflag.txtに<code>CTF{this_flag_is_your_flag}</code></li>
 </ul>
 
-<h2 id="skills">Skills</h2>
+<h2 id="futurella">futurella</h2>
 
 <ul>
-<li>Programming
-
-<ul>
-<li>C, Ruby, Go, assembly (x86, amd64, arm, mips), Python</li>
-<li>JavaScript (include TypeScript)</li>
-<li>Angular</li>
-<li>Vue</li>
-</ul></li>
-<li>Infrastructure
-
-<ul>
-<li>Vagrant</li>
-<li>Ansible</li>
-<li>Docker, Docker Compose</li>
-<li>Kubernetes (learning)</li>
-<li>Monitor (Zabbix, Prometheus, SNMP)
-<br /></li>
-</ul></li>
+<li>HTMLのソースを見ると<code>CTF{bring_it_back}</code></li>
 </ul>
 
-<h2 id="activites">Activites</h2>
+<h2 id="kookie">kookie</h2>
 
 <ul>
-<li>TokyoWesterns CTF 2018 (staff)</li>
-<li>SECCON Beginners 2018 (staff)</li>
-<li>14th IEEE Colloquium on Signal Processing and its Applications</li>
-<li>Cpaw AI Competition 1st, 2nd (staff)</li>
-<li>Security Camp 2017 (tutor)</li>
-<li>Cyber Colosseo 2017</li>
-<li>SECCON Beginners 2017 (staff)</li>
-<li>TokyoWesterns CTF 2017 (staff)</li>
-<li>セキュリティコンテストのためのCTF問題集 (co-author)</li>
-<li>CODEBLUE 2016,2017 student staff</li>
-<li>SECCON 2016 Final</li>
-<li>SECCON 2016 OSAKA</li>
-<li>Cpaw CTF (staff)</li>
-<li>Security Camp 2016</li>
-</ul>
-
-<h2 id="hobbies">Hobbies</h2>
-
-<ul>
-<li>CTF(Capture The Flag)</li>
-<li>Karaoke</li>
-<li>Western Art</li>
-<li>Swimming</li>
-<li>Tea ceremony</li>
-<li>Watching movies</li>
-</ul>
-
-<h2 id="links">Links</h2>
-
-<ul>
-<li><a href="https://github.com/owlinux1000">GitHub</a></li>
-<li><a href="https://git.alicemacs.com/explore/repos">Gogs</a></li>
-<li><a href="https://filmarks.com/users/Alice1000">Filmarks</a></li>
-<li><a href="https://encry1024.hatenablog.com">HatenaBlog</a></li>
+<li><code>cookie/monster</code>でログインできるのでログインする</li>
+<li>その際のCookieを見ると、<code>cookie</code>になっているので、これを<code>admin</code>に変更</li>
+<li>その後reloadすると<code>CTF{kookie_cookies}</code></li>
 </ul>
 
   

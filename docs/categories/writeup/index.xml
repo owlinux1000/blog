@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+
+
+
+
+<?xml-stylesheet type="text/xsl" href="#stylesheet" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <xsl:stylesheet id="stylesheet" version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xsl">
+    <xsl:output method="html" doctype-system="about:legacy-compat" />
+    <xsl:template match="/rss">
+      <html lang="en-us">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Writeup RSS | $ make life</title>
+          <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=" />
+        </head>
+        <body>
+          <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+          <main>
+            <div class="u-wrapper">
+              <div class="u-padding">
+                <h2 class="Heading-title">
+                  
+                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="bookmark">Writeup RSS</a>
+                  
+                </h2>
+                
+                <p>
+                  To subscribe to this RSS feed, copy its address and paste it into your favorite feed reader.
+                </p>
+                
+              </div>
+            </div>
+          </main>
+          
+<footer class="Footer">
+  <div class="u-wrapper">
+    <div class="u-padding">
+      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+    </div>
+  </div>
+</footer>
+
+        </body>
+      </html>
+    </xsl:template>
+  </xsl:stylesheet>
+  <channel>
+    <title>Writeup on $ make life</title>
+    <link>https://owlinux1000.github.io/blog/categories/writeup/</link>
+    <description>Recent content in Writeup on $ make life</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Mar 2019 22:48:37 +0900</lastBuildDate>
+    <atom:link href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PragyanCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/post/pragyan2019/</link>
+      <pubDate>Sun, 10 Mar 2019 22:48:37 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/pragyan2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;welcome&#34;&gt;Welcome&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す&lt;/li&gt;
+&lt;li&gt;取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される&lt;/li&gt;
+&lt;li&gt;bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード&lt;/li&gt;
+&lt;li&gt;zipを展開するとpngファイルがでてくる&lt;/li&gt;
+&lt;li&gt;stegosolveで適当にぽちぽちやるとFLAG&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{st3gs0lv3_1s_u53ful}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;cookie-monster&#34;&gt;Cookie Monster&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Cookieにflagというフィールドがあり、MD5が設定されている&lt;/li&gt;
+&lt;li&gt;どこかのMD5クラックサイトで検索すると&lt;code&gt;pc&lt;/code&gt;がでてくる&lt;/li&gt;
+&lt;li&gt;フラグフォーマットは、&lt;code&gt;pctf{&lt;/code&gt;なのでひたすらこのCookieのMD5の元を考えれば良いとわかる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;feed-me&#34;&gt;Feed_me&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;バイナリを読むと、渡された乱数3つがチェック用の値になっている&lt;/li&gt;
+&lt;li&gt;入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数
+&lt;code&gt;
+x + y = a1
+y + z = a2
+x + z = a3
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;自分が解いたときのケース
+&lt;code&gt;
+Can you cook my favourite food using these ingredients :)
+-10026 ; -8250 ; -12490 ;
+-000007133-000002893-000005357
+That&#39;s yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;game-of-faces&#34;&gt;Game of Faces&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える&lt;/li&gt;
+&lt;li&gt;適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる&lt;/li&gt;
+&lt;li&gt;ファイル名で直接アクセスするとフラグ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{You_L00K_Wi3Rd_IN_H3R3}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;easy-rsa&#34;&gt;Easy RSA&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&amp;rsquo;s Attackだとわかる&lt;/li&gt;
+&lt;li&gt;コード書いて、秘密鍵dを計算すると&lt;code&gt;12978409760901509356642421072925801006324287746872153539187221529835976408177&lt;/code&gt;だとわかる&lt;/li&gt;
+&lt;li&gt;あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;late-pr&#34;&gt;Late PR&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される&lt;/li&gt;
+&lt;li&gt;vol.pyでプロセスを見るとchrome.exeがexitしていることがわかり、GoogleChromeCrashHandler.exeというプロセスの存在に気づくので、当該プロセスのメモリダンプを見てみるとフラグ
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vol.py -f *.raw --profile Win7SP1x86_23418 pslist&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vol.py -f *.raw --profile Win7SP1x86_23418 memdump --dump-dir .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;strings 468.dmp | grep pctf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{Late_submissions_can_be_good}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;mandatory-php&#34;&gt;Mandatory PHP&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;以下のPHPのコードが渡される&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;?php&lt;/span&gt; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;flag.php&amp;#39;&lt;/span&gt;; 
+highlight_file(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;index.php&amp;#39;&lt;/span&gt;); 
+&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$_GET&lt;/span&gt;[&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;val1&amp;#34;&lt;/span&gt;]; 
+&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$_GET&lt;/span&gt;[&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;val2&amp;#34;&lt;/span&gt;]; 
+&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$_GET&lt;/span&gt;[&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;val3&amp;#34;&lt;/span&gt;]; 
+&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$_GET&lt;/span&gt;[&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;val4&amp;#34;&lt;/span&gt;]; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(preg_match(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;/[^A-Za-z]/&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;)) 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;oh my gawd...&amp;#39;&lt;/span&gt;); 
+&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;hash(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;sha256&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;); 
+&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;(log10(&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;**&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;0.5&lt;/span&gt;)))&lt;span style=&#34;color:#666&#34;&gt;**&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;) 
+&lt;span style=&#34;color:#19177c&#34;&gt;$s1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Bye...&amp;#34;&lt;/span&gt;); 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$s1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;) 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag1&lt;/span&gt;; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;lt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;10&lt;/span&gt;;&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;++&lt;/span&gt;){ 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;)) 
+        &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;duck&amp;#39;&lt;/span&gt;); 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
+        &lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;); 
+}     
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;WoAHh!&amp;#34;&lt;/span&gt;) 
+&lt;span style=&#34;color:#19177c&#34;&gt;$s2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;oops..&amp;#39;&lt;/span&gt;); 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$s2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;) 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag2&lt;/span&gt;; 
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;end...&amp;#39;&lt;/span&gt;); 
+&lt;span style=&#34;color:#bc7a00&#34;&gt;?&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;val1&lt;/code&gt;が&lt;code&gt;INF&lt;/code&gt;になるので、&lt;code&gt;val3&lt;/code&gt;と&lt;code&gt;val4&lt;/code&gt;でINFになるようにデカイ数を渡して、&lt;code&gt;val2&lt;/code&gt;は10回urldecodeして&lt;code&gt;WoAHh!&lt;/code&gt;になるようにパラメータを渡せば良い&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl &#39;http://159.89.166.12:14000///index.php?ffval1=0&amp;amp;val2=WoAHh%2525252525252525252521&amp;amp;val3=101&amp;amp;val4=大きい値&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{b3_c4r3fu1_w1th_pHp_f31145}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;終了後に解いた問題&#34;&gt;終了後に解いた問題&lt;/h2&gt;
+
+&lt;h3 id=&#34;magic-pngs&#34;&gt;Magic PNGs&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;パスワード付きzipとpngファイルが渡されるが、&lt;code&gt;file&lt;/code&gt;コマンドを叩くと&lt;code&gt;data&lt;/code&gt;都市てか表示されないためヘッダーなどが間違っていると推測できる&lt;/li&gt;
+&lt;li&gt;案の定Magic numberが間違っているので修正するが、それでも開かない&lt;/li&gt;
+&lt;li&gt;PNGは通常IDATチャンクがあるはずだが、そのキーワードが&lt;code&gt;idat&lt;/code&gt;と小文字になっていたのでこれを修正すると開けて、&lt;code&gt;h4CK3RM4n&lt;/code&gt;が読み取れる&lt;/li&gt;
+&lt;li&gt;ヒントから、この値をmd5してパスワードzipを展開するとフラグ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{y0u_s33_m33_n0w!}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ファイルヘッダーとかが違うところに気づいていなかった&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;exorcism&#34;&gt;EXORcism&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;大量の1と0があるファイルを渡される&lt;/li&gt;
+&lt;li&gt;100x100の正方形に整形して、1をスペース、0は黒として描画するとQRコードになる&lt;/li&gt;
+&lt;li&gt;QRコードを読み取ると、&lt;code&gt;160f15011d1b095339595138535f135613595e1a&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;タイトルがXORなので、この文字列となにかをxorする必要があると推測できる&lt;/li&gt;
+&lt;li&gt;フラグフォーマットの&lt;code&gt;pctf{&lt;/code&gt;になるようにxorする値を計算すると&lt;code&gt;flagf&lt;/code&gt;になるので、&lt;code&gt;flag&lt;/code&gt;を繰り返してxorすれば良いとわかるので、それで計算するとフラグ&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{wh4_50_53r1u5?}&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;そもそもQRコードになるなんて想像ができなかった&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;save-earth&#34;&gt;Save Earth&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;USBパケットのデータが渡されて入力した値を求めさせる&lt;/li&gt;
+&lt;li&gt;データ内にasciiがないので、間隔つまりモールス信号だと推測する&lt;/li&gt;
+&lt;li&gt;USBパケットの末尾のデータ部から4をスペース、1と2をそれぞれモールス信号にするとフラグが得られる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CTFS4V3&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    <item>
+      <title>BesidesCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/post/bsidessf2019/</link>
+      <pubDate>Sun, 10 Mar 2019 22:43:52 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/bsidessf2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;blink&#34;&gt;blink&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;apkが渡されるのでunzipして、&lt;code&gt;classes.dex&lt;/code&gt;をdex2jarでjarファイルに変換&lt;/li&gt;
+&lt;li&gt;jarファイルをunzipして、classファイルをjadで一括逆コンパイル&lt;/li&gt;
+&lt;li&gt;適当にファイルを眺めていると&lt;code&gt;/com/example/blink/r2d2.jad&lt;/code&gt;にbase64でエンコードされた文字列があるのでデコード&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;CTF{PUCKMAN}&lt;/code&gt;と書かれた画像が出てくる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;zippy&#34;&gt;zippy&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;pcapngが渡されるのでFollo TCP Streamをすると&lt;code&gt;supercomplexpassword&lt;/code&gt;がzipのパスワードだとわかる&lt;/li&gt;
+&lt;li&gt;パケットからzipファイルを通信してるパケットを見つけて抽出&lt;/li&gt;
+&lt;li&gt;パスワードを使ってunzipすると中のflag.txtに&lt;code&gt;CTF{this_flag_is_your_flag}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;futurella&#34;&gt;futurella&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HTMLのソースを見ると&lt;code&gt;CTF{bring_it_back}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;kookie&#34;&gt;kookie&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;cookie/monster&lt;/code&gt;でログインできるのでログインする&lt;/li&gt;
+&lt;li&gt;その際のCookieを見ると、&lt;code&gt;cookie&lt;/code&gt;になっているので、これを&lt;code&gt;admin&lt;/code&gt;に変更&lt;/li&gt;
+&lt;li&gt;その後reloadすると&lt;code&gt;CTF{kookie_cookies}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+  </channel>
+</rss>

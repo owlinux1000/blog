@@ -1,0 +1,240 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    
+    PragyanCTF 2019 writeup | $ make life
+    
+  </title>
+  
+  
+  <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
+  
+  <meta name="generator" content="Hugo 0.53" />
+</head>
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/pragyan2019/" rel="bookmark">PragyanCTF 2019 writeup</a>
+  </h2>
+  
+  <time datetime="2019-03-10T22:48:37&#43;09:00">
+    10 March, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="welcome">Welcome</h2>
+
+<ul>
+<li>JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す</li>
+<li>取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される</li>
+<li>bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード</li>
+<li>zipを展開するとpngファイルがでてくる</li>
+<li>stegosolveで適当にぽちぽちやるとFLAG</li>
+<li><code>pctf{st3gs0lv3_1s_u53ful}</code></li>
+</ul>
+
+<h2 id="cookie-monster">Cookie Monster</h2>
+
+<ul>
+<li>Cookieにflagというフィールドがあり、MD5が設定されている</li>
+<li>どこかのMD5クラックサイトで検索すると<code>pc</code>がでてくる</li>
+<li>フラグフォーマットは、<code>pctf{</code>なのでひたすらこのCookieのMD5の元を考えれば良いとわかる</li>
+<li><code>pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}</code></li>
+</ul>
+
+<h2 id="feed-me">Feed_me</h2>
+
+<ul>
+<li>バイナリを読むと、渡された乱数3つがチェック用の値になっている</li>
+<li>入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数
+<code>
+x + y = a1
+y + z = a2
+x + z = a3
+</code></li>
+<li>自分が解いたときのケース
+<code>
+Can you cook my favourite food using these ingredients :)
+-10026 ; -8250 ; -12490 ;
+-000007133-000002893-000005357
+That's yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
+</code></li>
+</ul>
+
+<h2 id="game-of-faces">Game of Faces</h2>
+
+<ul>
+<li>ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える</li>
+<li>適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる</li>
+<li>ファイル名で直接アクセスするとフラグ</li>
+<li><code>pctf{You_L00K_Wi3Rd_IN_H3R3}</code></li>
+</ul>
+
+<h2 id="easy-rsa">Easy RSA</h2>
+
+<ul>
+<li>e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&rsquo;s Attackだとわかる</li>
+<li>コード書いて、秘密鍵dを計算すると<code>12978409760901509356642421072925801006324287746872153539187221529835976408177</code>だとわかる</li>
+<li>あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ</li>
+<li><code>pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}</code></li>
+</ul>
+
+<h2 id="late-pr">Late PR</h2>
+
+<ul>
+<li>課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される</li>
+<li>vol.pyでプロセスを見るとchrome.exeがexitしていることがわかり、GoogleChromeCrashHandler.exeというプロセスの存在に気づくので、当該プロセスのメモリダンプを見てみるとフラグ
+
+<ul>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 pslist</code></li>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 memdump --dump-dir .</code></li>
+<li><code>strings 468.dmp | grep pctf</code></li>
+</ul></li>
+<li><code>pctf{Late_submissions_can_be_good}</code></li>
+</ul>
+
+<h2 id="mandatory-php">Mandatory PHP</h2>
+
+<ul>
+<li>以下のPHPのコードが渡される</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#bc7a00">&lt;?php</span> 
+<span style="color:#008000;font-weight:bold">include</span> <span style="color:#ba2121">&#39;flag.php&#39;</span>; 
+highlight_file(<span style="color:#ba2121">&#39;index.php&#39;</span>); 
+<span style="color:#19177c">$a</span> <span style="color:#666">=</span> <span style="color:#19177c">$_GET</span>[<span style="color:#ba2121">&#34;val1&#34;</span>]; 
+<span style="color:#19177c">$b</span> <span style="color:#666">=</span> <span style="color:#19177c">$_GET</span>[<span style="color:#ba2121">&#34;val2&#34;</span>]; 
+<span style="color:#19177c">$c</span> <span style="color:#666">=</span> <span style="color:#19177c">$_GET</span>[<span style="color:#ba2121">&#34;val3&#34;</span>]; 
+<span style="color:#19177c">$d</span> <span style="color:#666">=</span> <span style="color:#19177c">$_GET</span>[<span style="color:#ba2121">&#34;val4&#34;</span>]; 
+<span style="color:#008000;font-weight:bold">if</span>(preg_match(<span style="color:#ba2121">&#39;/[^A-Za-z]/&#39;</span>, <span style="color:#19177c">$a</span>)) 
+<span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;oh my gawd...&#39;</span>); 
+<span style="color:#19177c">$a</span><span style="color:#666">=</span>hash(<span style="color:#ba2121">&#34;sha256&#34;</span>,<span style="color:#19177c">$a</span>); 
+<span style="color:#19177c">$a</span><span style="color:#666">=</span>(log10(<span style="color:#19177c">$a</span><span style="color:#666">**</span>(<span style="color:#666">0.5</span>)))<span style="color:#666">**</span><span style="color:#666">2</span>; 
+<span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$c</span><span style="color:#666">&gt;</span><span style="color:#666">0</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$d</span><span style="color:#666">&gt;</span><span style="color:#666">0</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$d</span><span style="color:#666">&gt;</span><span style="color:#19177c">$c</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$a</span><span style="color:#666">==</span><span style="color:#19177c">$c</span><span style="color:#666">*</span><span style="color:#19177c">$c</span><span style="color:#666">+</span><span style="color:#19177c">$d</span><span style="color:#666">*</span><span style="color:#19177c">$d</span>) 
+<span style="color:#19177c">$s1</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;true&#34;</span>; 
+<span style="color:#008000;font-weight:bold">else</span> 
+    <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#34;Bye...&#34;</span>); 
+<span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$s1</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;true&#34;</span>) 
+    <span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag1</span>; 
+<span style="color:#008000;font-weight:bold">for</span>(<span style="color:#19177c">$i</span><span style="color:#666">=</span><span style="color:#666">1</span>;<span style="color:#19177c">$i</span><span style="color:#666">&lt;=</span><span style="color:#666">10</span>;<span style="color:#19177c">$i</span><span style="color:#666">++</span>){ 
+    <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$b</span><span style="color:#666">==</span>urldecode(<span style="color:#19177c">$b</span>)) 
+        <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;duck&#39;</span>); 
+    <span style="color:#008000;font-weight:bold">else</span> 
+        <span style="color:#19177c">$b</span><span style="color:#666">=</span>urldecode(<span style="color:#19177c">$b</span>); 
+}     
+<span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$b</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;WoAHh!&#34;</span>) 
+<span style="color:#19177c">$s2</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;true&#34;</span>; 
+<span style="color:#008000;font-weight:bold">else</span> 
+    <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;oops..&#39;</span>); 
+<span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$s2</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;true&#34;</span>) 
+    <span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag2</span>; 
+<span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;end...&#39;</span>); 
+<span style="color:#bc7a00">?&gt;</span> 
+</code></pre></div>
+<ul>
+<li><code>val1</code>が<code>INF</code>になるので、<code>val3</code>と<code>val4</code>でINFになるようにデカイ数を渡して、<code>val2</code>は10回urldecodeして<code>WoAHh!</code>になるようにパラメータを渡せば良い</li>
+<li><code>curl 'http://159.89.166.12:14000///index.php?ffval1=0&amp;val2=WoAHh%2525252525252525252521&amp;val3=101&amp;val4=大きい値'</code></li>
+<li><code>pctf{b3_c4r3fu1_w1th_pHp_f31145}</code></li>
+</ul>
+
+<h2 id="終了後に解いた問題">終了後に解いた問題</h2>
+
+<h3 id="magic-pngs">Magic PNGs</h3>
+
+<ul>
+<li>パスワード付きzipとpngファイルが渡されるが、<code>file</code>コマンドを叩くと<code>data</code>都市てか表示されないためヘッダーなどが間違っていると推測できる</li>
+<li>案の定Magic numberが間違っているので修正するが、それでも開かない</li>
+<li>PNGは通常IDATチャンクがあるはずだが、そのキーワードが<code>idat</code>と小文字になっていたのでこれを修正すると開けて、<code>h4CK3RM4n</code>が読み取れる</li>
+<li>ヒントから、この値をmd5してパスワードzipを展開するとフラグ</li>
+<li><code>pctf{y0u_s33_m33_n0w!}</code></li>
+<li><strong>ファイルヘッダーとかが違うところに気づいていなかった</strong></li>
+</ul>
+
+<h3 id="exorcism">EXORcism</h3>
+
+<ul>
+<li>大量の1と0があるファイルを渡される</li>
+<li>100x100の正方形に整形して、1をスペース、0は黒として描画するとQRコードになる</li>
+<li>QRコードを読み取ると、<code>160f15011d1b095339595138535f135613595e1a</code></li>
+<li>タイトルがXORなので、この文字列となにかをxorする必要があると推測できる</li>
+<li>フラグフォーマットの<code>pctf{</code>になるようにxorする値を計算すると<code>flagf</code>になるので、<code>flag</code>を繰り返してxorすれば良いとわかるので、それで計算するとフラグ</li>
+<li><code>pctf{wh4_50_53r1u5?}</code></li>
+<li><strong>そもそもQRコードになるなんて想像ができなかった</strong></li>
+</ul>
+
+<h2 id="save-earth">Save Earth</h2>
+
+<ul>
+<li>USBパケットのデータが渡されて入力した値を求めさせる</li>
+<li>データ内にasciiがないので、間隔つまりモールス信号だと推測する</li>
+<li>USBパケットの末尾のデータ部から4をスペース、1と2をそれぞれモールス信号にするとフラグが得られる</li>
+<li><code>CTFS4V3</code></li>
+</ul>
+
+  
+</article>
+
+
+      </div>
+    </div>
+  </main>
+  
+<footer class="Footer">
+  <div class="u-wrapper">
+    <div class="u-padding">
+      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+    </div>
+  </div>
+</footer>
+
+  
+</body>
+</html>
