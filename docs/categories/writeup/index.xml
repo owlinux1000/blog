@@ -80,8 +80,50 @@
     <description>Recent content in Writeup on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Mar 2019 22:48:37 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 03 Apr 2019 08:07:43 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VolgaCTF 2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/post/volga2019/</link>
+      <pubDate>Wed, 03 Apr 2019 08:07:43 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/volga2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;shadow-cat&#34;&gt;Shadow cat&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;と&lt;code&gt;encrypted.txt&lt;/code&gt;が渡される&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;には、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、&lt;code&gt;encrypted.txt&lt;/code&gt;にはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;のパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;unix_crypt&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# gem install unix-crypt&lt;/span&gt;
+org &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[]&lt;/span&gt;
+ans &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[]&lt;/span&gt;
+lines &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;read(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./shadow.txt&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)
+lines&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;line&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
+  org &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  enc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  salt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;$&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  
+  &lt;span style=&#34;color:#666&#34;&gt;0x1f&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;upto(&lt;span style=&#34;color:#666&#34;&gt;0x7e&lt;/span&gt;) &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
+    hashpass &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;UnixCrypt&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;SHA512&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;build(i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr, salt)
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt; hashpass &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; enc
+      ans &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr
+      &lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Passed&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;break&lt;/span&gt;
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+
+encrypted &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;read(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./encrypted.txt&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chomp
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;VolgaCTF{&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;encrypted&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;tr(org&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;), ans&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;))&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;}&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     <item>
       <title>PragyanCTF 2019 writeup</title>
       <link>https://owlinux1000.github.io/blog/post/pragyan2019/</link>

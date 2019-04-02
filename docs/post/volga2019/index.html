@@ -1,0 +1,125 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    
+    VolgaCTF 2019 writeup | $ make life
+    
+  </title>
+  
+  
+  <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
+  
+  <meta name="generator" content="Hugo 0.53" />
+</head>
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/volga2019/" rel="bookmark">VolgaCTF 2019 writeup</a>
+  </h2>
+  
+  <time datetime="2019-04-03T08:07:43&#43;09:00">
+    3 April, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="shadow-cat">Shadow cat</h2>
+
+<ul>
+<li><code>/etc/shadow</code>と<code>encrypted.txt</code>が渡される</li>
+<li><code>/etc/shadow</code>には、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、<code>encrypted.txt</code>にはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる</li>
+<li><code>/etc/shadow</code>のパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;unix_crypt&#39;</span> <span style="color:#408080;font-style:italic"># gem install unix-crypt</span>
+org <span style="color:#666">=</span> <span style="color:#666">[]</span>
+ans <span style="color:#666">=</span> <span style="color:#666">[]</span>
+lines <span style="color:#666">=</span> <span style="color:#800">File</span><span style="color:#666">.</span>read(<span style="color:#ba2121">&#34;./shadow.txt&#34;</span>)<span style="color:#666">.</span>split(<span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)
+lines<span style="color:#666">.</span>each <span style="color:#008000;font-weight:bold">do</span> <span style="color:#666">|</span>line<span style="color:#666">|</span>
+  org <span style="color:#666">&lt;&lt;</span> line<span style="color:#666">.</span>split(<span style="color:#ba2121">&#34;:&#34;</span>)<span style="color:#666">[</span><span style="color:#666">0</span><span style="color:#666">]</span>
+  enc <span style="color:#666">=</span> line<span style="color:#666">.</span>split(<span style="color:#ba2121">&#34;:&#34;</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">]</span>
+  salt <span style="color:#666">=</span> line<span style="color:#666">.</span>split(<span style="color:#ba2121">&#34;$&#34;</span>)<span style="color:#666">[</span><span style="color:#666">2</span><span style="color:#666">]</span>
+  
+  <span style="color:#666">0x1f</span><span style="color:#666">.</span>upto(<span style="color:#666">0x7e</span>) <span style="color:#008000;font-weight:bold">do</span> <span style="color:#666">|</span>i<span style="color:#666">|</span>
+    hashpass <span style="color:#666">=</span> <span style="color:#800">UnixCrypt</span><span style="color:#666">::</span><span style="color:#800">SHA512</span><span style="color:#666">.</span>build(i<span style="color:#666">.</span>chr, salt)
+    <span style="color:#008000;font-weight:bold">if</span> hashpass <span style="color:#666">==</span> enc
+      ans <span style="color:#666">&lt;&lt;</span> i<span style="color:#666">.</span>chr
+      <span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;Passed&#34;</span>
+      <span style="color:#008000;font-weight:bold">break</span>
+    <span style="color:#008000;font-weight:bold">end</span>
+  <span style="color:#008000;font-weight:bold">end</span>
+<span style="color:#008000;font-weight:bold">end</span>
+
+encrypted <span style="color:#666">=</span> <span style="color:#800">File</span><span style="color:#666">.</span>read(<span style="color:#ba2121">&#34;./encrypted.txt&#34;</span>)<span style="color:#666">.</span>chomp
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;VolgaCTF{</span><span style="color:#b68;font-weight:bold">#{</span>encrypted<span style="color:#666">.</span>tr(org<span style="color:#666">.</span>join(<span style="color:#ba2121">&#34;&#34;</span>), ans<span style="color:#666">.</span>join(<span style="color:#ba2121">&#34;&#34;</span>))<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">}&#34;</span></code></pre></div>
+<ul>
+<li><strong>VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}</strong></li>
+</ul>
+
+  
+</article>
+
+
+      </div>
+    </div>
+  </main>
+  
+<footer class="Footer">
+  <div class="u-wrapper">
+    <div class="u-padding">
+      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+    </div>
+  </div>
+</footer>
+
+  
+</body>
+</html>
