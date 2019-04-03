@@ -11,7 +11,7 @@
 - Binary Exploitation
 - Malware Analysis
 - DFIR
-  - Mobile Forensics-   
+  - Mobile Forensics
 
 ## Skills
 
