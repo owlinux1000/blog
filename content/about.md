@@ -26,6 +26,12 @@
   - Docker, Docker Compose
   - Kubernetes (learning)
   - Monitor (Zabbix, Prometheus, SNMP)
+  - Serverspec, goss
+  - Network Appliance
+    - Cisco Catalyst 2960
+    - Cisco 892J
+    - IIJ SEIL/BPV4
+    - Juniper SSG140
   
 ## Activites
 
