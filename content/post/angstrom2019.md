@@ -2,6 +2,8 @@
 title: "Angstrom2019 writeup"
 date: 2019-04-25T21:57:22+09:00
 draft: false
+categories:
+- writeup
 ---
 
 ## Misc
