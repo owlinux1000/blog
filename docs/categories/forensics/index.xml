@@ -80,8 +80,242 @@
     <description>Recent content in Forensics on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 06 Mar 2019 23:10:49 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 29 Apr 2019 07:03:53 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/categories/forensics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>平成のうちに理解しておくYara 入門</title>
+      <link>https://owlinux1000.github.io/blog/post/yara/</link>
+      <pubDate>Mon, 29 Apr 2019 07:03:53 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/yara/</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;平成も終わるし、知ったかぶりしてる技術を令和に持ち越さないようにしような&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;目次&#34;&gt;目次&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Yara とは&lt;/li&gt;
+&lt;li&gt;はじめてのYara ルール&lt;/li&gt;
+&lt;li&gt;文字列を用いたYara ルール&lt;/li&gt;
+&lt;li&gt;正規表現を用いたYara ルール&lt;/li&gt;
+&lt;li&gt;複数条件を用いたYara ルール&lt;/li&gt;
+&lt;li&gt;Yara の便利機能&lt;/li&gt;
+&lt;li&gt;モジュール機能を用いたYara ルール&lt;/li&gt;
+&lt;li&gt;Pythonから利用するYara ルール&lt;/li&gt;
+&lt;li&gt;まとめ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;yara-とは&#34;&gt;Yara とは&lt;/h2&gt;
+
+&lt;p&gt;Yaraは、「&lt;strong&gt;Yara ルール&lt;/strong&gt;」と呼ばれる専用のルールを用いて、マルウェアや悪意あるファイルなどを検知することのできるツールです。Yara ルールでは、文字列による検査や正規表現、論理条件などをサポートしており複雑なルールを構築することもできます。利用例として、あるマルウェアファミリーの特徴をYara ルールとして作成しておくことで、新しいマルウェアが発見されたときに既知のマルウェアファミリーに性質が近いかどうかなどを検知することができます。Yara は、&lt;a href=&#34;https://cuckoosandbox.org/&#34; target=&#34;_blank&#34;&gt;Cuckoo Sandbox&lt;/a&gt;など他のセキュリテイツールと連携していることが多く、セキュリテイに関わる人間としては、一度読み書きしておいた方が良いツールの１つです。本記事では、Yara を使ったこと無い人向けに基本的な概念やルールを幅広くご紹介します。&lt;br /&gt;
+まずは、Yara を利用するためにインストールしましょう。Ubuntu では、&lt;code&gt;apt&lt;/code&gt;からインストールすることができます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ sudo apt install yara&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;また、Macでは&lt;code&gt;brew&lt;/code&gt;からインストールすることが可能です。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ brew install yara&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;インストールできたら、以下のコマンドを入力して、Yara のバージョンを確認してください。なお本記事では、バージョン3.9.0を対象に執筆しています。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara --version
+3.9.0&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;はじめてのyara-ルール&#34;&gt;はじめてのYara ルール&lt;/h2&gt;
+
+&lt;p&gt;では、さっそくはじめてのYara ルールを作成してみましょう。以下に、必ず検知するルールを示します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;// hello_rule.yara
+rule hello
+{
+    condition:
+        true
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Yaraでは、&lt;code&gt;rule&lt;/code&gt;キーワードを用いてルールを作成します。ここで&lt;code&gt;hello&lt;/code&gt;はルール名にあたり、実際の条件が&lt;code&gt;condition&lt;/code&gt;が&lt;code&gt;true&lt;/code&gt;のときに検知することを意味しています。本例では、一般的なプログラミング言語と同様に、条件文が必ず真となります。そのため、必ず検知することができます。また、先頭の1行目は、コメント文です。Yara ルールのファイルの拡張子は、&lt;code&gt;.yara&lt;/code&gt;や&lt;code&gt;.yar&lt;/code&gt;の場合が多いです。&lt;br /&gt;
+では、このルールを用いて実際に検知するか確認してみましょう。そのために検査対象となるファイルを&lt;code&gt;hello.txt&lt;/code&gt;として以下の内容で作成してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;HelloWorld!&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;以下の以下コマンドを実行してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_rule.yara hello.txt
+hello hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;本コマンドでは、&lt;code&gt;hello.txt&lt;/code&gt;ファイルに対して、&lt;code&gt;hello_rule.yara&lt;/code&gt;を用いて検査しています。また、&lt;code&gt;hello&lt;/code&gt;というルールで&lt;code&gt;hello.txt&lt;/code&gt;が検知していることがわかります。
+Yara ルールによる検査は、ファイルの他にディレクトリやPIDを指定することもでき、それらの検査も行うことが可能となっています。&lt;/p&gt;
+
+&lt;p&gt;Yara ルールは、特別なシンタックスで書かれているので、エディタ等のシンタックスハイライトや補完プラグインの利用をおすすめします。Emacs ユーザならば、melpaで&lt;code&gt;yara-mode&lt;/code&gt;が配布されているので、&lt;code&gt;package&lt;/code&gt;でインストールすることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;文字列を用いたyara-ルール&#34;&gt;文字列を用いたYara ルール&lt;/h2&gt;
+
+&lt;p&gt;先程の例では、無条件に合致するルールを作成していました。次は、&lt;code&gt;hello.txt&lt;/code&gt;に格納されている&lt;code&gt;HelloWorld!&lt;/code&gt;という文字列を含んでいるファイルを検知するルールを作成してみましょう。&lt;code&gt;condition&lt;/code&gt;の条件として、検知したい文字列を設定します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule hello_string
+{
+    condition:
+        &amp;#34;HelloWorld!&amp;#34;
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;本ルールを用いて、先程と同様に検査してみましょう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_string_rule.yara hello.txt
+hello_string_rule(5): warning: Using literal string &amp;#34;HelloWorld!&amp;#34; in a boolean operation.
+hello_string hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;先程と同様に検知できましたが、警告が出ています。これは、文字列リテラルを用いて直接条件を設定しているため出ています。ルールの中で文字列を変数として定義し、その変数を用いることでこの警告は出力されなくなります。以下のようにルールを変更してください&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule hello_string
+{
+    strings:
+        $s = &amp;#34;HelloWorld!&amp;#34;
+    condition:
+        $s
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;strings&lt;/code&gt;キーワードを用いて、変数を定義することができます。再度検査すると警告文が出てきません。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_string.yara hello.txt
+hello_string hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Yara では、変数の後に様々なキーワードを設定することでより柔軟に検査することができます。例えば、以下のルールでは、検知したい文字列の後に、&lt;code&gt;nocase&lt;/code&gt;を記載することで、case-insentive に文字列を認識し、検査してくれます。そのため、&lt;code&gt;hEllOwORLD!&lt;/code&gt; といった文字列も検知することができます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule hello_string
+{
+    strings:
+        $s = &amp;#34;HelloWorld!&amp;#34; nocase
+    condition:
+        $s
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;nocase&lt;/code&gt;の他にも、&lt;code&gt;wide&lt;/code&gt;でUnicode文字列などの場合も検知することが可能となります。もしAscii文字列とUnicode文字列を両方検知したい場合は、&lt;code&gt;wide&lt;/code&gt; と&lt;code&gt;ascii&lt;/code&gt; の両方をつけることで可能となります。&lt;br /&gt;
+&lt;code&gt;fullword&lt;/code&gt;を設定すると、検知した文字列が、アルファベット以外で終端してる場合のみ検知することが可能となります。（例：&lt;code&gt;apple&lt;/code&gt; を検知したい文字列に設定している場合に、&lt;code&gt;applejuice.com&lt;/code&gt;は検知しないが、&lt;code&gt;apple.com&lt;/code&gt;は検知することができる）&lt;/p&gt;
+
+&lt;h2 id=&#34;正規表現を用いたyara-ルール&#34;&gt;正規表現を用いたYara ルール&lt;/h2&gt;
+
+&lt;p&gt;Yara では、正規表現を用いた検査を行うことができます。例えば、&lt;code&gt;a&lt;/code&gt;から始まる文字列を検知する場合を考えてみます。正規表現を用いる場合は、以下のように&lt;code&gt;&amp;quot;&lt;/code&gt;ではなく、&lt;code&gt;/&lt;/code&gt;で囲います。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule regexp
+{
+    strings:
+        $s1 = /^a/
+    condition:
+        $s1
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;また、正規表現においても、&lt;code&gt;nocase&lt;/code&gt;のようなキーワードを付与することもできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;複数条件を用いたyara-ルール&#34;&gt;複数条件を用いたYara ルール&lt;/h2&gt;
+
+&lt;p&gt;今までのルールでは、単一の条件にマッチした場合でしたが、&lt;code&gt;condition&lt;/code&gt;に、論理演算子を用いることで、より複雑な条件を構築することができます。例として、以下の内容で&lt;code&gt;hello2.txt&lt;/code&gt;を作成してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;Hello World!&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;そして、&lt;code&gt;hello2.txt&lt;/code&gt;を先程作成した&lt;code&gt;hello_string_rule.yara&lt;/code&gt;で検査してみてください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_string_rule.yara hello2.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;結果として検知されず何も表示されません。&lt;code&gt;hello_string_rule.yara&lt;/code&gt;では、&lt;code&gt;HelloWorld!&lt;/code&gt;をルールにしていたため、間にスペースがある&lt;code&gt;hello2.txt&lt;/code&gt;では検知することができませんでした。そこで次に、&lt;code&gt;Hello World!&lt;/code&gt;も条件として加え、&lt;code&gt;HelloWorld!&lt;/code&gt; または&lt;code&gt;Hello World!&lt;/code&gt;の場合に検知するようにルールを作成します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule hello_string
+{
+    strings:
+        $s1 = &amp;#34;HelloWorld!&amp;#34;
+        $s2 = &amp;#34;Hello World!&amp;#34;
+    condition:
+        $s1 or $s2
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上記ルールでは、文字列として2つ定義し、それらを&lt;code&gt;or&lt;/code&gt;で接続することで条件を構築しています。以下のように&lt;code&gt;hello.txt&lt;/code&gt;と&lt;code&gt;hello2.txt&lt;/code&gt;の両方を検査してみましょう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_string2_rule.yara hello2.txt
+hello_string hello2.txt
+$ yara hello_string2_rule.yara hello.txt
+hello_string hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;両方とも検知していることがわかります。&lt;br /&gt;
+Yara には、&lt;code&gt;or&lt;/code&gt;以外にも&lt;code&gt;and&lt;/code&gt;や&lt;code&gt;not&lt;/code&gt;など様々な条件に使えるキーワードがあります。詳しくは、&lt;a href=&#34;https://yara.readthedocs.io/en/v3.5.0/writingrules.html&#34; target=&#34;_blank&#34;&gt;公式ドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;yara-の便利機能&#34;&gt;Yara の便利機能&lt;/h2&gt;
+
+&lt;p&gt;ここでは、個人的に便利そうだなと思った機能をいくつかご紹介します。&lt;/p&gt;
+
+&lt;h3 id=&#34;特別な値を用いたルール&#34;&gt;特別な値を用いたルール&lt;/h3&gt;
+
+&lt;p&gt;Yara は、主にマルウェアを対象として検知を行うツールなため、標準で文字列マッチ以外にも便利な機能が備わっています。例えば、以下は、対象ファイルのファイルサイズが200KBより大きかった場合に検知するルールの例です。&lt;code&gt;filesize&lt;/code&gt;は、特別な値で元から検査対象のファイルのサイズが格納されています。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule FileSizeExample
+{
+    condition:
+       filesize &amp;gt; 200KB
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;また、後述するモジュール機能を用いることで、より多くの特別な値をルールで利用することができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;yara-ルールのメタデータ&#34;&gt;Yara ルールのメタデータ&lt;/h3&gt;
+
+&lt;p&gt;Yara ルールには、メタデータの設定を行うことが可能です。rule中に、&lt;code&gt;meta&lt;/code&gt;キーワードを用いることで、メタデータを格納することができます。以下に例を示します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule FileSizeExample
+{
+    meta:
+       description = &amp;#34;File size check&amp;#34;
+    condition:
+       filesize &amp;gt; 200KB
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;このルールでは、&lt;code&gt;description&lt;/code&gt;というメタデータを設定しています。このメタデータは、&lt;code&gt;yara&lt;/code&gt; コマンドのオプション&lt;code&gt;-m&lt;/code&gt; を設定することで表示することができます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara -m elf_rule.yara hello
+elf_64 [description=&amp;#34;File size check&amp;#34;] hello&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;yara-ルールのタグ&#34;&gt;Yara ルールのタグ&lt;/h3&gt;
+
+&lt;p&gt;メタデータと似た機能として、タグの設定を行うことも可能です。ルール名の後に、&lt;code&gt;:&lt;/code&gt;でタグ名を記載します。複数設定した場合は、スペースで分割して記載します。以下に&lt;code&gt;hello_rule&lt;/code&gt;にタグを設定した例を示します。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;rule hello : myfirstrule
+{
+    condition:
+        true
+}
+
+rule hello2 : mysecondrule
+{
+    condition:
+        true
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;hello&lt;/code&gt;ルールには、&lt;code&gt;myfirstrule&lt;/code&gt;、&lt;code&gt;hello2&lt;/code&gt;ルールには、&lt;code&gt;mysecondrule&lt;/code&gt;というタグを設定しています。今までのようにこのルールを用いて検査を行うと、以下のように&lt;code&gt;hello&lt;/code&gt;と&lt;code&gt;hello2&lt;/code&gt;の両方のルールにマッチしていることがわかります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara hello_rule.yara hello.txt
+hello hello.txt
+hello2 hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;しかしながら、タグを設定することで、特定のタグのルールのみを表示するといったフィルターのような処理を行うことができます。オプション&lt;code&gt;-t&lt;/code&gt; に、&lt;code&gt;myfirstrule&lt;/code&gt;を設定することで、&lt;code&gt;hello&lt;/code&gt;ルールのみを表示することが可能です。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara -t myfirstrule hello_rule.yara hello.txt
+hello hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&#34;yara-ルールを分割管理&#34;&gt;Yara ルールを分割管理&lt;/h3&gt;
+
+&lt;p&gt;1ファイルに多くのYara ルールを記載することは、管理上の観点からも好ましくありません。そこで、Yara では&lt;code&gt;include&lt;/code&gt;文を利用することで分割されたファイルを読みこむことが可能となります。以下の例では、最初に作った&lt;code&gt;hello_rule&lt;/code&gt;を読み込んでいます。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;include &amp;#34;./hello_rule&amp;#34;
+rule regexep
+{
+    strings:
+        $s1 = /^a/
+    condition:
+        $s1
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;モジュール機能を用いたyara-ルール&#34;&gt;モジュール機能を用いたYara ルール&lt;/h2&gt;
+
+&lt;p&gt;Yara には、モジュール機能があります。特に、PE モジュールは、マルウェア解析者にとってよく使うモジュールの1つです。PE モジュールの他にも、ELF モジュールやCuckoo モジュール、Hash モジュール、Magic モジュールなどがあります。モジュールは、&lt;code&gt;import&lt;/code&gt; 文を用いて読み込みます。今回は、ELF モジュールを用いた例を見てみましょう。以下は、ELFバイナリがx64向けの場合検知するルールです。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;import &amp;#34;elf&amp;#34;
+
+rule elf_64
+{
+    condition:
+        elf.machine == elf.EM_X86_64
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;本ルール検証のために、&lt;code&gt;Hello World!&lt;/code&gt;と表示するELFバイナリを作成します。以下のC言語のファイルを作成してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#b00040&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;main&lt;/span&gt;() {
+  printf(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;以下のようにコンパイルして、実行ファイルを作成してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ gcc hello.c -o hello&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;作成したELFバイナリに対して検査をすると検知していることがわかります。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ yara elf_rule.yara hello
+elf_64 hello&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;次に、IOCなどでもよく使われるハッシュ値を用いたルールを作成してみましょう。ハッシュ値を求める処理は、Hash モジュールを読み込むことで利用できます。Hash モジュールでは、md5やsha1、 sha256の代表的なハッシュアルゴリズムによるハッシュ値が求められます。まずは、検査対象となる&lt;code&gt;hello.txt&lt;/code&gt;のsha256ハッシュ値を求めてみましょう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ shasum -a 256 hello.txt
+209a3f843d2a572c2d66457dd7c8a6120fa308949867a5ebed5f4dca08fe4920  hello.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;では、このハッシュ値を用いて、読み込んだファイルのハッシュ値と等しかったら検知させるルールを作成してみましょう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;import &amp;#34;hash&amp;#34;
+rule sha256
+{
+     condition:
+         hash.sha256(0, filesize) == &amp;#34;209a3f843d2a572c2d66457dd7c8a6120fa308949867a5ebed5f4dca08fe4920&amp;#34;
+}&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Hash モジュールのハッシュ値を求める機能では、2つの引数を設定できます。本例における前者の&lt;code&gt;0&lt;/code&gt;は、ファイルのオフセットを示しています。つまり、ファイルの先頭からのハッシュ値を求めようとしています。ファイルオフセットを適切に設定することで、生の攻撃ペイロードの不要部分を飛ばし、適切な位置からハッシュ値を求めることも可能となります。また、2つ目の引数は、サイズを示しており、今回の例だと&lt;code&gt;filesize&lt;/code&gt;つまり、ファイル全体を示しています。そのため、第1引数に&lt;code&gt;0&lt;/code&gt;、第2引数に&lt;code&gt;filesize&lt;/code&gt;を設定することで、ファイル全体のハッシュ値を算出することができます。本機能における戻り値のハッシュ値は、lowercase で帰ってくるため、比較する際には気をつけてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;pythonから利用するyara-ルール&#34;&gt;Pythonから利用するYara ルール&lt;/h2&gt;
+
+&lt;p&gt;Yara ルールのファイルは、&lt;code&gt;yara&lt;/code&gt;コマンドだけでなく、Pythonから利用することも可能です。Python から利用することで、よりプログラマブルにYara を利用することができるため、システムに組み込むことが容易になります。利用するためには、&lt;code&gt;yara-python&lt;/code&gt;というライブラリをインストールしてください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ pip install yara-python&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;では、2つ目に作成した&lt;code&gt;hello_string_rule&lt;/code&gt;のYara ルールファイルを読み込んで検査してみましょう。以下の検査スクリプトを&lt;code&gt;hello.py&lt;/code&gt;として作成してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#00f;font-weight:bold&#34;&gt;yara&lt;/span&gt;
+rules &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; yara&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;compile&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;hello_rule.yara&amp;#39;&lt;/span&gt;)
+result &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; rules&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;hello.txt&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;print&lt;/span&gt;(result)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上記スクリプトを実行してください。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ python hello.py
+[hello_string]&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;実行すると予定通り検知していることがわかります。また、検知したファイルがない場合は、空の配列が帰ってくるため注意してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回、マルウェアなどを検知するルールベースのツールYara を見てきました。Yara は、文字列やファイルサイズ、バイナリの情報などを様々な値を用いて柔軟にルールを作成することができます。また、Pythonから利用するなどプログラマブルな使い方も可能となっています。ぜひYara を用いて様々な悪意ある挙動をするファイルを検知していきましょう。&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>binarycookiesファイル解析ツールbincookie</title>
       <link>https://owlinux1000.github.io/blog/post/analyzing_binary_cookie/</link>
