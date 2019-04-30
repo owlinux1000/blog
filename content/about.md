@@ -1,10 +1,13 @@
-0;95;0c## Profile
+# Profile
+
+## About me
 
 - Chihiro Hasegawa
 - 1996/03/28
 - Kanagawa, Japan
 - encry1024[at]gmail.com
 - Security Engineer at XXX (since 2018/04/01)
+- Happily married
 
 ## Interest
 
@@ -21,34 +24,35 @@
     - Angular
     - Vue
 - Infrastructure
-  - Vagrant
-  - Ansible
+  - Provisioning
+     - Vagrant
+     - Ansible
   - Docker, Docker Compose
   - Kubernetes (learning)
-  - Monitor (Zabbix, Prometheus, SNMP)
-  - Serverspec, goss
+  - Monitor
+     - Zabbix, Prometheus, SNMP
+  - Testing server
+     - Serverspec, goss
   - Network Appliance
-    - Cisco Catalyst 2960
-    - Cisco 892J
-    - IIJ SEIL/BPV4
-    - Juniper SSG140
+     - Cisco Catalyst 2960, Cisco 892J, IIJ SEIL/BPV4, Juniper SSG140
   
 ## Activites
 
-- TokyoWesterns CTF 2018 (staff)
-- SECCON Beginners 2018 (staff)
-- [14th IEEE Colloquium on Signal Processing and its Applications](https://ieeexplore.ieee.org/abstract/document/8368693)
-- Cpaw AI Competition 1st, 2nd (staff)
-- Security Camp 2017 (tutor)
-- Cyber Colosseo 2017
-- SECCON Beginners 2017 (staff)
-- TokyoWesterns CTF 2017 (staff)
-- セキュリティコンテストのためのCTF問題集 (co-author)
-- CODEBLUE 2016,2017 student staff
+### Now
+- TokyoWesterns CTF 2017, 2018 (staff)
+- SECCON Beginners 2017, 2018, 2019 (staff)
+- Cpaw CTF (staff)
+
+### Past
+
+- Security Camp 2016, 2017 (tutor)
 - SECCON 2016 Final
 - SECCON 2016 OSAKA
-- Cpaw CTF (staff)
-- Security Camp 2016
+- CODEBLUE 2016,2017 student staff
+- Cyber Colosseo 2017
+- [14th IEEE Colloquium on Signal Processing and its Applications](https://ieeexplore.ieee.org/abstract/document/8368693)
+- [セキュリティコンテストのためのCTF問題集 (co-author)](https://book.mynavi.jp/ec/products/detail/id=75673)
+- Cpaw AI Competition 1st, 2nd (staff)
 
 ## Hobbies
 
