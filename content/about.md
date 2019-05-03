@@ -63,6 +63,15 @@
 - Tea ceremony
 - Watching movies
 
+## Certificate (related IT)
+
+- Information Technology Passport Examination
+- Fundamental Information Technology Engineer Examination
+- Applied Information Technology Engineer Examination
+- Registered Information Security Specialist Examination
+- Network Specialist Examination
+- GIAC Reverse Engineering Malware（GREM）
+
 ## Links
 
 - [GitHub](https://github.com/owlinux1000)
