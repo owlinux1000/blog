@@ -1,0 +1,164 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    
+    Terraform でConoha のインスタンスを立ててみる | $ make life
+    
+  </title>
+  
+  
+  <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
+  
+  <meta name="generator" content="Hugo 0.53" />
+</head>
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/terraform_for_conoha/" rel="bookmark">Terraform でConoha のインスタンスを立ててみる</a>
+  </h2>
+  
+  <time datetime="2019-05-18T12:24:26&#43;09:00">
+    18 May, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。</p>
+
+<h2 id="terraform-とは">Terraform とは</h2>
+
+<p>Terraform は、Vagrant などで有名な<a href="https://www.hashicorp.com/">HashiCorp </a>が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、<code>HCL</code> を用いて主に<code>tf</code> ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、<code>Vagrantfile</code> ほどRuby 感はない。どちらかというと<code>json</code> などに近い雰囲気だ。</p>
+
+<h2 id="terraform-のインストール">Terraform のインストール</h2>
+
+<p>今回は、MacBook Proで行っているので、<code>brew</code> 経由でインストールする。</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ brew install terraform</pre></div>
+<p>また、<code>HCL</code>を書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsの<code>hcl-mode</code>を導入してみた。</p>
+
+<h2 id="定義ファイルの作成">定義ファイルの作成</h2>
+
+<p>今回は、<code>main.tf</code> というファイル名で以下の内容を作成した。以下の内容は、ほぼ<a href="https://qiita.com/kaminchu/items/d0776c381213d54a3a69">参考記事</a> と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。<br />
+まずはじめに、Provider の設定だ。</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">provider &#34;openstack&#34; {
+  user_name   = &#34;hgoehoge&#34;
+  password    = &#34;hagehage&#34;
+  tenant_name = &#34;fugafuga&#34;
+  auth_url    = &#34;https://identity.tyo1.conoha.io/v2.0&#34;
+}</pre></div>
+<p>Provider の設定では、<code>provider</code> キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider に<code>openstack</code> を設定する。ここには、<code>aws</code> や<code>azure</code> といった様々なクラウドサービスなどを指定することができる。今回の<code>openstack</code>の場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。<br />
+次に、Keypairについて見ていく。</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">resource &#34;openstack_compute_keypair_v2&#34; &#34;keypair&#34; {
+  name       = &#34;terraform-keypair&#34;
+  public_key = &#34;ssh-rsa hogehoge&#34;
+}</pre></div>
+<p>ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。<code>resource</code> ブロックを用いて、リソースを定義する。<code>resource</code> キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するための<code>name</code> や公開鍵を貼り付ける<code>public_key</code> を設定している。</p>
+
+<p>次に、実際にインスタンス自体の設定について見ていく。</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">resource &#34;openstack_compute_instance_v2&#34; &#34;basic&#34; {
+  name        = &#34;basic&#34;                             # 好きな名前
+  image_name  = &#34;vmi-ubuntu-18.04-amd64-20gb&#34;
+  flavor_name = &#34;g-512mb&#34;
+  key_pair    = &#34;terraform-keypair&#34;
+  security_groups = [
+    &#34;gncs-ipv4-all&#34;,
+  ]
+}</pre></div>
+<p>こちらも、先程と同様に<code>resource</code> ブロックを使って定義する。インスタンス自体の設定に関しては、<code>openstack_compute_instance_v2</code> で設定できるようだ。<code>image_name</code> や<code>flavor_name</code> は、ConohaのAPIを使って設定できる値がわかるので、その値を設定する。今回は最安値プランのVPS構成だ。また、<code>key_pair</code> には先程定義した<code>name</code> 設定する。最後に、<code>security_groups</code> では、通信許可に関する設定だが、今回はIPv4における全開放を指定している。</p>
+
+<p>今回は、設定ファイルにクレデンシャル情報をハードコードしているが、実際には環境変数で渡したり別ファイルに定義したりなどを行うように注意する。</p>
+
+<h2 id="terraform-の実行">Terraform の実行</h2>
+
+<p>Terraform では、まずはじめに<code>init</code> サブコマンドを実行する。ここで、Provider用のプラグインや各種初期化処理などが走る。次に、<code>plan</code> サブコマンドを用いて、実行計画の作成など実際に行われる処理の確認ができる。そして、<code>apply</code> サブコマンドを用いて、実際に処理を実行させる。また、削除した場合は、<code>destroy</code> サブコマンドを利用する。</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ terraform init
+...(skip)
+$ terraform plan
+...(skip)
+$ terraform apply</pre></div>
+<p><code>apply</code> サブコマンドが成功すると結果が出力されるので、そのIP アドレスに対して、ssh すると構築されたサーバにアクセスできることがわかる。また、ssh が確認できたら<code>destroy</code> サブコマンドを実行してみるとインスタンスが削除されている。ここらへんは、逐次実行しながらConoha のコンパネを見ると具体的なイメージが湧きやすい。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>今回は、既存の記事を参考にTerraform を使ってConoha にVPSを構築してみた。若干~元記事に騙されて時間をとかしたが、実際に構築することができた。これがあれば、また新しくVPS を立てたいときやイベントを行う際などには便利だと思った。もうちょっと使い道を模索して慣れていきたい。</p>
+
+  
+<footer>
+  <ul class="Tags">
+    
+    
+    
+    <li class="Tags-item u-background">
+      <a class="Tags-link u-clickable" href="https://owlinux1000.github.io/blog/tags/terraform/" rel="tag">Terraform</a>
+    </li>
+    
+    
+  </ul>
+</footer>
+
+</article>
+
+
+      </div>
+    </div>
+  </main>
+  
+<footer class="Footer">
+  <div class="u-wrapper">
+    <div class="u-padding">
+      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+    </div>
+  </div>
+</footer>
+
+  
+</body>
+</html>

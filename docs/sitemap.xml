@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://owlinux1000.github.io/blog/post/terraform_for_conoha/</loc>
+    <lastmod>2019-05-18T12:24:26+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://owlinux1000.github.io/blog/post/passed_grem/</loc>
     <lastmod>2019-05-03T14:32:45+09:00</lastmod>
   </url>
@@ -63,7 +68,7 @@
   
   <url>
     <loc>https://owlinux1000.github.io/blog/</loc>
-    <lastmod>2019-05-03T14:32:45+09:00</lastmod>
+    <lastmod>2019-05-18T12:24:26+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -97,6 +102,12 @@
   </url>
   
   <url>
+    <loc>https://owlinux1000.github.io/blog/categories/infrastructure/</loc>
+    <lastmod>2019-05-18T12:24:26+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://owlinux1000.github.io/blog/tags/mobile/</loc>
     <lastmod>2019-03-06T23:10:49+09:00</lastmod>
     <priority>0</priority>
@@ -104,13 +115,19 @@
   
   <url>
     <loc>https://owlinux1000.github.io/blog/post/</loc>
-    <lastmod>2019-05-03T14:32:45+09:00</lastmod>
+    <lastmod>2019-05-18T12:24:26+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://owlinux1000.github.io/blog/tags/</loc>
     <lastmod>2019-05-03T14:32:45+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://owlinux1000.github.io/blog/tags/terraform/</loc>
+    <lastmod>2019-05-18T12:24:26+09:00</lastmod>
     <priority>0</priority>
   </url>
   
