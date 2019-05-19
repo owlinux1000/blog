@@ -10,6 +10,7 @@ categories:
 ## Baby ROP 1
 
 - バイナリ中で、`system` 関数使ってechoしており、Canary等もないBOFが起こるので、`pop rdi; ret` 使って`system(/bin/sh)` を呼ぶだけ
+
 ```ruby
 #!/usr/bin/env ruby
 
@@ -32,11 +33,13 @@ z.sendline payload
 
 z.interact
 ```
+
 - **HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}**
 
 ## Baby ROP 2
 
 - `system` 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ
+
 ```ruby
 #!/usr/bin/env ruby
 
@@ -74,6 +77,7 @@ z.sendline payload
 
 z.interact
 ```
+
 - **HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}**
 
 ## Login
