@@ -1,5 +1,5 @@
 ---
-title: "Harekazectf2019"
+title: "HarekazeCTF 2019 writeup"
 date: 2019-05-19T16:54:53+09:00
 draft: false
 categories: 
