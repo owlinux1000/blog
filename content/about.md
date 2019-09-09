@@ -14,6 +14,7 @@
 - Binary Exploitation
 - Malware Analysis
 - DFIR
+  - Windows Forensics
   - Mobile Forensics
 
 ## Skills
@@ -38,13 +39,11 @@
   
 ## Activites
 
-### Now
-- TokyoWesterns CTF 2017, 2018 (staff)
-- SECCON Beginners 2017, 2018, 2019 (staff)
-- Cpaw CTF (staff)
-
 ### Past
 
+- Cpaw CTF (staff)
+- SECCON Beginners 2017, 2018, 2019 (staff)
+- TokyoWesterns CTF 2017, 2018 (staff)
 - Security Camp 2016, 2017 (tutor)
 - SECCON 2016 Final
 - SECCON 2016 OSAKA
