@@ -8,7 +8,7 @@ categories:
 
 ## はじめに
 
-本記事では、CSAW CTF 2014 で出題されたWindows 環境のPwnable 問題「greenhourd」を解説する。CTF におけるWindows のPwnable 問題が割合がかなり少なく知見もあまりまとまっていない分野なので自分の学習がてらまとめてみた。Linux でのPwnに慣れている人向けの記述になっているので、うまく補完しながら読んでほしい。
+本記事では、CSAW CTF 2014 で出題されたWindows 環境のPwnable 問題「greenhornd」を解説する。CTF におけるWindows のPwnable 問題が割合がかなり少なく知見もあまりまとまっていない分野なので自分の学習がてらまとめてみた。Linux でのPwnに慣れている人向けの記述になっているので、うまく補完しながら読んでほしい。
 
 ## 1. 環境準備
 
