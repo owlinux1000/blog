@@ -1,7 +1,9 @@
 ---
 title: "CSAW CTF 2014 Greenhornd writeup"
 date: 2019-09-19T23:49:38+09:00
-draft: true
+draft: false
+categories:
+- writeup
 ---
 
 ## はじめに
