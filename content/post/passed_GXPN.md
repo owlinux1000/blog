@@ -1,5 +1,5 @@
 ---
-title: "GIAC GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記"
+title: "GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記"
 date: 2019-11-01T21:15:46+09:00
 draft: false
 categories:
@@ -11,7 +11,7 @@ tags:
 
 ## tl; dr
 
-- [GIAC GIAC Exploit Researcher and Advanced Penetration Tester (GXPN)](https://www.giac.org/certification/exploit-researcher-advanced-penetration-tester-gxpn) に85% で合格した
+- [GIAC Exploit Researcher and Advanced Penetration Tester (GXPN)](https://www.giac.org/certification/exploit-researcher-advanced-penetration-tester-gxpn) に85% で合格した
 - 勉強方法
   - 受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す
   - 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して）
