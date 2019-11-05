@@ -1,79 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-
-
-
-
-<?xml-stylesheet type="text/xsl" href="#stylesheet" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <xsl:stylesheet id="stylesheet" version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" exclude-result-prefixes="xsl">
-    <xsl:output method="html" doctype-system="about:legacy-compat" />
-    <xsl:template match="/rss">
-      <html lang="en-us">
-        <head>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>Terraform RSS | $ make life</title>
-          <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=" />
-        </head>
-        <body>
-          <nav class="u-background">
-  <div class="u-wrapper">
-    <ul class="Banner">
-      <li class="Banner-item Banner-item--title">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/">$ make life</a>
-      </li>
-      
-      <li class="Banner-item">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/about/">About</a>
-      </li>
-      
-      <li class="Banner-item">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/post/">Posts</a>
-      </li>
-      
-      <li class="Banner-item">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/tags/">Tags</a>
-      </li>
-      
-      <li class="Banner-item">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/categories/">Categories</a>
-      </li>
-      
-      <li class="Banner-item">
-        <a class="Banner-link u-clickable" href="https://owlinux1000.github.io/blog/index.xml">RSS</a>
-      </li>
-      
-    </ul>
-  </div>
-</nav>
-          <main>
-            <div class="u-wrapper">
-              <div class="u-padding">
-                <h2 class="Heading-title">
-                  
-                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/tags/terraform/index.xml" rel="bookmark">Terraform RSS</a>
-                  
-                </h2>
-                
-                <p>
-                  To subscribe to this RSS feed, copy its address and paste it into your favorite feed reader.
-                </p>
-                
-              </div>
-            </div>
-          </main>
-          
-<footer class="Footer">
-  <div class="u-wrapper">
-    <div class="u-padding">
-      Except where otherwise noted, content on this site is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/" rel="license"> Creative Commons Attribution 4.0 International License</a>.
-    </div>
-  </div>
-</footer>
-
-        </body>
-      </html>
-    </xsl:template>
-  </xsl:stylesheet>
   <channel>
     <title>Terraform on $ make life</title>
     <link>https://owlinux1000.github.io/blog/tags/terraform/</link>
@@ -81,74 +7,26 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 18 May 2019 12:24:26 +0900</lastBuildDate>
-    <atom:link href="https://owlinux1000.github.io/blog/tags/terraform/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://owlinux1000.github.io/blog/tags/terraform/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Terraform でConoha のインスタンスを立ててみる</title>
       <link>https://owlinux1000.github.io/blog/post/terraform_for_conoha/</link>
       <pubDate>Sat, 18 May 2019 12:24:26 +0900</pubDate>
+      
       <guid>https://owlinux1000.github.io/blog/post/terraform_for_conoha/</guid>
-      <description>
-
-&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
-
-&lt;p&gt;最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;terraform-とは&#34;&gt;Terraform とは&lt;/h2&gt;
-
-&lt;p&gt;Terraform は、Vagrant などで有名な&lt;a href=&#34;https://www.hashicorp.com/&#34;&gt;HashiCorp &lt;/a&gt;が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、&lt;code&gt;HCL&lt;/code&gt; を用いて主に&lt;code&gt;tf&lt;/code&gt; ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、&lt;code&gt;Vagrantfile&lt;/code&gt; ほどRuby 感はない。どちらかというと&lt;code&gt;json&lt;/code&gt; などに近い雰囲気だ。&lt;/p&gt;
-
-&lt;h2 id=&#34;terraform-のインストール&#34;&gt;Terraform のインストール&lt;/h2&gt;
-
-&lt;p&gt;今回は、MacBook Proで行っているので、&lt;code&gt;brew&lt;/code&gt; 経由でインストールする。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ brew install terraform&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;また、&lt;code&gt;HCL&lt;/code&gt;を書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsの&lt;code&gt;hcl-mode&lt;/code&gt;を導入してみた。&lt;/p&gt;
-
-&lt;h2 id=&#34;定義ファイルの作成&#34;&gt;定義ファイルの作成&lt;/h2&gt;
-
-&lt;p&gt;今回は、&lt;code&gt;main.tf&lt;/code&gt; というファイル名で以下の内容を作成した。以下の内容は、ほぼ&lt;a href=&#34;https://qiita.com/kaminchu/items/d0776c381213d54a3a69&#34;&gt;参考記事&lt;/a&gt; と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。&lt;br /&gt;
-まずはじめに、Provider の設定だ。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;provider &amp;#34;openstack&amp;#34; {
-  user_name   = &amp;#34;hgoehoge&amp;#34;
-  password    = &amp;#34;hagehage&amp;#34;
-  tenant_name = &amp;#34;fugafuga&amp;#34;
-  auth_url    = &amp;#34;https://identity.tyo1.conoha.io/v2.0&amp;#34;
-}&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Provider の設定では、&lt;code&gt;provider&lt;/code&gt; キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider に&lt;code&gt;openstack&lt;/code&gt; を設定する。ここには、&lt;code&gt;aws&lt;/code&gt; や&lt;code&gt;azure&lt;/code&gt; といった様々なクラウドサービスなどを指定することができる。今回の&lt;code&gt;openstack&lt;/code&gt;の場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。&lt;br /&gt;
-次に、Keypairについて見ていく。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;resource &amp;#34;openstack_compute_keypair_v2&amp;#34; &amp;#34;keypair&amp;#34; {
-  name       = &amp;#34;terraform-keypair&amp;#34;
-  public_key = &amp;#34;ssh-rsa hogehoge&amp;#34;
-}&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。&lt;code&gt;resource&lt;/code&gt; ブロックを用いて、リソースを定義する。&lt;code&gt;resource&lt;/code&gt; キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するための&lt;code&gt;name&lt;/code&gt; や公開鍵を貼り付ける&lt;code&gt;public_key&lt;/code&gt; を設定している。&lt;/p&gt;
-
-&lt;p&gt;次に、実際にインスタンス自体の設定について見ていく。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;resource &amp;#34;openstack_compute_instance_v2&amp;#34; &amp;#34;basic&amp;#34; {
-  name        = &amp;#34;basic&amp;#34;                             # 好きな名前
-  image_name  = &amp;#34;vmi-ubuntu-18.04-amd64-20gb&amp;#34;
-  flavor_name = &amp;#34;g-512mb&amp;#34;
-  key_pair    = &amp;#34;terraform-keypair&amp;#34;
-  security_groups = [
-    &amp;#34;gncs-ipv4-all&amp;#34;,
-  ]
-}&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;こちらも、先程と同様に&lt;code&gt;resource&lt;/code&gt; ブロックを使って定義する。インスタンス自体の設定に関しては、&lt;code&gt;openstack_compute_instance_v2&lt;/code&gt; で設定できるようだ。&lt;code&gt;image_name&lt;/code&gt; や&lt;code&gt;flavor_name&lt;/code&gt; は、ConohaのAPIを使って設定できる値がわかるので、その値を設定する。今回は最安値プランのVPS構成だ。また、&lt;code&gt;key_pair&lt;/code&gt; には先程定義した&lt;code&gt;name&lt;/code&gt; 設定する。最後に、&lt;code&gt;security_groups&lt;/code&gt; では、通信許可に関する設定だが、今回はIPv4における全開放を指定している。&lt;/p&gt;
-
-&lt;p&gt;今回は、設定ファイルにクレデンシャル情報をハードコードしているが、実際には環境変数で渡したり別ファイルに定義したりなどを行うように注意する。&lt;/p&gt;
-
-&lt;h2 id=&#34;terraform-の実行&#34;&gt;Terraform の実行&lt;/h2&gt;
-
-&lt;p&gt;Terraform では、まずはじめに&lt;code&gt;init&lt;/code&gt; サブコマンドを実行する。ここで、Provider用のプラグインや各種初期化処理などが走る。次に、&lt;code&gt;plan&lt;/code&gt; サブコマンドを用いて、実行計画の作成など実際に行われる処理の確認ができる。そして、&lt;code&gt;apply&lt;/code&gt; サブコマンドを用いて、実際に処理を実行させる。また、削除した場合は、&lt;code&gt;destroy&lt;/code&gt; サブコマンドを利用する。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ terraform init
-...(skip)
-$ terraform plan
-...(skip)
-$ terraform apply&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;apply&lt;/code&gt; サブコマンドが成功すると結果が出力されるので、そのIP アドレスに対して、ssh すると構築されたサーバにアクセスできることがわかる。また、ssh が確認できたら&lt;code&gt;destroy&lt;/code&gt; サブコマンドを実行してみるとインスタンスが削除されている。ここらへんは、逐次実行しながらConoha のコンパネを見ると具体的なイメージが湧きやすい。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;今回は、既存の記事を参考にTerraform を使ってConoha にVPSを構築してみた。若干~元記事に騙されて時間をとかしたが、実際に構築することができた。これがあれば、また新しくVPS を立てたいときやイベントを行う際などには便利だと思った。もうちょっと使い道を模索して慣れていきたい。&lt;/p&gt;
-</description>
+      <description>はじめに 最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。
+Terraform とは Terraform は、Vagrant などで有名なHashiCorp が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、HCL を用いて主にtf ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、Vagrantfile ほどRuby 感はない。どちらかというとjson などに近い雰囲気だ。
+Terraform のインストール 今回は、MacBook Proで行っているので、brew 経由でインストールする。
+$ brew install terraform また、HCLを書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsのhcl-modeを導入してみた。
+定義ファイルの作成 今回は、main.tf というファイル名で以下の内容を作成した。以下の内容は、ほぼ参考記事 と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。
+まずはじめに、Provider の設定だ。
+provider &amp;#34;openstack&amp;#34; { user_name = &amp;#34;hgoehoge&amp;#34; password = &amp;#34;hagehage&amp;#34; tenant_name = &amp;#34;fugafuga&amp;#34; auth_url = &amp;#34;https://identity.tyo1.conoha.io/v2.0&amp;#34; } Provider の設定では、provider キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider にopenstack を設定する。ここには、aws やazure といった様々なクラウドサービスなどを指定することができる。今回のopenstackの場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。
+次に、Keypairについて見ていく。
+resource &amp;#34;openstack_compute_keypair_v2&amp;#34; &amp;#34;keypair&amp;#34; { name = &amp;#34;terraform-keypair&amp;#34; public_key = &amp;#34;ssh-rsa hogehoge&amp;#34; } ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。resource ブロックを用いて、リソースを定義する。resource キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するためのname や公開鍵を貼り付けるpublic_key を設定している。</description>
     </item>
+    
   </channel>
 </rss>

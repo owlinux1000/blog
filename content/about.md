@@ -70,6 +70,7 @@
 - Registered Information Security Specialist Examination
 - Network Specialist Examination
 - GIAC Reverse Engineering Malware（GREM）
+- GIAC Exploit Researcher and Advanced Penetration Tester（GXPN）
 
 ## Links
 
