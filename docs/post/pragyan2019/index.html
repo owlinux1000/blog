@@ -19,7 +19,7 @@
   
   <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
   
-  <meta name="generator" content="Hugo 0.54.0" />
+  <meta name="generator" content="Hugo 0.59.1" />
 </head>
 <body>
   <nav class="u-background">
@@ -94,20 +94,18 @@
 
 <ul>
 <li>バイナリを読むと、渡された乱数3つがチェック用の値になっている</li>
-<li>入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数
-<code>
-x + y = a1
+
+<li><p>入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">x + y = a1
 y + z = a2
-x + z = a3
-</code></li>
-<li>自分が解いたときのケース
-<code>
-Can you cook my favourite food using these ingredients :)
+x + z = a3</pre></div></li>
+
+<li><p>自分が解いたときのケース</p>
+<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">Can you cook my favourite food using these ingredients :)
 -10026 ; -8250 ; -12490 ;
 -000007133-000002893-000005357
-That's yummy.... Here is your gift:
-pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
-</code></li>
+That&#39;s yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}</pre></div></li>
 </ul>
 
 <h2 id="game-of-faces">Game of Faces</h2>
@@ -145,8 +143,7 @@ pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
 <h2 id="mandatory-php">Mandatory PHP</h2>
 
 <ul>
-<li>以下のPHPのコードが渡される</li>
-</ul>
+<li><p>以下のPHPのコードが渡される</p>
 <div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#bc7a00">&lt;?php</span> 
 <span style="color:#008000;font-weight:bold">include</span> <span style="color:#ba2121">&#39;flag.php&#39;</span>; 
 highlight_file(<span style="color:#ba2121">&#39;index.php&#39;</span>); 
@@ -161,28 +158,30 @@ highlight_file(<span style="color:#ba2121">&#39;index.php&#39;</span>);
 <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$c</span><span style="color:#666">&gt;</span><span style="color:#666">0</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$d</span><span style="color:#666">&gt;</span><span style="color:#666">0</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$d</span><span style="color:#666">&gt;</span><span style="color:#19177c">$c</span><span style="color:#666">&amp;&amp;</span><span style="color:#19177c">$a</span><span style="color:#666">==</span><span style="color:#19177c">$c</span><span style="color:#666">*</span><span style="color:#19177c">$c</span><span style="color:#666">+</span><span style="color:#19177c">$d</span><span style="color:#666">*</span><span style="color:#19177c">$d</span>) 
 <span style="color:#19177c">$s1</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;true&#34;</span>; 
 <span style="color:#008000;font-weight:bold">else</span> 
-    <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#34;Bye...&#34;</span>); 
+<span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#34;Bye...&#34;</span>); 
 <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$s1</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;true&#34;</span>) 
-    <span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag1</span>; 
+<span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag1</span>; 
 <span style="color:#008000;font-weight:bold">for</span>(<span style="color:#19177c">$i</span><span style="color:#666">=</span><span style="color:#666">1</span>;<span style="color:#19177c">$i</span><span style="color:#666">&lt;=</span><span style="color:#666">10</span>;<span style="color:#19177c">$i</span><span style="color:#666">++</span>){ 
-    <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$b</span><span style="color:#666">==</span>urldecode(<span style="color:#19177c">$b</span>)) 
-        <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;duck&#39;</span>); 
-    <span style="color:#008000;font-weight:bold">else</span> 
-        <span style="color:#19177c">$b</span><span style="color:#666">=</span>urldecode(<span style="color:#19177c">$b</span>); 
+<span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$b</span><span style="color:#666">==</span>urldecode(<span style="color:#19177c">$b</span>)) 
+    <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;duck&#39;</span>); 
+<span style="color:#008000;font-weight:bold">else</span> 
+    <span style="color:#19177c">$b</span><span style="color:#666">=</span>urldecode(<span style="color:#19177c">$b</span>); 
 }     
 <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$b</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;WoAHh!&#34;</span>) 
 <span style="color:#19177c">$s2</span><span style="color:#666">=</span><span style="color:#ba2121">&#34;true&#34;</span>; 
 <span style="color:#008000;font-weight:bold">else</span> 
-    <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;oops..&#39;</span>); 
+<span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;oops..&#39;</span>); 
 <span style="color:#008000;font-weight:bold">if</span>(<span style="color:#19177c">$s2</span><span style="color:#666">===</span><span style="color:#ba2121">&#34;true&#34;</span>) 
-    <span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag2</span>; 
+<span style="color:#008000;font-weight:bold">echo</span> <span style="color:#19177c">$flag2</span>; 
 <span style="color:#008000;font-weight:bold">die</span>(<span style="color:#ba2121">&#39;end...&#39;</span>); 
 <span style="color:#bc7a00">?&gt;</span> 
-</code></pre></div>
-<ul>
-<li><code>val1</code>が<code>INF</code>になるので、<code>val3</code>と<code>val4</code>でINFになるようにデカイ数を渡して、<code>val2</code>は10回urldecodeして<code>WoAHh!</code>になるようにパラメータを渡せば良い</li>
-<li><code>curl 'http://159.89.166.12:14000///index.php?ffval1=0&amp;val2=WoAHh%2525252525252525252521&amp;val3=101&amp;val4=大きい値'</code></li>
-<li><code>pctf{b3_c4r3fu1_w1th_pHp_f31145}</code></li>
+</code></pre></div></li>
+
+<li><p><code>val1</code>が<code>INF</code>になるので、<code>val3</code>と<code>val4</code>でINFになるようにデカイ数を渡して、<code>val2</code>は10回urldecodeして<code>WoAHh!</code>になるようにパラメータを渡せば良い</p></li>
+
+<li><p><code>curl 'http://159.89.166.12:14000///index.php?ffval1=0&amp;val2=WoAHh%2525252525252525252521&amp;val3=101&amp;val4=大きい値'</code></p></li>
+
+<li><p><code>pctf{b3_c4r3fu1_w1th_pHp_f31145}</code></p></li>
 </ul>
 
 <h2 id="終了後に解いた問題">終了後に解いた問題</h2>
