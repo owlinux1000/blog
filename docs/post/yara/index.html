@@ -19,7 +19,7 @@
   
   <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
   
-  <meta name="generator" content="Hugo 0.59.1" />
+  <meta name="generator" content="Hugo 0.53" />
 </head>
 <body>
   <nav class="u-background">
@@ -284,7 +284,7 @@ rule sha256
 <div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4">$ pip install yara-python</pre></div>
 <p>では、2つ目に作成した<code>hello_string_rule</code>のYara ルールファイルを読み込んで検査してみましょう。以下の検査スクリプトを<code>hello.py</code>として作成してください。</p>
 <div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#008000;font-weight:bold">import</span> <span style="color:#00f;font-weight:bold">yara</span>
-rules <span style="color:#666">=</span> yara<span style="color:#666">.</span>compile(<span style="color:#ba2121">&#39;hello_rule.yara&#39;</span>)
+rules <span style="color:#666">=</span> yara<span style="color:#666">.</span><span style="color:#008000">compile</span>(<span style="color:#ba2121">&#39;hello_rule.yara&#39;</span>)
 result <span style="color:#666">=</span> rules<span style="color:#666">.</span>match(<span style="color:#ba2121">&#39;hello.txt&#39;</span>)
 <span style="color:#008000;font-weight:bold">print</span>(result)</code></pre></div>
 <p>上記スクリプトを実行してください。</p>

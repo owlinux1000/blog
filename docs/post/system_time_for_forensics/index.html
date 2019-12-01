@@ -19,7 +19,7 @@
   
   <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
   
-  <meta name="generator" content="Hugo 0.59.1" />
+  <meta name="generator" content="Hugo 0.53" />
 </head>
 <body>
   <nav class="u-background">
@@ -77,13 +77,12 @@
 <h2 id="unix-time">UNIX time</h2>
 
 <ul>
-<li><p>UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。<strong>UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。</p>
+<li>UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。<strong>UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。</li>
+</ul>
 <div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#008000">require</span> <span style="color:#ba2121">&#39;time&#39;</span>
 <span style="color:#800">JST_OFFSET</span> <span style="color:#666">=</span> <span style="color:#666">3600</span> <span style="color:#666">*</span> <span style="color:#666">9</span>
 <span style="color:#008000">puts</span> <span style="color:#800">Time</span><span style="color:#666">.</span>parse(<span style="color:#ba2121">&#34;1970-01-01 00:00:00&#34;</span>)<span style="color:#666">.</span>to_i <span style="color:#666">+</span> <span style="color:#800">JST_OFFSET</span> <span style="color:#408080;font-style:italic">#=&gt; 0</span>
-<span style="color:#008000">puts</span> <span style="color:#800">Time</span><span style="color:#666">.</span>at(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic">#=&gt; 1970-01-01 09:00:00 +0900</span></code></pre></div></li>
-</ul>
-
+<span style="color:#008000">puts</span> <span style="color:#800">Time</span><span style="color:#666">.</span>at(<span style="color:#666">0</span>) <span style="color:#408080;font-style:italic">#=&gt; 1970-01-01 09:00:00 +0900</span></code></pre></div>
 <h2 id="apple-cocoa-core-data-timestamp">Apple Cocoa Core Data timestamp</h2>
 
 <ul>

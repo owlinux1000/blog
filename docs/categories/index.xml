@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 
 
@@ -79,7 +80,6 @@
     <description>Recent content in Categories on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Nov 2019 21:15:46 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>

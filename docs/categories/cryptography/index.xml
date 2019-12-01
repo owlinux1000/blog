@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 
 
 
@@ -10,7 +11,7 @@
       <html lang="en-us">
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <title>cryptography RSS | $ make life</title>
+          <title>Cryptography RSS | $ make life</title>
           <link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/base.min.21688b64210142c045c9a1d930a48fc517f428060c78a3a012d71f971874c5c3.css" integrity="sha256-IWiLZCEBQsBFyaHZMKSPxRf0KAYMeKOgEtcflxh0xcM=" />
         </head>
         <body>
@@ -49,7 +50,7 @@
               <div class="u-padding">
                 <h2 class="Heading-title">
                   
-                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/categories/cryptography/index.xml" rel="bookmark">cryptography RSS</a>
+                  <a class="Heading-link u-clickable" href="https://owlinux1000.github.io/blog/categories/cryptography/index.xml" rel="bookmark">Cryptography RSS</a>
                   
                 </h2>
                 
@@ -74,9 +75,9 @@
     </xsl:template>
   </xsl:stylesheet>
   <channel>
-    <title>cryptography on $ make life</title>
+    <title>Cryptography on $ make life</title>
     <link>https://owlinux1000.github.io/blog/categories/cryptography/</link>
-    <description>Recent content in cryptography on $ make life</description>
+    <description>Recent content in Cryptography on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 01 Apr 2019 22:33:26 +0900</lastBuildDate>
