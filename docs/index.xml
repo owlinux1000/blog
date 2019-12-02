@@ -80,8 +80,413 @@
     <description>Recent content on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Nov 2019 21:15:46 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 02 Dec 2019 23:00:00 +0900</lastBuildDate>
     <atom:link href="https://owlinux1000.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Powershell学習サイトUnder The Wireの問題を解く</title>
+      <link>https://owlinux1000.github.io/blog/post/powershell_ctf_utw/</link>
+      <pubDate>Mon, 02 Dec 2019 23:00:00 +0900</pubDate>
+      <guid>https://owlinux1000.github.io/blog/post/powershell_ctf_utw/</guid>
+      <description>
+
+&lt;p&gt;本記事は、&lt;a href=&#34;https://adventar.org/calendars/4371&#34;&gt;彌冨研 Advent Calendar 2019&lt;/a&gt; の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、&lt;a href=&#34;https://ieeexplore.ieee.org/document/8368693&#34;&gt;One-dimensional convolutional neural networks for Android malware detection&lt;/a&gt; でした。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+
+&lt;p&gt;みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それが&lt;a href=&#34;https://underthewire.tech/&#34;&gt;Under The Wire&lt;/a&gt; です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;century0-事前準備&#34;&gt;Century0（事前準備）&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Slackのチームに参加して、指定されているチャンネルにログインすると、&lt;code&gt;username:password&lt;/code&gt; を得ることができる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;century1&#34;&gt;Century1&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;当該システムのビルドバージョンを求める&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;PSVersionTable&lt;/code&gt; という変数に様々なバージョン情報が格納されている&lt;/li&gt;
+&lt;li&gt;下記結果より、答えは&lt;code&gt;10.0.14393.3053&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century1\documents&amp;gt; $PSVersionTable
+
+Name                           Value
+----                           -----
+PSVersion                      5.1.14393.3053
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.14393.3053
+CLRVersion                     4.0.30319.42000
+WSManStackVersion              3.0
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century2&#34;&gt;Century2&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-1&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-1&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Invoke-WebRequest がwgetのような動きをするコマンドレット&lt;/li&gt;
+&lt;li&gt;デスクトップに移動すると443というファイル名のファイルが存在する&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;invoke-webrequest443&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;century3&#34;&gt;Century3&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-2&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップ上にあるファイル数を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-2&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Get-ChildItem で対象ディレクトリの中身の一覧を取得&lt;/li&gt;
+&lt;li&gt;Where-Object を使ってファイルのみを抽出
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;$_&lt;/code&gt; が、パイプラインで渡されたオブジェクトを示す&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PSIsContainer&lt;/code&gt; は、ディレクトリの場合&lt;code&gt;True&lt;/code&gt;を返す&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Measure でパイプラインで渡されたオブジェクトの数をカウント&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;123&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century3\documents&amp;gt; Get-ChildItem ..\Desktop | Where-Object { !$_.PSIsContainer} | Measure
+
+
+Count    : 123
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century4&#34;&gt;Century4&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-3&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップにある空白が含まれたディレクトリの中にあるファイル名を求めよ&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;61580&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-3&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Get-ChildItem で表示するだけ
+
+&lt;ul&gt;
+&lt;li&gt;ディレクトリ名に空白が含まれている場合は、&lt;code&gt;&#39;&lt;/code&gt;で囲う&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century4\Documents&amp;gt; Get-ChildItem &amp;#39;..\Desktop\Can You Open Me&amp;#39;
+
+
+    Directory: C:\Users\century4\Desktop\Can You Open Me
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        8/30/2018   3:29 AM             24 61580&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century5&#34;&gt;Century5&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-4&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ドメイン名(TLDを除く)とデスクトップ上にあるファイルを連結したものを求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-4&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;環境変数USERDOMAINという値にドメイン名は格納されている&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;underthewire3347&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century6\documents&amp;gt; Get-ChildItem -Path env: | Where-Object {$_.NAME -eq &amp;#34;USERDNSDOMAIN&amp;#34;}
+
+Name                           Value
+----                           -----
+USERDNSDOMAIN                  UNDERTHEWIRE.TECH&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century6&#34;&gt;Century6&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-5&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップ上のフォルダの数を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-5&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Century3とほぼ同様
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;()&lt;/code&gt;でくくって、Countプロパティにアクセスすれば値のみを表示できる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;197&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century6\documents&amp;gt; (Get-ChildItem ..\Desktop | Where-Object { $_.PSIsContainer} | Measure).Count
+197&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century7&#34;&gt;Century7&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-6&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ユーザプロファイル配下のどこかにあるreadmeファイルの中に記載されている値を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-6&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;数が少ないので愚直にできるが、再帰的な検索方法を用いた&lt;/li&gt;
+&lt;li&gt;Get-ChildItem の&lt;code&gt;-Recurse&lt;/code&gt; オプションを利用することで再帰的に表示可能&lt;/li&gt;
+&lt;li&gt;中を見てみると、答えは&lt;code&gt;7points&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;Get-ChildItem -Recurse ..
+
+
+    Directory: C:\Users\century7
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-r---        7/16/2016   1:23 PM                Desktop
+d-r---        8/30/2018   3:10 AM                Documents
+d-r---       10/28/2019   5:50 PM                Downloads
+d-r---        7/16/2016   1:23 PM                Favorites
+d-r---        7/16/2016   1:23 PM                Links
+d-r---        7/16/2016   1:23 PM                Music
+d-r---        7/16/2016   1:23 PM                Pictures
+d-----        7/16/2016   1:23 PM                Saved Games
+d-r---        7/16/2016   1:23 PM                Videos
+
+
+    Directory: C:\Users\century7\Downloads
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        8/30/2018   3:29 AM              7 Readme.txt&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century8&#34;&gt;Century8&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-7&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップにあるファイルの中のユニークな文字列の数を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-7&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Get-Content でcatが可能
+
+&lt;ul&gt;
+&lt;li&gt;元からエイリアス貼られているので&lt;code&gt;cat&lt;/code&gt;でもOK&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;ユニーク数を取るためには、sortしてuniqすれば良い
+
+&lt;ul&gt;
+&lt;li&gt;sortはSort-Objectのエイリアス&lt;/li&gt;
+&lt;li&gt;Get-Unique でユニークな値を抽出&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;696&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century8\documents&amp;gt; Get-Content ..\Desktop\unique.txt | sort | Get-Unique | measure
+
+
+Count    : 696
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century9&#34;&gt;Century9&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-8&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップにあるファイルの161番目の単語を求めよ
+
+&lt;ul&gt;
+&lt;li&gt;空白で区切られた単語が並んでいる&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-8&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;()&lt;/code&gt;にして文字列として、Splitメソッドで空白で区切り添字160番目の要素にアクセス&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;pierid&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century9\documents&amp;gt; (cat ..\Desktop\Word_File.txt).Split(&amp;#34; &amp;#34;)[160]
+pierid&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century10&#34;&gt;Century10&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-9&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Windows Updateサービスの説明の10番目、8番目の単語とデスクトップ上のファイルのファイル名をつなげた値を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-9&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WMI のWin32_Serviceクラスから説明を得る
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Get-Service&lt;/code&gt; でサービス情報を取得できるが、説明の部分は保持していなかった&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;説明は英文なため空白で区切られているのでSplitして10番目と8番目を抜き出してくる&lt;/li&gt;
+&lt;li&gt;デスクトップ上のファイルのファイル名をつなげて答えは、&lt;code&gt;windowsupdates110&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century10\documents&amp;gt; word=(get-wmiobject win32_service -filter &amp;#34;name=&amp;#39;wuauserv&amp;#39;&amp;#34;).Description.Split(&amp;#34; &amp;#34;)
+PS C:\Users\century10\documents&amp;gt; $word[9] + $word[7]
+Windowsupdates&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century11&#34;&gt;Century11&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-10&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ユーザプロファイル配下の隠しファイルのファイル名を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-10&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Get-ChildItemの&lt;code&gt;-Hidden&lt;/code&gt;パラメータで表示できる
+
+&lt;ul&gt;
+&lt;li&gt;権限なくて見れないフォルダが多く出力されるが一つ怪しいのがある&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;secret_sauce&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century11\documents&amp;gt; Get-ChildItem -Hidden -Recurse ..
+    Directory: C:\Users\century11\Downloads
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+--rh--        8/30/2018   3:34 AM             30 secret_sauce&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century12&#34;&gt;Century12&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-11&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;所属するドメインコントローラの説明とデスクトップ上にあるファイルのファイル名をつなげたものを求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-11&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;まずは、ドメインコントローラをGet-ADDomainControllerで確認する
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Name&lt;/code&gt;が&lt;code&gt;UTW&lt;/code&gt;だと判明する&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Get-ADComputerを用いて、Descriptionを表示する&lt;/li&gt;
+&lt;li&gt;デスクトップのファイルのファイル名とつなげて答えは、&lt;code&gt;i_authenticate_things&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century12\documents&amp;gt; Get-ADDomainController
+
+
+ComputerObjectDN           : CN=UTW,OU=Domain Controllers,DC=underthewire,DC=tech
+DefaultPartition           : DC=underthewire,DC=tech
+Domain                     : underthewire.tech
+Enabled                    : True
+Forest                     : underthewire.tech
+HostName                   : utw.underthewire.tech
+InvocationId               : 09ee1897-2210-4ac9-989d-e19b4241e9c6
+IPv4Address                : 192.99.167.156
+IPv6Address                :
+IsGlobalCatalog            : True
+IsReadOnly                 : False
+LdapPort                   : 389
+Name                       : UTW
+NTDSSettingsObjectDN       : CN=NTDS Settings,CN=UTW,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=underthewire,DC=tech
+OperatingSystem            : Windows Server 2016 Standard
+OperatingSystemHotfix      :
+OperatingSystemServicePack :
+OperatingSystemVersion     : 10.0 (1439
+PS C:\Users\century12\documents&amp;gt; Get-ADComputer UTW -Properties Description
+
+
+Description       : i_authenticate
+DistinguishedName : CN=UTW,OU=Domain Controllers,DC=underthewire,DC=tech
+DNSHostName       : utw.underthewire.tech
+Enabled           : True
+Name              : UTW
+ObjectClass       : computer
+ObjectGUID        : 5ca56844-bb73-4234-ac85-eed2d0d01a2e
+SamAccountName    : UTW$
+SID               : S-1-5-21-758131494-606461608-3556270690-1000
+UserPrincipalName :&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century13&#34;&gt;Century13&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-12&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップにあるファイルの中の単語数を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-12&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ファイルの中身を空白でSplitしてMeasureにパイプラインで渡す&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;755&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century13\documents&amp;gt; (cat ..\Desktop\countmywords).Split(&amp;#34; &amp;#34;) | measure
+
+
+Count    : 755
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;century14&#34;&gt;Century14&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題概要-13&#34;&gt;問題概要&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;デスクトップ上にあるファイルの中で、&lt;code&gt;polo&lt;/code&gt;という単語の出現回数を求めよ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;解法-13&#34;&gt;解法&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;中身の抽出は今まで通り行い、Select-Stringで&lt;code&gt;polo&lt;/code&gt;を検索してMeasureにパイプラインで渡す
+
+&lt;ul&gt;
+&lt;li&gt;完全一致させる必要があるため&lt;code&gt;&amp;quot;^polo$&amp;quot;&lt;/code&gt; を指定する必要がある&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;答えは、&lt;code&gt;153&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;PS C:\Users\century14\documents&amp;gt; (cat ..\Desktop\countpolos).Split(&amp;#34; &amp;#34;) | Select-String &amp;#34;^polo$&amp;#34; | measure
+
+
+Count    : 153
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;これをやる前はあまり好きになれなかったPowershellもやってるうちに好きになることができました。このサイトではまだ次のレベルがあるので取り組んでみようと思います。もしセキュリティ系の職種に付きたい方は、Powershellわかるとなにかと便利なので勉強しておくことをおすすめします。&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</title>
       <link>https://owlinux1000.github.io/blog/post/passed_gxpn/</link>
