@@ -20,4 +20,4 @@ jobs:
           source: "docs"
           target: "html"
           rm: true
-          site_components: 1
+          strip_components: 1
