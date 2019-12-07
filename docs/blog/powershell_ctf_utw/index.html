@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - Powershell学習サイトUnder The Wireの問題を解く 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">Powershell学習サイトUnder The Wireの問題を解く</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON DEC 2, 2019 
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#はじめに">はじめに</a></li>
+<li><a href="#century0-事前準備">Century0（事前準備）</a></li>
+<li><a href="#century1">Century1</a>
+<ul>
+<li><a href="#問題概要">問題概要</a></li>
+<li><a href="#解法">解法</a></li>
+</ul></li>
+<li><a href="#century2">Century2</a>
+<ul>
+<li><a href="#問題概要-1">問題概要</a></li>
+<li><a href="#解法-1">解法</a></li>
+</ul></li>
+<li><a href="#century3">Century3</a>
+<ul>
+<li><a href="#問題概要-2">問題概要</a></li>
+<li><a href="#解法-2">解法</a></li>
+</ul></li>
+<li><a href="#century4">Century4</a>
+<ul>
+<li><a href="#問題概要-3">問題概要</a></li>
+<li><a href="#解法-3">解法</a></li>
+</ul></li>
+<li><a href="#century5">Century5</a>
+<ul>
+<li><a href="#問題概要-4">問題概要</a></li>
+<li><a href="#解法-4">解法</a></li>
+</ul></li>
+<li><a href="#century6">Century6</a>
+<ul>
+<li><a href="#問題概要-5">問題概要</a></li>
+<li><a href="#解法-5">解法</a></li>
+</ul></li>
+<li><a href="#century7">Century7</a>
+<ul>
+<li><a href="#問題概要-6">問題概要</a></li>
+<li><a href="#解法-6">解法</a></li>
+</ul></li>
+<li><a href="#century8">Century8</a>
+<ul>
+<li><a href="#問題概要-7">問題概要</a></li>
+<li><a href="#解法-7">解法</a></li>
+</ul></li>
+<li><a href="#century9">Century9</a>
+<ul>
+<li><a href="#問題概要-8">問題概要</a></li>
+<li><a href="#解法-8">解法</a></li>
+</ul></li>
+<li><a href="#century10">Century10</a>
+<ul>
+<li><a href="#問題概要-9">問題概要</a></li>
+<li><a href="#解法-9">解法</a></li>
+</ul></li>
+<li><a href="#century11">Century11</a>
+<ul>
+<li><a href="#問題概要-10">問題概要</a></li>
+<li><a href="#解法-10">解法</a></li>
+</ul></li>
+<li><a href="#century12">Century12</a>
+<ul>
+<li><a href="#問題概要-11">問題概要</a></li>
+<li><a href="#解法-11">解法</a></li>
+</ul></li>
+<li><a href="#century13">Century13</a>
+<ul>
+<li><a href="#問題概要-12">問題概要</a></li>
+<li><a href="#解法-12">解法</a></li>
+</ul></li>
+<li><a href="#century14">Century14</a>
+<ul>
+<li><a href="#問題概要-13">問題概要</a></li>
+<li><a href="#解法-13">解法</a></li>
+</ul></li>
+<li><a href="#おわりに">おわりに</a></li>
+</ul></li>
+</ul>
+</nav>
+    
+    
+
+<p>本記事は、<a href="https://adventar.org/calendars/4371">彌冨研 Advent Calendar 2019</a> の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、<a href="https://ieeexplore.ieee.org/document/8368693">One-dimensional convolutional neural networks for Android malware detection</a> でした。</p>
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それが<a href="https://underthewire.tech/">Under The Wire</a> です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。</p>
+
+<h2 id="century0-事前準備">Century0（事前準備）</h2>
+
+<ul>
+<li>Slackのチームに参加して、指定されているチャンネルにログインすると、<code>username:password</code> を得ることができる</li>
+</ul>
+
+<h2 id="century1">Century1</h2>
+
+<h3 id="問題概要">問題概要</h3>
+
+<ul>
+<li>当該システムのビルドバージョンを求める</li>
+</ul>
+
+<h3 id="解法">解法</h3>
+
+<ul>
+<li><code>PSVersionTable</code> という変数に様々なバージョン情報が格納されている</li>
+<li>下記結果より、答えは<code>10.0.14393.3053</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century1\documents&gt; $PSVersionTable
+
+Name                           Value
+----                           -----
+PSVersion                      5.1.14393.3053
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.14393.3053
+CLRVersion                     4.0.30319.42000
+WSManStackVersion              3.0
+PSRemotingProtocolVersion      2.3
+SerializationVersion           1.1.0.1
+</code></pre>
+
+<h2 id="century2">Century2</h2>
+
+<h3 id="問題概要-1">問題概要</h3>
+
+<ul>
+<li>PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ</li>
+</ul>
+
+<h3 id="解法-1">解法</h3>
+
+<ul>
+<li>Invoke-WebRequest がwgetのような動きをするコマンドレット</li>
+<li>デスクトップに移動すると443というファイル名のファイルが存在する</li>
+<li>答えは、<code>invoke-webrequest443</code></li>
+</ul>
+
+<h2 id="century3">Century3</h2>
+
+<h3 id="問題概要-2">問題概要</h3>
+
+<ul>
+<li>デスクトップ上にあるファイル数を求めよ</li>
+</ul>
+
+<h3 id="解法-2">解法</h3>
+
+<ul>
+<li>Get-ChildItem で対象ディレクトリの中身の一覧を取得</li>
+<li>Where-Object を使ってファイルのみを抽出
+
+<ul>
+<li><code>$_</code> が、パイプラインで渡されたオブジェクトを示す</li>
+<li><code>PSIsContainer</code> は、ディレクトリの場合<code>True</code>を返す</li>
+</ul></li>
+<li>Measure でパイプラインで渡されたオブジェクトの数をカウント</li>
+<li>答えは、<code>123</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century3\documents&gt; Get-ChildItem ..\Desktop | Where-Object { !$_.PSIsContainer} | Measure
+
+
+Count    : 123
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+</code></pre>
+
+<h2 id="century4">Century4</h2>
+
+<h3 id="問題概要-3">問題概要</h3>
+
+<ul>
+<li>デスクトップにある空白が含まれたディレクトリの中にあるファイル名を求めよ</li>
+<li>答えは、<code>61580</code></li>
+</ul>
+
+<h3 id="解法-3">解法</h3>
+
+<ul>
+<li>Get-ChildItem で表示するだけ
+
+<ul>
+<li>ディレクトリ名に空白が含まれている場合は、<code>'</code>で囲う</li>
+</ul></li>
+</ul>
+
+<pre><code>PS C:\Users\century4\Documents&gt; Get-ChildItem '..\Desktop\Can You Open Me'
+
+
+    Directory: C:\Users\century4\Desktop\Can You Open Me
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        8/30/2018   3:29 AM             24 61580
+</code></pre>
+
+<h2 id="century5">Century5</h2>
+
+<h3 id="問題概要-4">問題概要</h3>
+
+<ul>
+<li>ドメイン名(TLDを除く)とデスクトップ上にあるファイルを連結したものを求めよ</li>
+</ul>
+
+<h3 id="解法-4">解法</h3>
+
+<ul>
+<li>環境変数USERDOMAINという値にドメイン名は格納されている</li>
+<li>答えは、<code>underthewire3347</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century6\documents&gt; Get-ChildItem -Path env: | Where-Object {$_.NAME -eq &quot;USERDNSDOMAIN&quot;}
+
+Name                           Value
+----                           -----
+USERDNSDOMAIN                  UNDERTHEWIRE.TECH
+</code></pre>
+
+<h2 id="century6">Century6</h2>
+
+<h3 id="問題概要-5">問題概要</h3>
+
+<ul>
+<li>デスクトップ上のフォルダの数を求めよ</li>
+</ul>
+
+<h3 id="解法-5">解法</h3>
+
+<ul>
+<li>Century3とほぼ同様
+
+<ul>
+<li><code>()</code>でくくって、Countプロパティにアクセスすれば値のみを表示できる</li>
+</ul></li>
+<li>答えは、<code>197</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century6\documents&gt; (Get-ChildItem ..\Desktop | Where-Object { $_.PSIsContainer} | Measure).Count
+197
+</code></pre>
+
+<h2 id="century7">Century7</h2>
+
+<h3 id="問題概要-6">問題概要</h3>
+
+<ul>
+<li>ユーザプロファイル配下のどこかにあるreadmeファイルの中に記載されている値を求めよ</li>
+</ul>
+
+<h3 id="解法-6">解法</h3>
+
+<ul>
+<li>数が少ないので愚直にできるが、再帰的な検索方法を用いた</li>
+<li>Get-ChildItem の<code>-Recurse</code> オプションを利用することで再帰的に表示可能</li>
+<li>中を見てみると、答えは<code>7points</code></li>
+</ul>
+
+<pre><code>Get-ChildItem -Recurse ..
+
+
+    Directory: C:\Users\century7
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-r---        7/16/2016   1:23 PM                Desktop
+d-r---        8/30/2018   3:10 AM                Documents
+d-r---       10/28/2019   5:50 PM                Downloads
+d-r---        7/16/2016   1:23 PM                Favorites
+d-r---        7/16/2016   1:23 PM                Links
+d-r---        7/16/2016   1:23 PM                Music
+d-r---        7/16/2016   1:23 PM                Pictures
+d-----        7/16/2016   1:23 PM                Saved Games
+d-r---        7/16/2016   1:23 PM                Videos
+
+
+    Directory: C:\Users\century7\Downloads
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        8/30/2018   3:29 AM              7 Readme.txt
+</code></pre>
+
+<h2 id="century8">Century8</h2>
+
+<h3 id="問題概要-7">問題概要</h3>
+
+<ul>
+<li>デスクトップにあるファイルの中のユニークな文字列の数を求めよ</li>
+</ul>
+
+<h3 id="解法-7">解法</h3>
+
+<ul>
+<li>Get-Content でcatが可能
+
+<ul>
+<li>元からエイリアス貼られているので<code>cat</code>でもOK</li>
+</ul></li>
+<li>ユニーク数を取るためには、sortしてuniqすれば良い
+
+<ul>
+<li>sortはSort-Objectのエイリアス</li>
+<li>Get-Unique でユニークな値を抽出</li>
+</ul></li>
+<li>答えは、<code>696</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century8\documents&gt; Get-Content ..\Desktop\unique.txt | sort | Get-Unique | measure
+
+
+Count    : 696
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+</code></pre>
+
+<h2 id="century9">Century9</h2>
+
+<h3 id="問題概要-8">問題概要</h3>
+
+<ul>
+<li>デスクトップにあるファイルの161番目の単語を求めよ
+
+<ul>
+<li>空白で区切られた単語が並んでいる</li>
+</ul></li>
+</ul>
+
+<h3 id="解法-8">解法</h3>
+
+<ul>
+<li><code>()</code>にして文字列として、Splitメソッドで空白で区切り添字160番目の要素にアクセス</li>
+<li>答えは、<code>pierid</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century9\documents&gt; (cat ..\Desktop\Word_File.txt).Split(&quot; &quot;)[160]
+pierid
+</code></pre>
+
+<h2 id="century10">Century10</h2>
+
+<h3 id="問題概要-9">問題概要</h3>
+
+<ul>
+<li>Windows Updateサービスの説明の10番目、8番目の単語とデスクトップ上のファイルのファイル名をつなげた値を求めよ</li>
+</ul>
+
+<h3 id="解法-9">解法</h3>
+
+<ul>
+<li>WMI のWin32_Serviceクラスから説明を得る
+
+<ul>
+<li><code>Get-Service</code> でサービス情報を取得できるが、説明の部分は保持していなかった</li>
+</ul></li>
+<li>説明は英文なため空白で区切られているのでSplitして10番目と8番目を抜き出してくる</li>
+<li>デスクトップ上のファイルのファイル名をつなげて答えは、<code>windowsupdates110</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century10\documents&gt; word=(get-wmiobject win32_service -filter &quot;name='wuauserv'&quot;).Description.Split(&quot; &quot;)
+PS C:\Users\century10\documents&gt; $word[9] + $word[7]
+Windowsupdates
+</code></pre>
+
+<h2 id="century11">Century11</h2>
+
+<h3 id="問題概要-10">問題概要</h3>
+
+<ul>
+<li>ユーザプロファイル配下の隠しファイルのファイル名を求めよ</li>
+</ul>
+
+<h3 id="解法-10">解法</h3>
+
+<ul>
+<li>Get-ChildItemの<code>-Hidden</code>パラメータで表示できる
+
+<ul>
+<li>権限なくて見れないフォルダが多く出力されるが一つ怪しいのがある</li>
+</ul></li>
+<li>答えは、<code>secret_sauce</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century11\documents&gt; Get-ChildItem -Hidden -Recurse ..
+    Directory: C:\Users\century11\Downloads
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+--rh--        8/30/2018   3:34 AM             30 secret_sauce
+</code></pre>
+
+<h2 id="century12">Century12</h2>
+
+<h3 id="問題概要-11">問題概要</h3>
+
+<ul>
+<li>所属するドメインコントローラの説明とデスクトップ上にあるファイルのファイル名をつなげたものを求めよ</li>
+</ul>
+
+<h3 id="解法-11">解法</h3>
+
+<ul>
+<li>まずは、ドメインコントローラをGet-ADDomainControllerで確認する
+
+<ul>
+<li><code>Name</code>が<code>UTW</code>だと判明する</li>
+</ul></li>
+<li>Get-ADComputerを用いて、Descriptionを表示する</li>
+<li>デスクトップのファイルのファイル名とつなげて答えは、<code>i_authenticate_things</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century12\documents&gt; Get-ADDomainController
+
+
+ComputerObjectDN           : CN=UTW,OU=Domain Controllers,DC=underthewire,DC=tech
+DefaultPartition           : DC=underthewire,DC=tech
+Domain                     : underthewire.tech
+Enabled                    : True
+Forest                     : underthewire.tech
+HostName                   : utw.underthewire.tech
+InvocationId               : 09ee1897-2210-4ac9-989d-e19b4241e9c6
+IPv4Address                : 192.99.167.156
+IPv6Address                :
+IsGlobalCatalog            : True
+IsReadOnly                 : False
+LdapPort                   : 389
+Name                       : UTW
+NTDSSettingsObjectDN       : CN=NTDS Settings,CN=UTW,CN=Servers,CN=Default-First-Site-Name,CN=Sites,CN=Configuration,DC=underthewire,DC=tech
+OperatingSystem            : Windows Server 2016 Standard
+OperatingSystemHotfix      :
+OperatingSystemServicePack :
+OperatingSystemVersion     : 10.0 (1439
+PS C:\Users\century12\documents&gt; Get-ADComputer UTW -Properties Description
+
+
+Description       : i_authenticate
+DistinguishedName : CN=UTW,OU=Domain Controllers,DC=underthewire,DC=tech
+DNSHostName       : utw.underthewire.tech
+Enabled           : True
+Name              : UTW
+ObjectClass       : computer
+ObjectGUID        : 5ca56844-bb73-4234-ac85-eed2d0d01a2e
+SamAccountName    : UTW$
+SID               : S-1-5-21-758131494-606461608-3556270690-1000
+UserPrincipalName :
+</code></pre>
+
+<h2 id="century13">Century13</h2>
+
+<h3 id="問題概要-12">問題概要</h3>
+
+<ul>
+<li>デスクトップにあるファイルの中の単語数を求めよ</li>
+</ul>
+
+<h3 id="解法-12">解法</h3>
+
+<ul>
+<li>ファイルの中身を空白でSplitしてMeasureにパイプラインで渡す</li>
+<li>答えは、<code>755</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century13\documents&gt; (cat ..\Desktop\countmywords).Split(&quot; &quot;) | measure
+
+
+Count    : 755
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+</code></pre>
+
+<h2 id="century14">Century14</h2>
+
+<h3 id="問題概要-13">問題概要</h3>
+
+<ul>
+<li>デスクトップ上にあるファイルの中で、<code>polo</code>という単語の出現回数を求めよ</li>
+</ul>
+
+<h3 id="解法-13">解法</h3>
+
+<ul>
+<li>中身の抽出は今まで通り行い、Select-Stringで<code>polo</code>を検索してMeasureにパイプラインで渡す
+
+<ul>
+<li>完全一致させる必要があるため<code>&quot;^polo$&quot;</code> を指定する必要がある</li>
+</ul></li>
+<li>答えは、<code>153</code></li>
+</ul>
+
+<pre><code>PS C:\Users\century14\documents&gt; (cat ..\Desktop\countpolos).Split(&quot; &quot;) | Select-String &quot;^polo$&quot; | measure
+
+
+Count    : 153
+Average  :
+Sum      :
+Maximum  :
+Minimum  :
+Property :
+</code></pre>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>これをやる前はあまり好きになれなかったPowershellもやってるうちに好きになることができました。このサイトではまだ次のレベルがあるので取り組んでみようと思います。もしセキュリティ系の職種に付きたい方は、Powershellわかるとなにかと便利なので勉強しておくことをおすすめします。</p>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/passed_gxpn/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

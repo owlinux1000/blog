@@ -1,13 +1,44 @@
 # End your baseURL with a `/` trailing slash, e.g. `https://example.com/`.
-baseURL = "https://owlinux1000.github.io/blog/"
-
-languageCode = "en-us"
+baseURL = "https://alicemacs.com/"
+author = "Chihiro Hasegawa"
 title = "$ make life"
-# theme = "one"
-theme = "hugo-flex"
+languageCode = "ja"
+theme = "hugo-goa"
+contentdir = "content"
+layoutdir = "layouts"
 publishDir = "docs"
 
-# Chroma Syntax Highlighting
-pygmentsCodefences = true
-pygmentsCodefencesGuessSyntax = true
-pygmentsStyle = "pygments"
+[params]
+author = "Chihiro Hasegawa"
+intro = "Welcome to alicemacs.com!!"
+description = "I <3 Alice's Adventures in Wonderland and Emacs<br>So, my domain is alicemacs.com :-)"
+authorimage = "me.jpg"
+dateformat = "Jan 2, 2006"
+
+[params.social]
+github = "owlinux1000"
+instagram = "encry1024"
+twitter = "encry1024"
+email = "encry1024@gmail.com"
+facebook = "3f9c43f9"
+
+[[menu.main]]
+    name = "blog"
+    identifier = "blog"
+    weight = 1
+    url = "/blog/"
+[[menu.main]]
+    name = "résumé"
+    identifier = "resume"
+    weight = 2
+    url = "/resume/"
+[[menu.main]]
+    name = "hobbies"
+    identifier = "hobbies"
+    weight = 3
+    url = "/hobbies/"
+
+[params.extra]
+copyright = "© 2019. Chihiro Hasegawa. [Some Rights Reserved](https://creativecommons.org/licenses/by/3.0/)."
+highlightjs = true
+

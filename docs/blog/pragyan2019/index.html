@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - PragyanCTF 2019 writeup 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">PragyanCTF 2019 writeup</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON MAR 10, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/writeup">WRITEUP</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    
+
+<h2 id="welcome">Welcome</h2>
+
+<ul>
+<li>JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す</li>
+<li>取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される</li>
+<li>bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード</li>
+<li>zipを展開するとpngファイルがでてくる</li>
+<li>stegosolveで適当にぽちぽちやるとFLAG</li>
+<li><code>pctf{st3gs0lv3_1s_u53ful}</code></li>
+</ul>
+
+<h2 id="cookie-monster">Cookie Monster</h2>
+
+<ul>
+<li>Cookieにflagというフィールドがあり、MD5が設定されている</li>
+<li>どこかのMD5クラックサイトで検索すると<code>pc</code>がでてくる</li>
+<li>フラグフォーマットは、<code>pctf{</code>なのでひたすらこのCookieのMD5の元を考えれば良いとわかる</li>
+<li><code>pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}</code></li>
+</ul>
+
+<h2 id="feed-me">Feed_me</h2>
+
+<ul>
+<li>バイナリを読むと、渡された乱数3つがチェック用の値になっている</li>
+<li>入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数
+<code>
+x + y = a1
+y + z = a2
+x + z = a3
+</code></li>
+<li>自分が解いたときのケース
+<code>
+Can you cook my favourite food using these ingredients :)
+-10026 ; -8250 ; -12490 ;
+-000007133-000002893-000005357
+That's yummy.... Here is your gift:
+pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3}
+</code></li>
+</ul>
+
+<h2 id="game-of-faces">Game of Faces</h2>
+
+<ul>
+<li>ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える</li>
+<li>適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる</li>
+<li>ファイル名で直接アクセスするとフラグ</li>
+<li><code>pctf{You_L00K_Wi3Rd_IN_H3R3}</code></li>
+</ul>
+
+<h2 id="easy-rsa">Easy RSA</h2>
+
+<ul>
+<li>e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&rsquo;s Attackだとわかる</li>
+<li>コード書いて、秘密鍵dを計算すると<code>12978409760901509356642421072925801006324287746872153539187221529835976408177</code>だとわかる</li>
+<li>あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ</li>
+<li><code>pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}</code></li>
+</ul>
+
+<h2 id="late-pr">Late PR</h2>
+
+<ul>
+<li>課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される</li>
+<li>vol.pyでプロセスを見るとchrome.exeがexitしていることがわかり、GoogleChromeCrashHandler.exeというプロセスの存在に気づくので、当該プロセスのメモリダンプを見てみるとフラグ
+
+<ul>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 pslist</code></li>
+<li><code>vol.py -f *.raw --profile Win7SP1x86_23418 memdump --dump-dir .</code></li>
+<li><code>strings 468.dmp | grep pctf</code></li>
+</ul></li>
+<li><code>pctf{Late_submissions_can_be_good}</code></li>
+</ul>
+
+<h2 id="mandatory-php">Mandatory PHP</h2>
+
+<ul>
+<li>以下のPHPのコードが渡される</li>
+</ul>
+
+<pre><code class="language-php">&lt;?php 
+include 'flag.php'; 
+highlight_file('index.php'); 
+$a = $_GET[&quot;val1&quot;]; 
+$b = $_GET[&quot;val2&quot;]; 
+$c = $_GET[&quot;val3&quot;]; 
+$d = $_GET[&quot;val4&quot;]; 
+if(preg_match('/[^A-Za-z]/', $a)) 
+die('oh my gawd...'); 
+$a=hash(&quot;sha256&quot;,$a); 
+$a=(log10($a**(0.5)))**2; 
+if($c&gt;0&amp;&amp;$d&gt;0&amp;&amp;$d&gt;$c&amp;&amp;$a==$c*$c+$d*$d) 
+$s1=&quot;true&quot;; 
+else 
+    die(&quot;Bye...&quot;); 
+if($s1===&quot;true&quot;) 
+    echo $flag1; 
+for($i=1;$i&lt;=10;$i++){ 
+    if($b==urldecode($b)) 
+        die('duck'); 
+    else 
+        $b=urldecode($b); 
+}     
+if($b===&quot;WoAHh!&quot;) 
+$s2=&quot;true&quot;; 
+else 
+    die('oops..'); 
+if($s2===&quot;true&quot;) 
+    echo $flag2; 
+die('end...'); 
+?&gt; 
+</code></pre>
+
+<ul>
+<li><code>val1</code>が<code>INF</code>になるので、<code>val3</code>と<code>val4</code>でINFになるようにデカイ数を渡して、<code>val2</code>は10回urldecodeして<code>WoAHh!</code>になるようにパラメータを渡せば良い</li>
+<li><code>curl 'http://159.89.166.12:14000///index.php?ffval1=0&amp;val2=WoAHh%2525252525252525252521&amp;val3=101&amp;val4=大きい値'</code></li>
+<li><code>pctf{b3_c4r3fu1_w1th_pHp_f31145}</code></li>
+</ul>
+
+<h2 id="終了後に解いた問題">終了後に解いた問題</h2>
+
+<h3 id="magic-pngs">Magic PNGs</h3>
+
+<ul>
+<li>パスワード付きzipとpngファイルが渡されるが、<code>file</code>コマンドを叩くと<code>data</code>都市てか表示されないためヘッダーなどが間違っていると推測できる</li>
+<li>案の定Magic numberが間違っているので修正するが、それでも開かない</li>
+<li>PNGは通常IDATチャンクがあるはずだが、そのキーワードが<code>idat</code>と小文字になっていたのでこれを修正すると開けて、<code>h4CK3RM4n</code>が読み取れる</li>
+<li>ヒントから、この値をmd5してパスワードzipを展開するとフラグ</li>
+<li><code>pctf{y0u_s33_m33_n0w!}</code></li>
+<li><strong>ファイルヘッダーとかが違うところに気づいていなかった</strong></li>
+</ul>
+
+<h3 id="exorcism">EXORcism</h3>
+
+<ul>
+<li>大量の1と0があるファイルを渡される</li>
+<li>100x100の正方形に整形して、1をスペース、0は黒として描画するとQRコードになる</li>
+<li>QRコードを読み取ると、<code>160f15011d1b095339595138535f135613595e1a</code></li>
+<li>タイトルがXORなので、この文字列となにかをxorする必要があると推測できる</li>
+<li>フラグフォーマットの<code>pctf{</code>になるようにxorする値を計算すると<code>flagf</code>になるので、<code>flag</code>を繰り返してxorすれば良いとわかるので、それで計算するとフラグ</li>
+<li><code>pctf{wh4_50_53r1u5?}</code></li>
+<li><strong>そもそもQRコードになるなんて想像ができなかった</strong></li>
+</ul>
+
+<h2 id="save-earth">Save Earth</h2>
+
+<ul>
+<li>USBパケットのデータが渡されて入力した値を求めさせる</li>
+<li>データ内にasciiがないので、間隔つまりモールス信号だと推測する</li>
+<li>USBパケットの末尾のデータ部から4をスペース、1と2をそれぞれモールス信号にするとフラグが得られる</li>
+<li><code>CTFS4V3</code></li>
+</ul>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/bsidessf2019/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/predict_lcg/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

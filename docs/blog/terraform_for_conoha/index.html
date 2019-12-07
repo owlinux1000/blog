@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - Terraform でConoha のインスタンスを立ててみる 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">Terraform でConoha のインスタンスを立ててみる</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON MAY 18, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/infrastructure">INFRASTRUCTURE</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。</p>
+
+<h2 id="terraform-とは">Terraform とは</h2>
+
+<p>Terraform は、Vagrant などで有名な<a href="https://www.hashicorp.com/">HashiCorp </a>が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、<code>HCL</code> を用いて主に<code>tf</code> ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、<code>Vagrantfile</code> ほどRuby 感はない。どちらかというと<code>json</code> などに近い雰囲気だ。</p>
+
+<h2 id="terraform-のインストール">Terraform のインストール</h2>
+
+<p>今回は、MacBook Proで行っているので、<code>brew</code> 経由でインストールする。</p>
+
+<pre><code>$ brew install terraform
+</code></pre>
+
+<p>また、<code>HCL</code>を書いていくためエディタ側にもプラグイン等をインストールしてあげよう。渡しの場合は、Emacsの<code>hcl-mode</code>を導入してみた。</p>
+
+<h2 id="定義ファイルの作成">定義ファイルの作成</h2>
+
+<p>今回は、<code>main.tf</code> というファイル名で以下の内容を作成した。以下の内容は、ほぼ<a href="https://qiita.com/kaminchu/items/d0776c381213d54a3a69">参考記事</a> と同一である。今回は、勉強も兼ねているので、これを丁寧に読み解いていく。<br />
+まずはじめに、Provider の設定だ。</p>
+
+<pre><code>provider &quot;openstack&quot; {
+  user_name   = &quot;hgoehoge&quot;
+  password    = &quot;hagehage&quot;
+  tenant_name = &quot;fugafuga&quot;
+  auth_url    = &quot;https://identity.tyo1.conoha.io/v2.0&quot;
+}
+</code></pre>
+
+<p>Provider の設定では、<code>provider</code> キーワードを用いてブロックを定義する。次に、実際のProvider 名を設定するのだが、Conoha がOpenStack を使っているため、Provider に<code>openstack</code> を設定する。ここには、<code>aws</code> や<code>azure</code> といった様々なクラウドサービスなどを指定することができる。今回の<code>openstack</code>の場合は、API用のユーザ名やパスワード、テナントを名、認証用URLを設定する。<br />
+次に、Keypairについて見ていく。</p>
+
+<pre><code>resource &quot;openstack_compute_keypair_v2&quot; &quot;keypair&quot; {
+  name       = &quot;terraform-keypair&quot;
+  public_key = &quot;ssh-rsa hogehoge&quot;
+}
+</code></pre>
+
+<p>ここでは、構築したインスタンスにssh する際に利用する公開鍵の設定をしている。<code>resource</code> ブロックを用いて、リソースを定義する。<code>resource</code> キーワードの次に、リソースの種類、リソース名を設定する。このブロックの中では、一意に識別するための<code>name</code> や公開鍵を貼り付ける<code>public_key</code> を設定している。</p>
+
+<p>次に、実際にインスタンス自体の設定について見ていく。</p>
+
+<pre><code>resource &quot;openstack_compute_instance_v2&quot; &quot;basic&quot; {
+  name        = &quot;basic&quot;                             # 好きな名前
+  image_name  = &quot;vmi-ubuntu-18.04-amd64-20gb&quot;
+  flavor_name = &quot;g-512mb&quot;
+  key_pair    = &quot;terraform-keypair&quot;
+  security_groups = [
+    &quot;gncs-ipv4-all&quot;,
+  ]
+}
+</code></pre>
+
+<p>こちらも、先程と同様に<code>resource</code> ブロックを使って定義する。インスタンス自体の設定に関しては、<code>openstack_compute_instance_v2</code> で設定できるようだ。<code>image_name</code> や<code>flavor_name</code> は、ConohaのAPIを使って設定できる値がわかるので、その値を設定する。今回は最安値プランのVPS構成だ。また、<code>key_pair</code> には先程定義した<code>name</code> 設定する。最後に、<code>security_groups</code> では、通信許可に関する設定だが、今回はIPv4における全開放を指定している。</p>
+
+<p>今回は、設定ファイルにクレデンシャル情報をハードコードしているが、実際には環境変数で渡したり別ファイルに定義したりなどを行うように注意する。</p>
+
+<h2 id="terraform-の実行">Terraform の実行</h2>
+
+<p>Terraform では、まずはじめに<code>init</code> サブコマンドを実行する。ここで、Provider用のプラグインや各種初期化処理などが走る。次に、<code>plan</code> サブコマンドを用いて、実行計画の作成など実際に行われる処理の確認ができる。そして、<code>apply</code> サブコマンドを用いて、実際に処理を実行させる。また、削除した場合は、<code>destroy</code> サブコマンドを利用する。</p>
+
+<pre><code>$ terraform init
+...(skip)
+$ terraform plan
+...(skip)
+$ terraform apply
+</code></pre>
+
+<p><code>apply</code> サブコマンドが成功すると結果が出力されるので、そのIP アドレスに対して、ssh すると構築されたサーバにアクセスできることがわかる。また、ssh が確認できたら<code>destroy</code> サブコマンドを実行してみるとインスタンスが削除されている。ここらへんは、逐次実行しながらConoha のコンパネを見ると具体的なイメージが湧きやすい。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>今回は、既存の記事を参考にTerraform を使ってConoha にVPSを構築してみた。若干~元記事に騙されて時間をとかしたが、実際に構築することができた。これがあれば、また新しくVPS を立てたいときやイベントを行う際などには便利だと思った。もうちょっと使い道を模索して慣れていきたい。</p>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+      
+      
+      TAGS:
+      
+      
+      <a class="meta" href="/tags/terraform">TERRAFORM</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/passed_grem/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/harekazectf2019/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

