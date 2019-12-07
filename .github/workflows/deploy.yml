@@ -12,10 +12,11 @@ jobs:
       - uses: actions/checkout@master
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.0.1
-        with:
+        env:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+        with:
           source: "docs/*"
           target: "docs"
