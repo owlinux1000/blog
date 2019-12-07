@@ -9,7 +9,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: SCP Files to 
+      - uses: actions/checkout@master
+      - name: copy file via ssh password
         uses: appleboy/scp-action@v0.0.1
         with:
           host: ${{ secrets.HOST }}
