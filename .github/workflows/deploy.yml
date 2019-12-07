@@ -1,0 +1,21 @@
+name: Deploy my website to the server
+on:
+  push:
+    branches:
+      - master
+      - use_ci
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: SCP Files to 
+        uses: appleboy/scp-action@v0.0.1
+        with:
+          host: alicemacs.com
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "docs/*"
+          target: "docs"
