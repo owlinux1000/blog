@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://alicemacs.com/blog/playground_with_github_action/</loc>
+    <lastmod>2019-12-07T18:47:45+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://alicemacs.com/blog/powershell_ctf_utw/</loc>
     <lastmod>2019-12-02T23:00:00+09:00</lastmod>
   </url>
@@ -101,13 +106,13 @@
   
   <url>
     <loc>https://alicemacs.com/</loc>
-    <lastmod>2019-12-02T23:00:00+09:00</lastmod>
+    <lastmod>2019-12-07T18:47:45+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://alicemacs.com/blog/</loc>
-    <lastmod>2019-12-02T23:00:00+09:00</lastmod>
+    <lastmod>2019-12-07T18:47:45+09:00</lastmod>
     <priority>0</priority>
   </url>
   

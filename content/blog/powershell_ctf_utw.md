@@ -4,10 +4,9 @@ date: 2019-12-02T23:00:00+09:00
 draft: false
 ---
 
-本記事は、[彌冨研 Advent Calendar 2019](https://adventar.org/calendars/4371) の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、[One-dimensional convolutional neural networks for Android malware detection](https://ieeexplore.ieee.org/document/8368693) でした。
-
 ## はじめに
 
+本記事は、[彌冨研 Advent Calendar 2019](https://adventar.org/calendars/4371) の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、[One-dimensional convolutional neural networks for Android malware detection](https://ieeexplore.ieee.org/document/8368693) でした。  
 みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それが[Under The Wire](https://underthewire.tech/) です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
 
 ## Century0（事前準備）

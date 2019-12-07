@@ -6,10 +6,23 @@
     <description>Recent content in Blogs on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 02 Dec 2019 23:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 07 Dec 2019 18:47:45 +0900</lastBuildDate>
     
 	<atom:link href="https://alicemacs.com/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>GitHub Action を使ってみる</title>
+      <link>https://alicemacs.com/blog/playground_with_github_action/</link>
+      <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
+      
+      <guid>https://alicemacs.com/blog/playground_with_github_action/</guid>
+      <description>はじめに リリースされてからまだGitHub Actionを使っていなかったので、勉強がてら触ってみた。その際に学んだことをまとめておく。
+GitHub Action とは GitHub Actionは、簡単に言ってしまえばGitHubで使える標準のCI/CDのようなツールだ。独自のワークフローを定義することで、GitHub上の様々なイベントでそれを発火させることができる。設定方法は簡単で、repository/.github/workflows/[ファイル名].yml にTravisのようなYMLファイルを作成するだけ。
+使ってみる 今回試してみたのは、このブログの内容をGitHubにpushしたら、自動的に自分のVPSへデプロイするようなCDとしての機能の実現のために利用してみた。対象リポジトリは以下である。
+ owlinux1000/blog  このやりたいことだけ聞くと、Git Hookでもいいと思えるだろうが、今回はGitHub Actionを使ってみるのが目的なので問題無い。この目的のために作成したのが以下のdeploy.ymlだ。
+name: Deploy my website to the server on: push: branches: - master jobs: build: name: Build runs-on: ubuntu-latest steps: - uses: actions/checkout@master - name: copy file via ssh password uses: appleboy/scp-action@master with: host: ${{ secrets.HOST }} username: ${{ secrets.USERNAME }} password: ${{ secrets.PASSWORD }} port: ${{ secrets.PORT }} source: &amp;quot;docs&amp;quot; target: &amp;quot;html&amp;quot; rm: true strip_components: 1  フォーマットの様相は、あまり他のCIツールと変わらない。onの要素で、masterブランチのpush時に後続の処理を行うような設定にしてある。on: [push, pull_request] のような形でpushとpull-request時に実行することも可能だ。また、scheduleで、cron形式で設定することも可能っぽい。runs-onでは、動作させる環境を指定する。複数の環境で実行したいときはよくある以下のようなMatrix形式の設定をする。</description>
+    </item>
     
     <item>
       <title>Powershell学習サイトUnder The Wireの問題を解く</title>
@@ -17,8 +30,8 @@
       <pubDate>Mon, 02 Dec 2019 23:00:00 +0900</pubDate>
       
       <guid>https://alicemacs.com/blog/powershell_ctf_utw/</guid>
-      <description>本記事は、彌冨研 Advent Calendar 2019 の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、One-dimensional convolutional neural networks for Android malware detection でした。
-はじめに みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それがUnder The Wire です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
+      <description>はじめに 本記事は、彌冨研 Advent Calendar 2019 の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、One-dimensional convolutional neural networks for Android malware detection でした。
+みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それがUnder The Wire です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
 Century0（事前準備）  Slackのチームに参加して、指定されているチャンネルにログインすると、username:password を得ることができる  Century1 問題概要  当該システムのビルドバージョンを求める  解法  PSVersionTable という変数に様々なバージョン情報が格納されている 下記結果より、答えは10.0.14393.3053  PS C:\Users\century1\documents&amp;gt; $PSVersionTable Name Value ---- ----- PSVersion 5.1.14393.3053 PSEdition Desktop PSCompatibleVersions {1.0, 2.0, 3.0, 4.0...} BuildVersion 10.0.14393.3053 CLRVersion 4.0.30319.42000 WSManStackVersion 3.0 PSRemotingProtocolVersion 2.3 SerializationVersion 1.1.0.1  Century2 問題概要  PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ  解法  Invoke-WebRequest がwgetのような動きをするコマンドレット デスクトップに移動すると443というファイル名のファイルが存在する 答えは、invoke-webrequest443  Century3 問題概要  デスクトップ上にあるファイル数を求めよ  解法  Get-ChildItem で対象ディレクトリの中身の一覧を取得 Where-Object を使ってファイルのみを抽出  $_ が、パイプラインで渡されたオブジェクトを示す PSIsContainer は、ディレクトリの場合Trueを返す  Measure でパイプラインで渡されたオブジェクトの数をカウント 答えは、123  PS C:\Users\century3\documents&amp;gt; Get-ChildItem .</description>
     </item>
     
