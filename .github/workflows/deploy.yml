@@ -19,4 +19,6 @@ jobs:
           PORT: ${{ secrets.PORT }}
           SOURCE: "docs"
           TARGET: "html"
-          OVERWRITE: true
+        with:
+          overwrite: true
+          rm: true
