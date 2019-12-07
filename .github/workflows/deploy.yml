@@ -17,5 +17,5 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
           PORT: ${{ secrets.PORT }}
-          SOURCE: "docs/"
-          TARGET: "docs"
+          SOURCE: "docs"
+          TARGET: "html"
