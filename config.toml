@@ -7,6 +7,9 @@ theme = "hugo-goa"
 contentdir = "content"
 layoutdir = "layouts"
 publishDir = "docs"
+disqusShortname = "alicemacs"
+googleAnalytics = "UA-154126244-1"
+enableRobotsTXT = true
 
 [params]
 author = "Chihiro Hasegawa"
@@ -41,4 +44,4 @@ facebook = "3f9c43f9"
 [params.extra]
 copyright = "© 2019. Chihiro Hasegawa. [Some Rights Reserved](https://creativecommons.org/licenses/by/3.0/)."
 highlightjs = true
-
+poweredby = true
