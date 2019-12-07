@@ -18,6 +18,5 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           PORT: ${{ secrets.PORT }}
           SOURCE: "docs"
-          TARGET: "html"
         with:
           strip_components: 1
