@@ -13,10 +13,10 @@ jobs:
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.0.1
         env:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          PORT: ${{ secrets.PORT }}
         with:
           source: "docs/*"
           target: "docs"
