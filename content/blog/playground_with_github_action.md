@@ -2,6 +2,8 @@
 title: "GitHub Action を使ってみる"
 date: 2019-12-07T18:47:45+09:00
 draft: false
+categories: 
+- misc
 ---
 
 ## はじめに
