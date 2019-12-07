@@ -13,7 +13,7 @@ jobs:
       - name: SCP Files to 
         uses: appleboy/scp-action@v0.0.1
         with:
-          host: alicemacs.com
+          host: "alicemacs.com"
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
