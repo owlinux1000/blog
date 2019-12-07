@@ -2,6 +2,8 @@
 title: "新年なのでHugo でGitHub Pages にデプロイ"
 date: 2019-01-02T22:27:14+09:00
 draft: false
+categories:
+- misc
 ---
 
 あけましておめでとうございます。本年もよろしくお願いいたします。   

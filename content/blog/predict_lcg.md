@@ -4,7 +4,6 @@ date: 2019-04-01T22:33:26+09:00
 draft: false
 categories:
 - cryptography
-
 ---
 
 ## はじめに
@@ -62,17 +61,14 @@ matrix0 = np.array([
     [x1 - x0, x2 - x1],
     [x2 - x0, x3 - x1]
 ])
-
 matrix1 = np.array([
     [x2 - x0, x3 - x1],
     [x3 - x0, x4 - x1]
 ])
-
 matrix2 = np.array([
     [x3 - x0, x4 - x1],
     [x4 - x0, x5 - x1]
 ])
-
 matrix3 = np.array([
     [x4 - x0, x5 - x1],
     [x5 - x0, x6 - x1]
