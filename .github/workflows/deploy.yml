@@ -19,3 +19,4 @@ jobs:
           PORT: ${{ secrets.PORT }}
           SOURCE: "docs"
           TARGET: "html"
+          STRIP_COMPONENTS: 1
