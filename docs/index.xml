@@ -6,10 +6,28 @@
     <description>Recent content on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sat, 07 Dec 2019 18:47:45 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 28 Dec 2019 15:00:00 +0900</lastBuildDate>
     
 	<atom:link href="https://alicemacs.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>令和元年のうちに抑えておくLinuxマルウェアの基本</title>
+      <link>https://alicemacs.com/blog/linux_malware101/</link>
+      <pubDate>Sat, 28 Dec 2019 15:00:00 +0900</pubDate>
+      
+      <guid>https://alicemacs.com/blog/linux_malware101/</guid>
+      <description>はじめに 本記事では、私の頭の中に断片的に蓄積されているLinuxマルウェアに関する知見を年末の大掃除がてら整理してみる。おそらく一般的なことが多いと思う。浅く広くという感じで紹介していく。だいたいの本はWindowsマルウェアについてしか書かれていないが、Mastering Malware Analysisにはこの手のことが纏まっていたので学びたい人は読むと良い。
+1. 感染経路 ここでは、Linuxマルウェアに感染する主な経路について紹介する。この手のLinuxマルウェアやIoTマルウェアの多くは、弱いデフォルトパスワード などを狙う場合が多い。典型的なのは、admin:adminやroot:rootなどだ。その他、プロトコルスタック周りの脆弱性を突かれることによるケースも多く存在する。これによりいったんLinuxシステムに侵入されるとLinuxマルウェアは、次の永続化機構などで足場を固める行動に移る。
+2. 永続化機構 ここではLinuxマルウェアが利用する代表的な永続化機構について紹介する。WindowsのCurrenVersion\Runキー等への書き込みと同様に永続化するための機構を備えている場合が多い。もしLinuxマルウェアに感染している際は以下に記載したようなファイルやディレクトリ群を調査するのが良い。
+ cron  /etc/crontab /etc/cron.d /etc/cron.dailyなど  シェルのprofile系  .bash_profile .profileなど  サービス  /etc/inittab /etc/rc?.d/ /etc/system/  正規ファイルの置き換え  多くの場合は、これらのファイルにまた新たなマルウェアをダウンロードしたり、あるいはプロセスを複数起動するような処理が書き込まれていることが多い。
+3. 権限昇格 ここでは、Linuxマルウェアによる一般権限から管理者権限への権限昇格などに使われる手法を紹介する。Linuxにおける権限昇格の多くは、SUID/SGIDなバイナリの脆弱性を突いたものである。SUID/SGIDは、実行したユーザに関わらずバイナリの所有者や所有グループで実行されることになる。例えば、パスワード設定を行うpasswdコマンドなどはSUIDの設定がされている。そのため一般権限で実行しても所有者のrootユーザで実行された扱いになる。
+$ ls -la (which passwd) -rwsr-xr-x 1 root root 59640 Mar 23 2019 /usr/bin/passwd*  このようなバイナリに脆弱性があるとすぐに管理者権限などを持っていかれる可能性が高いため、SUID/SGIDの設定をする際には十分に注意してほしい。
+4. C&amp;amp;Cサーバとの通信方法 実際にLinuxマルウェアに感染すると多くの場合、C&amp;amp;Cサーバとの通信が行われる。LinuxマルウェアがC&amp;amp;Cサーバと通信を行う際には、wgetやcurlといった代表的なHTTPリクエストが可能なコマンドが多く利用される。バイナリ中で、これらのコマンドを呼び出して実行する場合も存在する。この他、正規の通信にまぎれさせるような形で行うものもある。例えばpingコマンドの-p オプションでデータを送信したり、送信データを暗号化して分割した値をサブドメインとして名前解決することで送ったりなどだ。
+5. 表層解析 Linuxマルウェアの表層解析をする際には、fileコマンドとstringsコマンドが役に立つ。これらのコマンドは言及するまでもないだろう。ちなみにstringsコマンドを使う際は、文字列として認識する最低文字列長を設定する-nオプションを利用することをおすすめする。個人的なおすすめ値は-n 7だ。その他個人的に便利でよく使うのが、base64dump.py だ。これは、REMnuxなどでも導入されている対象ファイル中からbase64でエンコードされているような箇所を抜き出してくれる便利ツールだ。
+6. 動的解析 Linuxマルウェアの動的解析をする際には、まずおすすめするのがstrace やltraceコマンドである。前者はシステムコール、後者はライブラリ関数呼び出しをトレースしてくれる。多くの場合、straceをかませることで、大まかな挙動がわかるケースが多い。また、これらのコマンドを利用する際には-fオプションを使ってスレッドも追うように設定したり、-sや-vのオプションも効果的だ。特に以下のシステムコールに着目するべき。
+ open/creat read/write readdir access chmod chdir/chroot rename unlink socket, connect, bind, listen, accept fork/execve prctl, signal, ptrace  また、Linux環境であるためGDBを使った解析も効果的だ。名前のgdbを使うのではなく、gdb-peda などのプラグインを利用することをおすすめする。 C&amp;amp;Cサーバへの通信なども確認したい場合があると思うので、動的解析する際はtcpdumpでパケットをキャプチャしておくのが望ましい。</description>
+    </item>
     
     <item>
       <title>GitHub Action を使ってみる</title>
