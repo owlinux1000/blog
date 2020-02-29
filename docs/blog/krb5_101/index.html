@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+
+
+<base href="https://alicemacs.com/">
+
+<title>
+  $ make life - Kerberos 入門 
+</title>
+
+<meta name="generator" content="Hugo 0.53" />
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+<link rel="stylesheet" href="https://alicemacs.com/css/main.css">
+<link rel="stylesheet" href="https://alicemacs.com/css/custom.css">
+
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+
+</head>
+<body lang="ja">
+<div class="container">
+
+
+<header class="row text-left title">
+  <h1 class="title">Kerberos 入門</h1>
+</header>
+<section id="category-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-left meta">
+        PUBLISHED ON FEB 24, 2020 
+      
+      
+      
+      —
+      
+      
+      <a class="meta" href="/categories/security">SECURITY</a>
+      
+      
+      
+    </h6>
+  </div>
+  
+</section>
+<section id="content-pane" class="row">
+  <div class="col-md-12 text-justify content">
+    
+    
+
+<h2 id="はじめに">はじめに</h2>
+
+<p>本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、<a href="https://twitter.com/encry1024">Twitter</a>などでご指摘いただけると幸いです。</p>
+
+<h2 id="kerberosとは">Kerberosとは</h2>
+
+<p>Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりに<strong>チケット</strong>と呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。</p>
+
+<h2 id="基本用語">基本用語</h2>
+
+<ul>
+<li>レルム(REALM)
+
+<ul>
+<li>Kerberosにおける管理対象となる論理的なネットワーク</li>
+<li>レルム名には、<strong>DNSのドメイン名(大文字)</strong>が利用されることが多い
+
+<ul>
+<li>例) <code>ALICEMACS.COM</code></li>
+</ul></li>
+</ul></li>
+<li>プリンシパル(PRINCIPAL)
+
+<ul>
+<li>Kerberosから認識されるユーザ、サービスやホストのこと
+
+<ul>
+<li>ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される</li>
+</ul></li>
+<li>プリンシパル名と呼ばれる一意な名前を利用する(<code>[]</code>内はオプション項目)
+
+<ul>
+<li><code>username[/instance]@REALM</code> (<strong>instance</strong>は、ホスト名)</li>
+<li><code>service[/FQDN]@REALM</code> (ホストプリンシパルの場合、<strong>service</strong>が<code>&quot;host&quot;</code>という固定文字列になる)</li>
+</ul></li>
+</ul></li>
+<li>サービスサーバ(SS: Service Server)
+
+<ul>
+<li>Kerberos対応したサービスを提供するサーバ</li>
+</ul></li>
+<li>サービスチケット(ST: Service Ticket)
+
+<ul>
+<li>サービスの利用するためにクライアントがサービスサーバに送信するチケット</li>
+</ul></li>
+<li>チケット交付チケット(TGT: Ticket Granting Ticket)
+
+<ul>
+<li>サービスチケットを要求するために利用されるチケット</li>
+</ul></li>
+<li>認証サーバ(AS: Authentication Server)
+
+<ul>
+<li>クライアントに、暗号化された<strong>TGT</strong>を発行する</li>
+<li>この暗号化には、<strong>クライアントのパスワードが利用される</strong>ため本人でないと復号できない</li>
+</ul></li>
+<li>チケット交付サーバ(TGS: Ticket Granting Server)
+
+<ul>
+<li>サービスチケットをクライアントに発行する</li>
+</ul></li>
+<li>鍵配布センター(KDC: Key Distribution Center)
+
+<ul>
+<li>以下の3つの要素から構成される
+
+<ul>
+<li>すべてのプリンシパルと関連する暗号化鍵のデータベース</li>
+<li>認証サーバ</li>
+<li>チケット交付サーバ</li>
+</ul></li>
+<li>1つのレルムには少なくとも1つの鍵配布センターが必要
+<br /></li>
+</ul></li>
+</ul>
+
+<h2 id="動作概要">動作概要</h2>
+
+<p>ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。</p>
+
+<p><img src="https://i.imgur.com/eFb4rUD.png" width="100%"/></p>
+
+<h3 id="1-ユーザのログインと鍵生成">1. ユーザのログインと鍵生成</h3>
+
+<p>まず初めにユーザは、クライアントに自身のユーザIDとパスワードを使ってログインします。これによりKerberos対応しているクライアントは、パスワードを用いて共通鍵暗号の鍵を生成します(この変換処理のことを一般に<code>strings2Key</code>と呼びます)。この鍵のことを便宜上「<strong>クライアントの鍵</strong>」と定義しておきます。鍵を生成したらクライアントはTGTを取得する処理に移ります。</p>
+
+<h3 id="2-tgtの取得">2. TGTの取得</h3>
+
+<p>TGTを取得したいクライアントは、ASに対して<strong>AS_REQ(Authentication Server REQuest)</strong>と呼ばれるリクエストを送信します。AS_REQでは、主に以下の3つの情報を送信します。</p>
+
+<ol>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのタイムスタンプ</li>
+<li>TGSのプリンシパル名</li>
+</ol>
+
+<p>1つ目のクライアントのプリンシパル名、ユーザプリンシパル名やWindowsの場合SAMアカウント名などです。2つ目のタイムスタンプは、各プリンシパルやKDCでの時刻がずれていないかを確認するために利用されます。最後のTGSのプリンシパル名は、<code>krbtgt/FQDN@REALM</code>で固定されています（Kerberos 5の場合）。<br />
+ASは、この要求を受け取ると上述した<strong>クライアントプリンシパルが存在すること</strong>と<strong>タイムスタンプがKDCのローカルタイムとずれていないこと（通常5分以内）</strong>を確認します。問題がなければ、ASは<strong>クライアントとTGS間のセッション鍵</strong>を生成します。この鍵のことを便宜上「クライアント/TGSセッション鍵」と定義しておきます。そしてASは以下の2つの情報を含む<strong>AS_REP(Authentication Server REsPonse)</strong>と呼ばれるレスポンスを行います。</p>
+
+<ol>
+<li>「クライアントの鍵」を利用して暗号化された「クライアント/TGSセッション鍵」</li>
+<li>TGSが持つ鍵で暗号化されたTGT(以下の情報を含む)
+
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのIPアドレス</li>
+<li>チケットの有効期限</li>
+<li>クライアント/TGSセッション鍵
+<br /></li>
+</ul></li>
+</ol>
+
+<p>クライアントは、上記2つの情報を受取ると自身が持つ「クライアントの鍵」を用いて「クライアント/TGSセッション鍵」を復号します。これにより、クライアントはTGSと通信を行う際に暗号化したデータで送受信することができるようになります。しかしながら、TGTはTGSのみが保つ鍵で暗号化されているためクライアントは復号することができません。<br />
+次にクライアントは、TGSから利用したいサービスのSTを取得する処理に移ります。</p>
+
+<h3 id="3-stの取得">3. STの取得</h3>
+
+<p>クライアントは、TGSに対して、「このサービスを利用するためのチケットを取得したい」というリクエストを送信します。このリクエストを行う際には、以下の3つ情報を送信します。</p>
+
+<ol>
+<li>TGSが持つ鍵で暗号化されたTGT</li>
+<li>アクセスしたいサービスのSPN</li>
+<li>「クライアント/TGSセッション鍵」で暗号化された<strong>Authenticator</strong>(Authenticatorには以下の情報を含む)
+
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのタイムスタンプ</li>
+</ul></li>
+</ol>
+
+<p>TGSはこれらの情報を受け取ると、初めに暗号化されたTGTを復号します。送られてくるTGTは、TGSが持つ鍵で暗号化されているため復号できます。TGTを復号できるとTGSは、「クライアント/TGSセッション鍵」を手に入れることができます。そのため手に入れたセッション鍵を用いて、受け取った暗号化されているAuthenticatorを復号します。これにより判明したクライアントのプリンシパル名と復号したTGTに記載されているクライアントのプリンシパル名を比較して一致することを確認します。問題がなければ、以下の2つの情報をクライアントにレスポンスします。</p>
+
+<ol>
+<li>SSが持つ鍵で暗号化されたST(STには以下の情報を含む)
+
+<ul>
+<li>クライアントのプリンシパル名</li>
+<li>クライアントのIPアドレス</li>
+<li>チケットの有効期限</li>
+<li>クライアント/SSのセッション鍵</li>
+</ul></li>
+<li>「クライアント/TGSセッション鍵」で暗号化された「クライアント/SSセッション鍵」</li>
+</ol>
+
+<p>これらを受け取ったクライアントは、Kerberos対応されたサービスの利用のリクエストを行うことが出来るようになりました。最後にクライアントがSTを用いて、当該サービスを利用する処理に移ります。</p>
+
+<h3 id="4-サービスの利用">4. サービスの利用</h3>
+
+<p>クライアントが、サービスを利用するためにリクエストを行う際に送信する情報は以下の2つです。</p>
+
+<ol>
+<li>ST</li>
+<li>「クライアント/SSセッション鍵」で暗号化されたAuthenticator(含む情報は上述したものと同じ)</li>
+</ol>
+
+<p>これらを受け取ったSSは、STを復号します。送られてくるSTは、SSが持つ鍵で暗号化されているため復号できます。SSは、STを復号すると「クライアント/SSセッション鍵」を手に入れることができるので、Authenticatorを復号できるようになります。そこでこれを復号し、受け取った２つの情報が復号できると、TGSの時と同じようにそれぞれに格納されているクライアントのプリンシパル名を確認します。これが一致する場合、サービス提供サーバはクライアントに対してAuthenticatorに含まれるタイムスタンプを「クライアント/SSセッション鍵」で暗号化してクライアントにレスポンスします。そしてこれを受け取ったクライアントは、タイムスタンプを復号し正常な時間かどうかを確認します。正常であれば、その後クライアントはSSへサービスの要求を開始し利用することができるようになります。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>本記事では、Kerberosを用いてクライアントがサービスを利用するまでの流れを詳細に見てきました。大雑把にまとめてしまうとKerberosは、ユーザが一度ログインしてしまえば、ある一定期間はログイン済みであることを証明するTGTと呼ばれるチケットを用いて、各種サービスへのアクセスを要求し、当該サービスを利用するためのチケットを取得することで利用できるようになるシステムです。次回の記事では、本記事の知識を前提にKerberosにおける攻撃手法を解説します。</p>
+
+<h2 id="参考文献">参考文献</h2>
+
+<ul>
+<li><a href="http://web.mit.edu/kerberos/">Kerberos: The Network Authentication Protocol</a></li>
+<li><a href="https://www.infraexpert.com/study/security18.html">ケルベロス認証（Kerberos Authentication）とは</a></li>
+<li><a href="https://www.oreilly.co.jp/books/4873111862/">Kerberos: The Definitive Guide</a></li>
+<li><a href="https://www.keicode.com/windows/kerberos-basic.php">Kerberos の概要とチケット取得の様子を目で確認した結果</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos(Protocol)</a></li>
+</ul>
+
+  </div>
+</section>
+<section id="tag-pane" class="row meta">
+  
+  <div class="col-md-12">
+    <h6 class="text-right meta">
+      
+    </h6>
+  </div>
+  
+</section>
+
+
+
+
+<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "alicemacs" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+<section id="menu-pane" class="row menu text-center">
+  
+  
+  <span><a class="menu-item" href="https://alicemacs.com/blog/linux_malware101/">&lt; prev | </a></span>
+  
+  
+  <span><a class="menu-item" href="/blog">blog</a></span>
+  
+  
+  
+  <h4 class="text-center"><a class="menu-item" href="https://alicemacs.com/">home</a></h4>
+</section>
+
+
+
+<footer class="row text-center footer">
+  <hr />
+  
+  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
+  
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  
+      
+      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
+    
+  
+</footer>
+
+</div>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="js/main.js"></script>
+<script src="js/custom.js"></script>
+</body>
+</html>
+
+

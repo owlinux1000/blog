@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://alicemacs.com/blog/krb5_101/</loc>
+    <lastmod>2020-02-24T17:36:24+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://alicemacs.com/blog/linux_malware101/</loc>
     <lastmod>2019-12-28T15:00:00+09:00</lastmod>
   </url>
@@ -111,13 +116,13 @@
   
   <url>
     <loc>https://alicemacs.com/</loc>
-    <lastmod>2019-12-28T15:00:00+09:00</lastmod>
+    <lastmod>2020-02-24T17:36:24+09:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://alicemacs.com/blog/</loc>
-    <lastmod>2019-12-28T15:00:00+09:00</lastmod>
+    <lastmod>2020-02-24T17:36:24+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -165,6 +170,12 @@
   <url>
     <loc>https://alicemacs.com/tags/mobile/</loc>
     <lastmod>2019-03-06T23:10:49+09:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://alicemacs.com/categories/security/</loc>
+    <lastmod>2020-02-24T17:36:24+09:00</lastmod>
     <priority>0</priority>
   </url>
   
