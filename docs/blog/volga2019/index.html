@@ -16,7 +16,7 @@
   $ make life - VolgaCTF 2019 writeup 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,42 +68,36 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<h2 id="shadow-cat">Shadow cat</h2>
-
+    <h2 id="shadow-cat">Shadow cat</h2>
 <ul>
 <li><code>/etc/shadow</code>と<code>encrypted.txt</code>が渡される</li>
 <li><code>/etc/shadow</code>には、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、<code>encrypted.txt</code>にはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる</li>
 <li><code>/etc/shadow</code>のパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG</li>
 </ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
 
-<pre><code class="language-ruby">#!/usr/bin/env ruby
-
-require 'unix_crypt' # gem install unix-crypt
-org = []
-ans = []
-lines = File.read(&quot;./shadow.txt&quot;).split(&quot;\n&quot;)
-lines.each do |line|
-  org &lt;&lt; line.split(&quot;:&quot;)[0]
-  enc = line.split(&quot;:&quot;)[1]
-  salt = line.split(&quot;$&quot;)[2]
+require <span style="color:#e6db74">&#39;unix_crypt&#39;</span> <span style="color:#75715e"># gem install unix-crypt</span>
+org <span style="color:#f92672">=</span> <span style="color:#f92672">[]</span>
+ans <span style="color:#f92672">=</span> <span style="color:#f92672">[]</span>
+lines <span style="color:#f92672">=</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>read(<span style="color:#e6db74">&#34;./shadow.txt&#34;</span>)<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+lines<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>line<span style="color:#f92672">|</span>
+  org <span style="color:#f92672">&lt;&lt;</span> line<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;:&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">0</span><span style="color:#f92672">]</span>
+  enc <span style="color:#f92672">=</span> line<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;:&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">]</span>
+  salt <span style="color:#f92672">=</span> line<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;$&#34;</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">2</span><span style="color:#f92672">]</span>
   
-  0x1f.upto(0x7e) do |i|
-    hashpass = UnixCrypt::SHA512.build(i.chr, salt)
-    if hashpass == enc
-      ans &lt;&lt; i.chr
-      puts &quot;Passed&quot;
-      break
-    end
-  end
-end
+  <span style="color:#ae81ff">0x1f</span><span style="color:#f92672">.</span>upto(<span style="color:#ae81ff">0x7e</span>) <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>i<span style="color:#f92672">|</span>
+    hashpass <span style="color:#f92672">=</span> <span style="color:#66d9ef">UnixCrypt</span><span style="color:#f92672">::</span><span style="color:#66d9ef">SHA512</span><span style="color:#f92672">.</span>build(i<span style="color:#f92672">.</span>chr, salt)
+    <span style="color:#66d9ef">if</span> hashpass <span style="color:#f92672">==</span> enc
+      ans <span style="color:#f92672">&lt;&lt;</span> i<span style="color:#f92672">.</span>chr
+      puts <span style="color:#e6db74">&#34;Passed&#34;</span>
+      <span style="color:#66d9ef">break</span>
+    <span style="color:#66d9ef">end</span>
+  <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">end</span>
 
-encrypted = File.read(&quot;./encrypted.txt&quot;).chomp
-puts &quot;VolgaCTF{#{encrypted.tr(org.join(&quot;&quot;), ans.join(&quot;&quot;))}}&quot;
-</code></pre>
-
-<ul>
+encrypted <span style="color:#f92672">=</span> <span style="color:#66d9ef">File</span><span style="color:#f92672">.</span>read(<span style="color:#e6db74">&#34;./encrypted.txt&#34;</span>)<span style="color:#f92672">.</span>chomp
+puts <span style="color:#e6db74">&#34;VolgaCTF{</span><span style="color:#e6db74">#{</span>encrypted<span style="color:#f92672">.</span>tr(org<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;&#34;</span>), ans<span style="color:#f92672">.</span>join(<span style="color:#e6db74">&#34;&#34;</span>))<span style="color:#e6db74">}</span><span style="color:#e6db74">}&#34;</span>
+</code></pre></div><ul>
 <li><strong>VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}</strong></li>
 </ul>
 
@@ -167,7 +161,7 @@ puts &quot;VolgaCTF{#{encrypted.tr(org.join(&quot;&quot;), ans.join(&quot;&quot;
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

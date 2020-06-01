@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on $ make life</title>
@@ -12,20 +12,11 @@
     
     
     <item>
-      <title>Giac</title>
+      <title>GIAC</title>
       <link>https://alicemacs.com/tags/giac/</link>
       <pubDate>Fri, 01 Nov 2019 21:15:46 +0900</pubDate>
       
       <guid>https://alicemacs.com/tags/giac/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Mobile</title>
-      <link>https://alicemacs.com/tags/mobile/</link>
-      <pubDate>Wed, 06 Mar 2019 23:10:49 +0900</pubDate>
-      
-      <guid>https://alicemacs.com/tags/mobile/</guid>
       <description></description>
     </item>
     
@@ -35,6 +26,15 @@
       <pubDate>Sat, 18 May 2019 12:24:26 +0900</pubDate>
       
       <guid>https://alicemacs.com/tags/terraform/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mobile</title>
+      <link>https://alicemacs.com/tags/mobile/</link>
+      <pubDate>Wed, 06 Mar 2019 23:10:49 +0900</pubDate>
+      
+      <guid>https://alicemacs.com/tags/mobile/</guid>
       <description></description>
     </item>
     

@@ -16,7 +16,7 @@
   $ make life - フォレンジックのためのシステム時刻入門 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,55 +68,39 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<h2 id="はじめに">はじめに</h2>
-
+    <h2 id="はじめに">はじめに</h2>
 <p>フォレンジックなどをやっていると様々な時刻形式と直面することがあります。いざ調べてみると時刻形式は、プラットフォームによって異なる場合が多いことに気づきました。時刻の情報はタイムライン作成では、とても重要な要因となってくるので、適切に時刻を解釈することが必要です。本記事では、よく見る3つの時刻表記についてご紹介します。</p>
-
 <h2 id="unix-time">UNIX time</h2>
-
 <ul>
 <li>UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。<strong>UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。</li>
 </ul>
-
-<pre><code class="language-ruby">require 'time'
-JST_OFFSET = 3600 * 9
-puts Time.parse(&quot;1970-01-01 00:00:00&quot;).to_i + JST_OFFSET #=&gt; 0
-puts Time.at(0) #=&gt; 1970-01-01 09:00:00 +0900
-</code></pre>
-
-<h2 id="apple-cocoa-core-data-timestamp">Apple Cocoa Core Data timestamp</h2>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby">require <span style="color:#e6db74">&#39;time&#39;</span>
+<span style="color:#66d9ef">JST_OFFSET</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3600</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">9</span>
+puts <span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>parse(<span style="color:#e6db74">&#34;1970-01-01 00:00:00&#34;</span>)<span style="color:#f92672">.</span>to_i <span style="color:#f92672">+</span> <span style="color:#66d9ef">JST_OFFSET</span> <span style="color:#75715e">#=&gt; 0</span>
+puts <span style="color:#66d9ef">Time</span><span style="color:#f92672">.</span>at(<span style="color:#ae81ff">0</span>) <span style="color:#75715e">#=&gt; 1970-01-01 09:00:00 +0900</span>
+</code></pre></div><h2 id="apple-cocoa-core-data-timestamp">Apple Cocoa Core Data timestamp</h2>
 <ul>
 <li>Apple Cocoa Core Data timestampは、主にMac OSやiOSで見かける時刻形式です。Cocoaとは、macOS用のフレームワークです。また、<strong>Mac absolute time</strong>と表記されることもあります。本時刻形式は、<strong>UTCの2001年1月1日0時0分0秒からの経過秒数</strong>で表す時刻形式です。UNIX timeとの差分は、<strong>978307200</strong>なので、これを考慮すればUNIX timeからすぐ算出することができます。</li>
 </ul>
-
-<h2 id="webkit-chrome-time">WebKit/Chrome time</h2>
-
+<h2 id="webkitchrome-time">WebKit/Chrome time</h2>
 <ul>
 <li>WebKit/Chrome timeは、Google Chrome、OperaやSafariなどのデータで使われている時刻形式です。本時刻形式は、<strong>UTCの1601年1月1日0時0分0秒からの経過マイクロ秒</strong>で表す時刻形式です。UNIX timeなどと異なりマイクロ秒なので値が大きいという特徴があります。</li>
 </ul>
-
 <h2 id="便利なツールやサイト">便利なツールやサイト</h2>
-
 <p>以下の2つは、システム時刻変換をする際に、使いやすかったツールです。</p>
-
 <ul>
 <li><a href="https://www.epochconverter.com/">Epoch Converter</a>
-
 <ul>
 <li>本記事で説明した時刻形式などは概ねカバーしているツールです</li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://www.digital-detective.net/dcode/">DCode</a>
-
 <ul>
 <li>Epoch Converterと同様の機能を有しているWindowsアプリケーション</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="参考文献">参考文献</h2>
-
 <ul>
 <li><a href="https://www.packtpub.com/networking-and-servers/practical-mobile-forensics-third-edition">Practical Mobile Forensics - Third Edition</a></li>
 </ul>
@@ -181,7 +165,7 @@ puts Time.at(0) #=&gt; 1970-01-01 09:00:00 +0900
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

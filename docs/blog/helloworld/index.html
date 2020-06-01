@@ -16,7 +16,7 @@
   $ make life - 新年なのでHugo でGitHub Pages にデプロイ 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,17 +68,11 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<p>あけましておめでとうございます。本年もよろしくお願いいたします。</p>
-
+    <p>あけましておめでとうございます。本年もよろしくお願いいたします。</p>
 <p>新年なので、Hugo で技術ブログを作成してみました。私ははてなブログやMedium などいろいろサイトを持っているわけですが、このブログには自分の備忘録的なことを書いて行こうと思います。</p>
-
 <h2 id="1-hugo-のインストールと事前準備">1. Hugo のインストールと事前準備</h2>
-
-<p>まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub に<code>blog</code> というリポジトリを作成(アクセスする際には、<code>https://owlinux1000.github.io/blog/</code>) して、GitHubの設定で <strong>masterブランチのdocs/</strong> を公開対象として設定する。<br />
+<p>まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub に<code>blog</code> というリポジトリを作成(アクセスする際には、<code>https://owlinux1000.github.io/blog/</code>) して、GitHubの設定で <strong>masterブランチのdocs/</strong> を公開対象として設定する。<br>
 <code>config.toml</code> を編集する際には、<code>publishDir = &quot;docs&quot;</code> を追加しておく。これはGitHub 側で公開するディレクトリを<code>docs</code> にしているから。</p>
-
 <pre><code>$ brew install hugo
 $ hugo new site blog
 $ cd blog
@@ -87,24 +81,17 @@ $ cd themes
 $ git submodule add https://github.com/resugary/hugo-theme-one one
 $ cp one/exampleSite/config.toml ../../../
 $ emacs config.toml # 適宜パラメータを修正する
-</code></pre>
-
-<h2 id="2-記事作成">2. 記事作成</h2>
-
+</code></pre><h2 id="2-記事作成">2. 記事作成</h2>
 <p>hugo コマンドで記事を作成してまずは、server サブコマンドを使ってPreview を見てみる。大丈夫そうならGitHub にpushする</p>
-
-<pre><code class="language-sh">$ hugo new posts/helloworld # この記事
-$ emacs content/posts/helloworld.md # draft: false に変更
-$ hugo # Webページを生成。これでdocsに吐かれる
-$ hugo server # アクセスして見れるか確認する
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">$ hugo new posts/helloworld <span style="color:#75715e"># この記事</span>
+$ emacs content/posts/helloworld.md <span style="color:#75715e"># draft: false に変更</span>
+$ hugo <span style="color:#75715e"># Webページを生成。これでdocsに吐かれる</span>
+$ hugo server <span style="color:#75715e"># アクセスして見れるか確認する</span>
 $ git add .
-$ git commit -m &quot;1st commit!&quot;
+$ git commit -m <span style="color:#e6db74">&#34;1st commit!&#34;</span>
 $ git remote add origin git@github.com:owlinux1000/blog.git
 $ git push -u origin master
-</code></pre>
-
-<h2 id="おわりに">おわりに</h2>
-
+</code></pre></div><h2 id="おわりに">おわりに</h2>
 <p>Hugo を初めて使ってみた感想として結構めんどくさくなかったと思った。ネット上見てるとCIでがんばったりいろいろ見ていたので、プロジェクトサイトでのデプロイにした。毎月1本程度では継続していきたい。</p>
 
   </div>
@@ -165,7 +152,7 @@ $ git push -u origin master
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

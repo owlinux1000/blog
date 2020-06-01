@@ -16,7 +16,7 @@
   $ make life - GitHub Action を使ってみる 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,71 +68,50 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<h2 id="はじめに">はじめに</h2>
-
+    <h2 id="はじめに">はじめに</h2>
 <p>リリースされてからまだ<a href="https://github.com/features/actions">GitHub Action</a>を使っていなかったので、勉強がてら触ってみた。その際に学んだことをまとめておく。</p>
-
 <h2 id="github-action-とは">GitHub Action とは</h2>
-
 <p>GitHub Actionは、簡単に言ってしまえばGitHubで使える標準のCI/CDのようなツールだ。独自のワークフローを定義することで、GitHub上の様々なイベントでそれを発火させることができる。設定方法は簡単で、<code>repository/.github/workflows/[ファイル名].yml</code> にTravisのようなYMLファイルを作成するだけ。</p>
-
 <h2 id="使ってみる">使ってみる</h2>
-
 <p>今回試してみたのは、このブログの内容をGitHubにpushしたら、自動的に自分のVPSへデプロイするようなCDとしての機能の実現のために利用してみた。対象リポジトリは以下である。</p>
-
 <ul>
 <li><a href="https://github.com/owlinux1000/blog">owlinux1000/blog</a></li>
 </ul>
-
 <p>このやりたいことだけ聞くと、Git Hookでもいいと思えるだろうが、今回はGitHub Actionを使ってみるのが目的なので問題無い。この目的のために作成したのが以下の<code>deploy.yml</code>だ。</p>
-
-<pre><code class="language-yaml">name: Deploy my website to the server
-on:
-  push:
-    branches:
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">name</span>: Deploy my website to the server
+<span style="color:#66d9ef">on</span>:
+  <span style="color:#66d9ef">push</span>:
+    <span style="color:#66d9ef">branches</span>:
       - master
-jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          source: &quot;docs&quot;
-          target: &quot;html&quot;
-          rm: true
-          strip_components: 1
-</code></pre>
-
-<p>フォーマットの様相は、あまり他のCIツールと変わらない。<code>on</code>の要素で、<code>master</code>ブランチの<code>push</code>時に後続の処理を行うような設定にしてある。<code>on: [push, pull_request]</code> のような形でpushとpull-request時に実行することも可能だ。また、<code>schedule</code>で、cron形式で設定することも可能っぽい。<code>runs-on</code>では、動作させる環境を指定する。複数の環境で実行したいときはよくある以下のようなMatrix形式の設定をする。</p>
-
-<pre><code class="language-yaml">strategy:
-  matrix:
-    platform: [ubuntu-latest, macos-latest, windows-latest]
-</code></pre>
-
-<p>次に<code>steps</code>の子要素で複数の工程を定義することができる。今回は使っていないが、最も基本的なのは<code>run</code>っぽい。以下のようにして、bashでスクリプトを実行することもできる。</p>
-
+<span style="color:#66d9ef">jobs</span>:
+  <span style="color:#66d9ef">build</span>:
+    <span style="color:#66d9ef">name</span>: Build
+    <span style="color:#66d9ef">runs-on</span>: ubuntu-latest
+    <span style="color:#66d9ef">steps</span>:
+      - <span style="color:#66d9ef">uses</span>: actions/checkout@master
+      - <span style="color:#66d9ef">name</span>: copy file via ssh password
+        <span style="color:#66d9ef">uses</span>: appleboy/scp-action@master
+        <span style="color:#66d9ef">with</span>:
+          <span style="color:#66d9ef">host</span>: ${{ secrets.HOST }}
+          <span style="color:#66d9ef">username</span>: ${{ secrets.USERNAME }}
+          <span style="color:#66d9ef">password</span>: ${{ secrets.PASSWORD }}
+          <span style="color:#66d9ef">port</span>: ${{ secrets.PORT }}
+          <span style="color:#66d9ef">source</span>: <span style="color:#e6db74">&#34;docs&#34;</span>
+          <span style="color:#66d9ef">target</span>: <span style="color:#e6db74">&#34;html&#34;</span>
+          <span style="color:#66d9ef">rm</span>: <span style="color:#66d9ef">true</span>
+          <span style="color:#66d9ef">strip_components</span>: <span style="color:#ae81ff">1</span>
+</code></pre></div><p>フォーマットの様相は、あまり他のCIツールと変わらない。<code>on</code>の要素で、<code>master</code>ブランチの<code>push</code>時に後続の処理を行うような設定にしてある。<code>on: [push, pull_request]</code> のような形でpushとpull-request時に実行することも可能だ。また、<code>schedule</code>で、cron形式で設定することも可能っぽい。<code>runs-on</code>では、動作させる環境を指定する。複数の環境で実行したいときはよくある以下のようなMatrix形式の設定をする。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">strategy</span>:
+  <span style="color:#66d9ef">matrix</span>:
+    <span style="color:#66d9ef">platform</span>: [ubuntu-latest, macos-latest, windows-latest]
+</code></pre></div><p>次に<code>steps</code>の子要素で複数の工程を定義することができる。今回は使っていないが、最も基本的なのは<code>run</code>っぽい。以下のようにして、bashでスクリプトを実行することもできる。</p>
 <pre><code>steps:
   - name: Display the path
     run: echo $PATH
     shell: bash
-</code></pre>
-
-<p><code>uses</code>では、他の人が作成したActionを利用できるっぽい。今回は、当該リポジトリの<code>docs</code>フォルダをサーバにscpしたいので、<code>actions/checkout@master</code>というActionをまずは実行して、リポジトリをfetchしてcheckoutする。次に、<code>appleboy/scp-action@master</code> というscpを実行するActionを利用した。リポジトリのSecrets機能を使ってクレデンシャルを保存してそれを利用する形で設定する。ここで指定してるパラメータはAction依存なもので割愛するが、シンプルで分かりやすかった。</p>
-
+</code></pre><p><code>uses</code>では、他の人が作成したActionを利用できるっぽい。今回は、当該リポジトリの<code>docs</code>フォルダをサーバにscpしたいので、<code>actions/checkout@master</code>というActionをまずは実行して、リポジトリをfetchしてcheckoutする。次に、<code>appleboy/scp-action@master</code> というscpを実行するActionを利用した。リポジトリのSecrets機能を使ってクレデンシャルを保存してそれを利用する形で設定する。ここで指定してるパラメータはAction依存なもので割愛するが、シンプルで分かりやすかった。</p>
 <p>実際のワークフローの動作している様子は、<a href="https://github.com/owlinux1000/blog/actions">ここ</a> から確認できる。うまく動作せずに何回も繰り返している様子がわかる。</p>
-
 <h2 id="おわりに">おわりに</h2>
-
 <p>簡単にだがGitHub Actionを使ってみた。この手のツールは色々あるが、個人的にはGitHub上で簡単に利用できるという点でこれから使っていくのは、GitHub Actionにしようと思った。</p>
 
   </div>
@@ -195,7 +174,7 @@ jobs:
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>

