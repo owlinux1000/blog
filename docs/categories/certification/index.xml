@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>certification on $ make life</title>
-    <link>https://alicemacs.com/categories/certification/</link>
+    <link>https://owlinux1000.github.io/blog/categories/certification/</link>
     <description>Recent content in certification on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Fri, 01 Nov 2019 21:15:46 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/categories/certification/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/categories/certification/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</title>
-      <link>https://alicemacs.com/blog/passed_gxpn/</link>
+      <link>https://owlinux1000.github.io/blog/blog/passed_gxpn/</link>
       <pubDate>Fri, 01 Nov 2019 21:15:46 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/passed_gxpn/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/passed_gxpn/</guid>
       <description>tl; dr  GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) に85% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 実技テスト対策に、模擬試験では環境に慣れておく    はじめに GIAC Reverse Engineering Malware（GREM）合格体験記 を書いてから約半年で2つ目のGIAC資格を取得することができた。前回は初めてのGIAC 試験だったのでたくさん文章を書いたが今回は簡単に勉強方法と感想だけ書いておこうと思う。
 GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Hacking に対応するGIAC資格で、主にペネトレーションテスト に関する分野の問題が出題される。前回同様、トレーニング自体も受講したのでテキストや模擬試験x2を受けることができた。どんな問題が出題されるかは、公式サイトを見てほしい。
 勉強方法 前回のGREMの記事で書いた事とまったく同じ感じの勉強を行った。しかしながら、GXPNでは実技テストが存在するため、具体的な中身については言えないが、トレーニングでやった演習などを通じて、「こういうことをやりたい場合、どのツールを使って、どうすればいいか」などがパッと浮かぶレベルには仕上げた（つもりだったがいくつかわからずもどかしかった）。また実技テストの環境が若干癖があるので、模擬試験を通してなれておくことをおすすめする。
@@ -26,10 +26,10 @@ GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Ha
     
     <item>
       <title>GIAC Reverse Engineering Malware（GREM）合格体験記</title>
-      <link>https://alicemacs.com/blog/passed_grem/</link>
+      <link>https://owlinux1000.github.io/blog/blog/passed_grem/</link>
       <pubDate>Fri, 03 May 2019 14:32:45 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/passed_grem/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/passed_grem/</guid>
       <description>tl;dr  GIAC Reverse Engineering Malware（GREM） に 81.33% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 少しでも詰まった概念などについては、ググって知識を補完した   トレーニング以外の総合計勉強時間は30 ~ 40時間ほど 試験言語は、英語だが英語自体の難易度は高くない  よっぽど英語に自信がない限りは、保険のために紙の辞書を持っていくと良い    はじめに 今回GREMと呼ばれるGIACのマルウェア解析系の資格試験を受けてきて、見事81.33%で合格することができた。この資格については、あまり情報を公開できないのだが、触れられる範囲で勉強法など当日までの道のりをメモしておく。私自身、初めてGIACの試験を受けたのだが、あまり事前情報がない(日本国内の)ため、今後受ける人の参考になると嬉しい。
 はじめに、この手の話は筆者のスペックを語っておいた方が勉強時間や勉強方法などの参考になると思うので少し触れておく。私は、CTFを通して主にELFファイルの解析等を3年ほどやっているため、普通のx86やamd64のバイナリ(逆アセンブル結果)なら苦じゃなく読むことはできる。しかしながら、PEバイナリなどWindows環境やWin32 API、今流行りのマルウェアやキャンペーンなどについては、ド素人である。マルウェアがどういうレジストリキーを書き込むとか、どんなファイルを作成するとかその手の話題も正直あまり詳しくない。そこで、私は2019年3月にSANS For 610というコースに参加してきた。そのため、何もトレーニングを受けてない人に比べるとかなり優位ではある。このコースでは、主に前述した内容などを学んできた。そのため、当初に比べるとかなりスキルは上がったような気はする。また、英語スキル的には、英語で書かれたドキュメントや技術洋書は苦じゃなく読むことができるが、ちょこちょこ英単語ググりながら読んでるレベルである。正直得意ではない。以上がざっとしたスペックである。
 勉強方法 トレーニングを受講してから、およそ4ヵ月以内に本試験を受けなければならない。社会人2年目になった私は、あまり勉強時間が取れないと思い、このGWに勉強しようと決めてGWに突入した。当初の予定では、このGWに勉強して、受験期限日のギリギリに試験を受ける予定だった。

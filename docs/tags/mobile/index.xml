@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>mobile on $ make life</title>
-    <link>https://alicemacs.com/tags/mobile/</link>
+    <link>https://owlinux1000.github.io/blog/tags/mobile/</link>
     <description>Recent content in mobile on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Wed, 06 Mar 2019 23:10:49 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/tags/mobile/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/tags/mobile/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>binarycookiesファイル解析ツールbincookie</title>
-      <link>https://alicemacs.com/blog/analyzing_binary_cookie/</link>
+      <link>https://owlinux1000.github.io/blog/blog/analyzing_binary_cookie/</link>
       <pubDate>Wed, 06 Mar 2019 23:10:49 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/analyzing_binary_cookie/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/analyzing_binary_cookie/</guid>
       <description>はじめに iOSやMacのフォレンジックでは、アーティファクトの1つとしてCookie情報を利用します。macOSでは、/User/ユーザ名/Library/Cookies/Cookies.binarycookies に存在します。しかしながら、本ファイルは拡張子からもわかるようにバイナリ形式になっています。そこで、本記事ではこのバイナリファイルを解析するツールをご紹介します。
 bincookie bincookie
 拙作のGolangで実装された解析ツールです。goユーザならgo getで入りますし、Releaseからバイナリのダウンロードもできます。
@@ -27,10 +27,10 @@ $ bincookie /Users/ユーザ名/Library/Cookies/com.apple.iTunes.binarycookies #
     
     <item>
       <title>iOSデバイスフォレンジック入門</title>
-      <link>https://alicemacs.com/blog/an_introduction_of_ios_forensics/</link>
+      <link>https://owlinux1000.github.io/blog/blog/an_introduction_of_ios_forensics/</link>
       <pubDate>Thu, 28 Feb 2019 21:00:00 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/an_introduction_of_ios_forensics/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/an_introduction_of_ios_forensics/</guid>
       <description>はじめに 本記事では、iOSフォレンジックをやったことない人向けに基本的な情報をまとめてみました。取っ掛かりとしては簡単に読める内容だと思います。主にiOSデバイスのバックアップデータやその解析ツールについてご紹介しています。
 準備 本記事では主に以下のデバイスやソフトウェアを使って検証しています。当該デバイスやバージョンでない場合同じ結果や解釈にならない可能性もありますのでご了承ください。
  iPad mini4 (iOS 12.1.1 非Jailbreak) MacBookPro (High Sierra 10.13.6) iTunes (12.8.3)  iOS 概要 iOSは、iPhoneやiPad、Apple Watch等で利用されているOSです。iOSは大きく分けて、以下の4つのシステムから構成されています。

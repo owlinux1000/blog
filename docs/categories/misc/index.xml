@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>misc on $ make life</title>
-    <link>https://alicemacs.com/categories/misc/</link>
+    <link>https://owlinux1000.github.io/blog/categories/misc/</link>
     <description>Recent content in misc on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Sat, 07 Dec 2019 18:47:45 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/categories/misc/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>GitHub Action を使ってみる</title>
-      <link>https://alicemacs.com/blog/playground_with_github_action/</link>
+      <link>https://owlinux1000.github.io/blog/blog/playground_with_github_action/</link>
       <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/playground_with_github_action/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/playground_with_github_action/</guid>
       <description>はじめに リリースされてからまだGitHub Actionを使っていなかったので、勉強がてら触ってみた。その際に学んだことをまとめておく。
 GitHub Action とは GitHub Actionは、簡単に言ってしまえばGitHubで使える標準のCI/CDのようなツールだ。独自のワークフローを定義することで、GitHub上の様々なイベントでそれを発火させることができる。設定方法は簡単で、repository/.github/workflows/[ファイル名].yml にTravisのようなYMLファイルを作成するだけ。
 使ってみる 今回試してみたのは、このブログの内容をGitHubにpushしたら、自動的に自分のVPSへデプロイするようなCDとしての機能の実現のために利用してみた。対象リポジトリは以下である。
@@ -26,10 +26,10 @@ name: Deploy my website to the server on: push: branches: - master jobs: build: 
     
     <item>
       <title>新年なのでHugo でGitHub Pages にデプロイ</title>
-      <link>https://alicemacs.com/blog/helloworld/</link>
+      <link>https://owlinux1000.github.io/blog/blog/helloworld/</link>
       <pubDate>Wed, 02 Jan 2019 22:27:14 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/helloworld/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/helloworld/</guid>
       <description>あけましておめでとうございます。本年もよろしくお願いいたします。
 新年なので、Hugo で技術ブログを作成してみました。私ははてなブログやMedium などいろいろサイトを持っているわけですが、このブログには自分の備忘録的なことを書いて行こうと思います。
 1. Hugo のインストールと事前準備 まずはHugo をインストールし、使いたいテーマ(今回はoneというテーマ)をsubmoduleとして取り込む。今回は、GitHub にblog というリポジトリを作成(アクセスする際には、https://owlinux1000.github.io/blog/) して、GitHubの設定で masterブランチのdocs/ を公開対象として設定する。

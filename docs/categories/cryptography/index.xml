@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>cryptography on $ make life</title>
-    <link>https://alicemacs.com/categories/cryptography/</link>
+    <link>https://owlinux1000.github.io/blog/categories/cryptography/</link>
     <description>Recent content in cryptography on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Mon, 01 Apr 2019 22:33:26 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/categories/cryptography/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/categories/cryptography/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>線形合同法で生成される乱数値を予測する</title>
-      <link>https://alicemacs.com/blog/predict_lcg/</link>
+      <link>https://owlinux1000.github.io/blog/blog/predict_lcg/</link>
       <pubDate>Mon, 01 Apr 2019 22:33:26 +0900</pubDate>
       
-      <guid>https://alicemacs.com/blog/predict_lcg/</guid>
+      <guid>https://owlinux1000.github.io/blog/blog/predict_lcg/</guid>
       <description>はじめに 線形合同法（LCG）とは、至極一般的かつ簡易に実装することができる乱数生成手法の1つです。先日行われたVolgaCTF 2019では、この線形合同法により生成される乱数値を予測する問題（問題名LG）が出題されました。本問題ではx0 ~ x6に相当する6つの乱数が表示され、それを元に次の値を算出する問題です。
 線形合同法 線形合同法は、以下の式で定義されます。
 x1 = (a * x0 + c) % p このとき、x0は乱数のseed値、a, c, pがパラメータとなり適切な値を選びます。今回の問題では、x0 ~ x6までの値が与えられ、その次の値を入力するといったものでした。「a, c, pがわからないと無理じゃない？ｗ」と思ってしまったのですが、どうやら行列演算することで「a, c, p」を算出可能らしいです。

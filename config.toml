@@ -1,5 +1,5 @@
 # End your baseURL with a `/` trailing slash, e.g. `https://example.com/`.
-baseURL = "https://alicemacs.com/"
+baseURL = "https://owlinux1000.github.io/blog"
 author = "Chihiro Hasegawa"
 title = "$ make life"
 languageCode = "ja"

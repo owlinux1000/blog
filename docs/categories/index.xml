@@ -2,75 +2,75 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on $ make life</title>
-    <link>https://alicemacs.com/categories/</link>
+    <link>https://owlinux1000.github.io/blog/categories/</link>
     <description>Recent content in Categories on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <lastBuildDate>Sat, 29 Feb 2020 10:17:51 +0900</lastBuildDate>
     
-	<atom:link href="https://alicemacs.com/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://owlinux1000.github.io/blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>security</title>
-      <link>https://alicemacs.com/categories/security/</link>
+      <link>https://owlinux1000.github.io/blog/categories/security/</link>
       <pubDate>Sat, 29 Feb 2020 10:17:51 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/security/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/security/</guid>
       <description></description>
     </item>
     
     <item>
       <title>misc</title>
-      <link>https://alicemacs.com/categories/misc/</link>
+      <link>https://owlinux1000.github.io/blog/categories/misc/</link>
       <pubDate>Sat, 07 Dec 2019 18:47:45 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/misc/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/misc/</guid>
       <description></description>
     </item>
     
     <item>
       <title>certification</title>
-      <link>https://alicemacs.com/categories/certification/</link>
+      <link>https://owlinux1000.github.io/blog/categories/certification/</link>
       <pubDate>Fri, 01 Nov 2019 21:15:46 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/certification/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/certification/</guid>
       <description></description>
     </item>
     
     <item>
       <title>writeup</title>
-      <link>https://alicemacs.com/categories/writeup/</link>
+      <link>https://owlinux1000.github.io/blog/categories/writeup/</link>
       <pubDate>Thu, 19 Sep 2019 23:49:38 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/writeup/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/writeup/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Infrastructure</title>
-      <link>https://alicemacs.com/categories/infrastructure/</link>
+      <link>https://owlinux1000.github.io/blog/categories/infrastructure/</link>
       <pubDate>Sat, 18 May 2019 12:24:26 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/infrastructure/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/infrastructure/</guid>
       <description></description>
     </item>
     
     <item>
       <title>forensics</title>
-      <link>https://alicemacs.com/categories/forensics/</link>
+      <link>https://owlinux1000.github.io/blog/categories/forensics/</link>
       <pubDate>Mon, 29 Apr 2019 07:03:53 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/forensics/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/forensics/</guid>
       <description></description>
     </item>
     
     <item>
       <title>cryptography</title>
-      <link>https://alicemacs.com/categories/cryptography/</link>
+      <link>https://owlinux1000.github.io/blog/categories/cryptography/</link>
       <pubDate>Mon, 01 Apr 2019 22:33:26 +0900</pubDate>
       
-      <guid>https://alicemacs.com/categories/cryptography/</guid>
+      <guid>https://owlinux1000.github.io/blog/categories/cryptography/</guid>
       <description></description>
     </item>
     
