@@ -16,7 +16,7 @@ enableRobotsTXT = true
 author = "Chihiro Hasegawa"
 intro = "Welcome to alicemacs.com!!"
 description = "I <3 Alice's Adventures in Wonderland and Emacs<br>So, my domain is alicemacs.com :-)"
-authorimage = "me.jpg"
+authorimage = "../../blog/img/me.jpg"
 dateformat = "Jan 2, 2006"
 
 [params.social]
