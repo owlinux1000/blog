@@ -1,5 +1,5 @@
 # End your baseURL with a `/` trailing slash, e.g. `https://example.com/`.
-baseURL = "https://owlinux1000.github.io/blog"
+baseURL = "https://owlinux1000.github.io/blog/"
 author = "Chihiro Hasegawa"
 title = "$ make life"
 languageCode = "ja"
@@ -16,7 +16,7 @@ enableRobotsTXT = true
 author = "Chihiro Hasegawa"
 intro = "Welcome to alicemacs.com!!"
 description = "I <3 Alice's Adventures in Wonderland and Emacs<br>So, my domain is alicemacs.com :-)"
-authorimage = "/blog/me.jpg"
+authorimage = "me.jpg"
 dateformat = "Jan 2, 2006"
 
 [params.social]
