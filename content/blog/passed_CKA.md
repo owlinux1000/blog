@@ -12,8 +12,8 @@ tags:
 
 2021年5月16日に、[Certified Kubernetes Administrator (CKA)](https://training.linuxfoundation.org/ja/certification/certified-kubernetes-administrator-cka/) を受験し88%で合格したので、勉強内容や受験時の振り返りをする。一言で感想を言う慣れば、決して難しい試験ではないと思うが、油断してると足元すくわれるいい難易度の試験だと思った(試験問題に関しては口外禁止なため触れない)。また、試験要項や注意事項、禁止事項などは変わる恐れがあるので、常に最新の情報を確認してもらいたい。
 
-Credy でのバッジが増えて嬉しい。  
-![Credyでの所有バッジ](https://i.imgur.com/qxj6zTll.png)
+Credly でのバッジが増えて嬉しい。  
+![Credlyでの所有バッジ](https://i.imgur.com/qxj6zTll.png)
 
 ## 試験勉強
 
