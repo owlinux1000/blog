@@ -6,10 +6,19 @@
     <description>Recent content in Tags on $ make life</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 17 May 2021 20:50:52 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 29 Sep 2021 09:54:40 +0900</lastBuildDate>
     
 	<atom:link href="https://owlinux1000.github.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OSCP</title>
+      <link>https://owlinux1000.github.io/blog/tags/oscp/</link>
+      <pubDate>Wed, 29 Sep 2021 09:54:40 +0900</pubDate>
+      
+      <guid>https://owlinux1000.github.io/blog/tags/oscp/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>CKA</title>
