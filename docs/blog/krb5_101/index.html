@@ -1,74 +1,112 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
+Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
+基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&quot;host&quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。'>
+<meta name='theme-color' content='#ffcd00'>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-
-
-<base href="https://owlinux1000.github.io/blog/">
-
-<title>
-  $ make life - Kerberos 入門 
-</title>
+<meta property='og:title' content='Kerberos 入門 • $ make life'>
+<meta property='og:description' content='はじめに 本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、Twitterなどでご指摘いただけると幸いです。
+Kerberosとは Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりにチケットと呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。
+基本用語  レルム(REALM)  Kerberosにおける管理対象となる論理的なネットワーク レルム名には、**DNSのドメイン名(大文字)**が利用されることが多い  例) ALICEMACS.COM     プリンシパル(PRINCIPAL)  Kerberosから認識されるユーザ、サービスやホストのこと  ユーザプリンシパル、サービスプリンシパル(SPN)、ホストプリンシパルの3つに大別される   プリンシパル名と呼ばれる一意な名前を利用する([]内はオプション項目)  username[/instance]@REALM (instanceは、ホスト名) service[/FQDN]@REALM (ホストプリンシパルの場合、serviceが&quot;host&quot;という固定文字列になる)     サービスサーバ(SS: Service Server)  Kerberos対応したサービスを提供するサーバ   サービスチケット(ST: Service Ticket)  サービスの利用するためにクライアントがサービスサーバに送信するチケット   チケット交付チケット(TGT: Ticket Granting Ticket)  サービスチケットを要求するために利用されるチケット   認証サーバ(AS: Authentication Server)  クライアントに、暗号化されたTGTを発行する この暗号化には、クライアントのパスワードが利用されるため本人でないと復号できない   チケット交付サーバ(TGS: Ticket Granting Server)  サービスチケットをクライアントに発行する   鍵配布センター(KDC: Key Distribution Center)  以下の3つの要素から構成される  すべてのプリンシパルと関連する暗号化鍵のデータベース 認証サーバ チケット交付サーバ   1つのレルムには少なくとも1つの鍵配布センターが必要    動作概要 ここでは、例としてあるユーザがクライアントからKerberos対応したサービスを利用するまでの流れを見ていきます。初めに以降に説明する流れを簡単に図示したものを示します。適宜、この図を見返しながら読むとわかりやすいかもしれません。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/blog/krb5_101/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2020-02-24T17:36:24&#43;09:00'/><meta property='article:modified_time' content='2020-02-24T17:36:24&#43;09:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.73.0" />
 
+  <title>Kerberos 入門 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/blog/krb5_101/'>
+  
+  
+  <link rel='icon' href='/blog/favicon.ico'>
+<link rel='stylesheet' href='/blog/assets/css/main.ab98e12b.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/main.css">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/custom.css">
-
-
-
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="theme-color" content="#ffffff">
+  
 
 </head>
-<body lang="ja">
-<div class="container">
+<body class='page type-blog'>
 
-
-<header class="row text-left title">
-  <h1 class="title">Kerberos 入門</h1>
-</header>
-<section id="category-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-left meta">
-        PUBLISHED ON FEB 24, 2020 
-      
-      
-      
-      —
-      
-      
-      <a class="meta" href="/blog/categories/security">SECURITY</a>
-      
-      
-      
-    </h6>
-  </div>
-  
-</section>
-<section id="content-pane" class="row">
-  <div class="col-md-12 text-justify content">
+  <div class='site'><a class='screen-reader-text' href='#content'>Skip to Content</a><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
     
-    <h2 id="はじめに">はじめに</h2>
+    <ul><li class='item'>
+        <a href='/blog/blog/'>blog</a>
+      </li><li class='item'>
+        <a href='/blog/resume/'>résumé</a>
+      </li><li class='item'>
+        <a href='/blog/hobbies/'>hobbies</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Kerberos 入門</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2020-02-24T17:36:24&#43;09:00'>2020, Feb 24</time>
+</span>
+
+  
+  
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
 <p>本記事では、基本的なKerberosの概念や動作概要について紹介します。次回執筆予定のKerberosに対するペネトレーションテストの記事を理解するために必要な知識をまとめています。Kerberosは一見複雑そうに見えるプロトコルですが、Kerberos用語などを理解すると動作内容がとても明快でシンプルなことがわかります。そこで、まずは知らない用語も含まれてきてしまうかもしれませんが、基本用語を始めに記載しました。まずは、ここに目を通していただいてから、動作概要を見ていただくのが良いかと思います。筆者自身もKerberosについて深い理解があるわけではなく勉強がてらまとめているので間違いなどありましたら、<a href="https://twitter.com/encry1024">Twitter</a>などでご指摘いただけると幸いです。</p>
 <h2 id="kerberosとは">Kerberosとは</h2>
 <p>Kerberosは、パスワードがネットワーク上を流れる箇所を減らし、代わりに<strong>チケット</strong>と呼ばれる暗号化されたデータを用いて、各種サービスを利用する仕組みを提供するプロトコルです。Kerberosには、大きく分けて3つのバージョンの括りが存在します。バージョン1,2,3はテストの目的で作られMITの内部でのみ使われていました。MITが最初に外部に配布したのがバージョン4です。しかしながら、バージョン4ではDES暗号を使っており、当時のアメリカ合衆国政府が課した暗号化ソフトウェアに対する輸出規制のためアメリカ合衆国以外へ輸出することができませんでした（そのため、MITの開発チームは、Kerberosからすべての暗号化コードを抜いた輸出可能なBonesというソフトウェアを構築しました）。そして、現在主流となるのがバージョン5です。バージョン4では提供されなかった機能の追加やセキュリティの強化を目的として開発されました。今日ではKerberosは、MicrosoftのActive Directoryなどにも採用されており企業ネットワークでは非常に重要な存在になっています。</p>
@@ -207,104 +245,81 @@ ASは、この要求を受け取ると上述した<strong>クライアントプ�
 <li><a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos(Protocol)</a></li>
 </ul>
 
-  </div>
-</section>
-<section id="tag-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-right meta">
-      
-    </h6>
-  </div>
-  
-</section>
-
-
-
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "alicemacs" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-<section id="menu-pane" class="row menu text-center">
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/linux_malware101/">&lt; prev | </a></span>
-  
-  
-  <span><a class="menu-item" href="/blog/blog">blog</a></span>
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/krb5_attacks_101/"> | next &gt;</a></span>
-  
-  
-  <h4 class="text-center"><a class="menu-item" href="https://owlinux1000.github.io/blog/">home</a></h4>
-</section>
-
-
-
-<footer class="row text-center footer">
-  <hr />
-  
-  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
-  
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.73.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
-  
-      
-      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
-    
-  
-</footer>
-
 </div>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/blog/categories/security/'>security</a></div>
 
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
-</script>
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/blog/linux_malware101/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>令和元年のうちに抑えておくLinuxマルウェアの基本</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/blog/krb5_attacks_101/'>
+        <span class='screen-reader-text'>Next post: </span>Kerberos への攻撃手法<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
 
 
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-154126244-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+      </main>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
-<script src="js/custom.js"></script>
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p></p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/blog/assets/js/"</script>
+
+<script src='/blog/assets/js/main.c3bcf2df.js'></script>
+
 </body>
-</html>
 
+</html>
 

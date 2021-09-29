@@ -1,74 +1,122 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='目次 はじめに 本記事では、前記事(Kerberos 入門)で学んだKerberosの基本的な概念や動作を知っていることを前提にKerberosへの攻撃手法について解説します。ここで紹介している内容は、自分で管理している端末外では決して行わないでください。
+Brute Force Attack for Kerberos Kerberosにおいてもブルートフォース攻撃は有効です。Kerberosへのブルートフォース攻撃を行うために必要な条件は基本的には1つです。それは、KDCへの接続ができるという条件だけです。さらにKerberosの認証のレスポンスで、パスワードが間違っている場合、ユーザ名が正しいかどうかを教えてくれます。つまり、存在するユーザかどうかの判断を行うことができます。しかしながら、試行回数などによりブロックしたりすることも可能なので、本攻撃を行う際には注意が必要です。
+ブルートフォースを行うツールとしては、kerbruteが便利です。ユーザ名とパスワードを記載したファイル、ドメインを指定することでブルートフォース攻撃が行えます。
+kali@kali:~/bin/kerbrute$ ./kerbrute.py -users ./username.txt -passwords ./password.txt -domain dc01.alicemacs.local Impacket v0.9.21.dev1&#43;20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Stupendous =&gt; snickers66:snickers66 [*] Saved TGT in snickers66.ccache [*] Valid user =&gt; Administrator 上記の実行結果では、ユーザ名とパスワードが同じsnickers66というドメインユーザを特定しており、snickers66.ccacheというファイルにTGTが保存されています。また、パスワードは違いますが、Administratorというユーザが存在することも判明しています(余談ですが、Windowsでは今回判明したような簡単なパスワードは、通常パスワードの複雑さのグループポリシーで許可されていません。そのため、今回はグループポリシーの「パスワードのポリシー」の項目の1つである「複雑さの要件を満たす必要があるパスワード」という項目を無効化しました)。
+AS-REP Roasting Kerberos 5には、事前認証(Pre-authentication)という概念があります。クライアントがAS_REQを送信した後、ASは誰にでもAS_REPをレスポンスするのではなく、KRB_ERRORという事前認証を要求するメッセージをレスポンスします。これを受け取ったクライアントは、クライアントのプリンシパル名と「クライアントの鍵」で暗号化したタイムスタンプを送信します。これを受け取ったASは、クライアントが正しいかを確認してからTGTを返信します。Active Directoryでは、本機能はユーザ単位で制御することができます。デフォルトでは、「事前認証を必要としない」という設定が無効になっているため、通常は事前認証が要求されます。
+しかし、もしこの設定を有効にしていたり、Kerberos 4を利用している場合は、どんなプリンシパルからのTGTの要求に対しても、ASはTGTを返信してしまいます(ASは、プリンシパルが存在すること、タイムスタンプがずれていないことしか確認しないため)。そのため、事前認証が無効のユーザを装った偽のAS_REQを送信することで、AS_REPをレスポンスさせることが可能となります。実は、このAS_REPのメッセージ内には、クライアントのパスワードがもとになって生成された鍵で暗号化されたデータが含まれています。そのため、手にれたデータをオフラインで解析することで、最終的にパスワードを特定することが可能となる場合もあります。
+AS-REP Roastingを行うには、impacketのGetNPUsers.pyが利用できます。下記のように-no-passオプションを利用することで、パスワードがわかっていない場合でもAS_REPに含まれる暗号化されたデータを抽出できます。また、抽出したデータは、HashcatとJohn The Ripperの2つのフォーマットで出力できます。今回はJohn The Ripperで辞書攻撃を行うため-johnオプションを設定しています。また、ここでは本データをsnickers66.asrepというファイルに保存しておきました。
+kali@kali:~/bin/impacket/examples$ python GetNPUsers.py dc01.alicemacs.local/snickers66 -no-pass --john Impacket v0.9.21.dev1&#43;20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Getting TGT for snickers66 $krb5asrep$snickers66@DC01.'>
+<meta name='theme-color' content='#ffcd00'>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-
-
-<base href="https://owlinux1000.github.io/blog/">
-
-<title>
-  $ make life - Kerberos への攻撃手法 
-</title>
+<meta property='og:title' content='Kerberos への攻撃手法 • $ make life'>
+<meta property='og:description' content='目次 はじめに 本記事では、前記事(Kerberos 入門)で学んだKerberosの基本的な概念や動作を知っていることを前提にKerberosへの攻撃手法について解説します。ここで紹介している内容は、自分で管理している端末外では決して行わないでください。
+Brute Force Attack for Kerberos Kerberosにおいてもブルートフォース攻撃は有効です。Kerberosへのブルートフォース攻撃を行うために必要な条件は基本的には1つです。それは、KDCへの接続ができるという条件だけです。さらにKerberosの認証のレスポンスで、パスワードが間違っている場合、ユーザ名が正しいかどうかを教えてくれます。つまり、存在するユーザかどうかの判断を行うことができます。しかしながら、試行回数などによりブロックしたりすることも可能なので、本攻撃を行う際には注意が必要です。
+ブルートフォースを行うツールとしては、kerbruteが便利です。ユーザ名とパスワードを記載したファイル、ドメインを指定することでブルートフォース攻撃が行えます。
+kali@kali:~/bin/kerbrute$ ./kerbrute.py -users ./username.txt -passwords ./password.txt -domain dc01.alicemacs.local Impacket v0.9.21.dev1&#43;20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Stupendous =&gt; snickers66:snickers66 [*] Saved TGT in snickers66.ccache [*] Valid user =&gt; Administrator 上記の実行結果では、ユーザ名とパスワードが同じsnickers66というドメインユーザを特定しており、snickers66.ccacheというファイルにTGTが保存されています。また、パスワードは違いますが、Administratorというユーザが存在することも判明しています(余談ですが、Windowsでは今回判明したような簡単なパスワードは、通常パスワードの複雑さのグループポリシーで許可されていません。そのため、今回はグループポリシーの「パスワードのポリシー」の項目の1つである「複雑さの要件を満たす必要があるパスワード」という項目を無効化しました)。
+AS-REP Roasting Kerberos 5には、事前認証(Pre-authentication)という概念があります。クライアントがAS_REQを送信した後、ASは誰にでもAS_REPをレスポンスするのではなく、KRB_ERRORという事前認証を要求するメッセージをレスポンスします。これを受け取ったクライアントは、クライアントのプリンシパル名と「クライアントの鍵」で暗号化したタイムスタンプを送信します。これを受け取ったASは、クライアントが正しいかを確認してからTGTを返信します。Active Directoryでは、本機能はユーザ単位で制御することができます。デフォルトでは、「事前認証を必要としない」という設定が無効になっているため、通常は事前認証が要求されます。
+しかし、もしこの設定を有効にしていたり、Kerberos 4を利用している場合は、どんなプリンシパルからのTGTの要求に対しても、ASはTGTを返信してしまいます(ASは、プリンシパルが存在すること、タイムスタンプがずれていないことしか確認しないため)。そのため、事前認証が無効のユーザを装った偽のAS_REQを送信することで、AS_REPをレスポンスさせることが可能となります。実は、このAS_REPのメッセージ内には、クライアントのパスワードがもとになって生成された鍵で暗号化されたデータが含まれています。そのため、手にれたデータをオフラインで解析することで、最終的にパスワードを特定することが可能となる場合もあります。
+AS-REP Roastingを行うには、impacketのGetNPUsers.pyが利用できます。下記のように-no-passオプションを利用することで、パスワードがわかっていない場合でもAS_REPに含まれる暗号化されたデータを抽出できます。また、抽出したデータは、HashcatとJohn The Ripperの2つのフォーマットで出力できます。今回はJohn The Ripperで辞書攻撃を行うため-johnオプションを設定しています。また、ここでは本データをsnickers66.asrepというファイルに保存しておきました。
+kali@kali:~/bin/impacket/examples$ python GetNPUsers.py dc01.alicemacs.local/snickers66 -no-pass --john Impacket v0.9.21.dev1&#43;20200217.163437.e5e676d7 - Copyright 2020 SecureAuth Corporation [*] Getting TGT for snickers66 $krb5asrep$snickers66@DC01.'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/blog/krb5_attacks_101/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2020-02-29T10:17:51&#43;09:00'/><meta property='article:modified_time' content='2020-02-29T10:17:51&#43;09:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.73.0" />
 
+  <title>Kerberos への攻撃手法 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/blog/krb5_attacks_101/'>
+  
+  
+  <link rel='icon' href='/blog/favicon.ico'>
+<link rel='stylesheet' href='/blog/assets/css/main.ab98e12b.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/main.css">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/custom.css">
-
-
-
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="theme-color" content="#ffffff">
+  
 
 </head>
-<body lang="ja">
-<div class="container">
+<body class='page type-blog'>
 
-
-<header class="row text-left title">
-  <h1 class="title">Kerberos への攻撃手法</h1>
-</header>
-<section id="category-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-left meta">
-        PUBLISHED ON FEB 29, 2020 
-      
-      
-      
-      —
-      
-      
-      <a class="meta" href="/blog/categories/security">SECURITY</a>
-      
-      
-      
-    </h6>
-  </div>
-  
-</section>
-<section id="content-pane" class="row">
-  <div class="col-md-12 text-justify content">
+  <div class='site'><a class='screen-reader-text' href='#content'>Skip to Content</a><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
     
-    <h1 id="目次">目次</h1>
+    <ul><li class='item'>
+        <a href='/blog/blog/'>blog</a>
+      </li><li class='item'>
+        <a href='/blog/resume/'>résumé</a>
+      </li><li class='item'>
+        <a href='/blog/hobbies/'>hobbies</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Kerberos への攻撃手法</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2020-02-29T10:17:51&#43;09:00'>2020, Feb 29</time>
+</span>
+
+  
+  
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h1 id="目次">目次</h1>
 <h2 id="はじめに">はじめに</h2>
 <p>本記事では、<a href="https://alicemacs.com/blog/krb5_101/">前記事(Kerberos 入門)</a>で学んだKerberosの基本的な概念や動作を知っていることを前提にKerberosへの攻撃手法について解説します。ここで紹介している内容は、自分で管理している端末外では決して行わないでください。</p>
 <h2 id="brute-force-attack-for-kerberos">Brute Force Attack for Kerberos</h2>
@@ -163,104 +211,81 @@ Silver Ticketは、Golden Ticketとほぼ同様の手法です。Silver Ticket�
 <li><a href="https://fluidattacks.com/web/blog/roasting-kerberos/">Roasting Kerberos</a></li>
 </ul>
 
-  </div>
-</section>
-<section id="tag-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-right meta">
-      
-    </h6>
-  </div>
-  
-</section>
-
-
-
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "alicemacs" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-<section id="menu-pane" class="row menu text-center">
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/krb5_101/">&lt; prev | </a></span>
-  
-  
-  <span><a class="menu-item" href="/blog/blog">blog</a></span>
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/passed_cka/"> | next &gt;</a></span>
-  
-  
-  <h4 class="text-center"><a class="menu-item" href="https://owlinux1000.github.io/blog/">home</a></h4>
-</section>
-
-
-
-<footer class="row text-center footer">
-  <hr />
-  
-  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
-  
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.73.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
-  
-      
-      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
-    
-  
-</footer>
-
 </div>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/blog/categories/security/'>security</a></div>
 
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
-</script>
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/blog/krb5_101/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>Kerberos 入門</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/blog/passed_cka/'>
+        <span class='screen-reader-text'>Next post: </span>Certified Kubernetes Administrator (CKA) 合格体験記<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
 
 
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-154126244-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+      </main>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
-<script src="js/custom.js"></script>
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p></p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/blog/assets/js/"</script>
+
+<script src='/blog/assets/js/main.c3bcf2df.js'></script>
+
 </body>
-</html>
 
+</html>
 

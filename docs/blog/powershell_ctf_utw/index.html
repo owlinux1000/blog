@@ -1,157 +1,112 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='はじめに 本記事は、彌冨研 Advent Calendar 2019 の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、One-dimensional convolutional neural networks for Android malware detection でした。
+みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それがUnder The Wire です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
+Century0（事前準備）  Slackのチームに参加して、指定されているチャンネルにログインすると、username:password を得ることができる  Century1 問題概要  当該システムのビルドバージョンを求める  解法  PSVersionTable という変数に様々なバージョン情報が格納されている 下記結果より、答えは10.0.14393.3053  PS C:\Users\century1\documents&gt; $PSVersionTable Name Value ---- ----- PSVersion 5.1.14393.3053 PSEdition Desktop PSCompatibleVersions {1.0, 2.0, 3.0, 4.0...} BuildVersion 10.0.14393.3053 CLRVersion 4.0.30319.42000 WSManStackVersion 3.0 PSRemotingProtocolVersion 2.3 SerializationVersion 1.1.0.1 Century2 問題概要  PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ  解法  Invoke-WebRequest がwgetのような動きをするコマンドレット デスクトップに移動すると443というファイル名のファイルが存在する 答えは、invoke-webrequest443  Century3 問題概要  デスクトップ上にあるファイル数を求めよ  解法  Get-ChildItem で対象ディレクトリの中身の一覧を取得 Where-Object を使ってファイルのみを抽出  $_ が、パイプラインで渡されたオブジェクトを示す PSIsContainer は、ディレクトリの場合Trueを返す   Measure でパイプラインで渡されたオブジェクトの数をカウント 答えは、123  PS C:\Users\century3\documents&gt; Get-ChildItem .'>
+<meta name='theme-color' content='#ffcd00'>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-
-
-<base href="https://owlinux1000.github.io/blog/">
-
-<title>
-  $ make life - Powershell学習サイトUnder The Wireの問題を解く 
-</title>
+<meta property='og:title' content='Powershell学習サイトUnder The Wireの問題を解く • $ make life'>
+<meta property='og:description' content='はじめに 本記事は、彌冨研 Advent Calendar 2019 の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、One-dimensional convolutional neural networks for Android malware detection でした。
+みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それがUnder The Wire です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。
+Century0（事前準備）  Slackのチームに参加して、指定されているチャンネルにログインすると、username:password を得ることができる  Century1 問題概要  当該システムのビルドバージョンを求める  解法  PSVersionTable という変数に様々なバージョン情報が格納されている 下記結果より、答えは10.0.14393.3053  PS C:\Users\century1\documents&gt; $PSVersionTable Name Value ---- ----- PSVersion 5.1.14393.3053 PSEdition Desktop PSCompatibleVersions {1.0, 2.0, 3.0, 4.0...} BuildVersion 10.0.14393.3053 CLRVersion 4.0.30319.42000 WSManStackVersion 3.0 PSRemotingProtocolVersion 2.3 SerializationVersion 1.1.0.1 Century2 問題概要  PowerShellでwgetのような挙動をするコマンドレット名（小文字）にデスクトップ上にあるファイルのファイル名を連結したものを求めよ  解法  Invoke-WebRequest がwgetのような動きをするコマンドレット デスクトップに移動すると443というファイル名のファイルが存在する 答えは、invoke-webrequest443  Century3 問題概要  デスクトップ上にあるファイル数を求めよ  解法  Get-ChildItem で対象ディレクトリの中身の一覧を取得 Where-Object を使ってファイルのみを抽出  $_ が、パイプラインで渡されたオブジェクトを示す PSIsContainer は、ディレクトリの場合Trueを返す   Measure でパイプラインで渡されたオブジェクトの数をカウント 答えは、123  PS C:\Users\century3\documents&gt; Get-ChildItem .'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/blog/powershell_ctf_utw/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:published_time' content='2019-12-02T23:00:00&#43;09:00'/><meta property='article:modified_time' content='2019-12-02T23:00:00&#43;09:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.73.0" />
 
+  <title>Powershell学習サイトUnder The Wireの問題を解く • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/blog/powershell_ctf_utw/'>
+  
+  
+  <link rel='icon' href='/blog/favicon.ico'>
+<link rel='stylesheet' href='/blog/assets/css/main.ab98e12b.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/main.css">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/custom.css">
-
-
-
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="theme-color" content="#ffffff">
+  
 
 </head>
-<body lang="ja">
-<div class="container">
+<body class='page type-blog'>
 
-
-<header class="row text-left title">
-  <h1 class="title">Powershell学習サイトUnder The Wireの問題を解く</h1>
-</header>
-<section id="category-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-left meta">
-        PUBLISHED ON DEC 2, 2019 
-      
-    </h6>
+  <div class='site'><a class='screen-reader-text' href='#content'>Skip to Content</a><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
+    
+    <ul><li class='item'>
+        <a href='/blog/blog/'>blog</a>
+      </li><li class='item'>
+        <a href='/blog/resume/'>résumé</a>
+      </li><li class='item'>
+        <a href='/blog/hobbies/'>hobbies</a>
+      </li></ul>
   </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>Powershell学習サイトUnder The Wireの問題を解く</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-12-02T23:00:00&#43;09:00'>2019, Dec 02</time>
+</span>
+
   
-</section>
-<section id="content-pane" class="row">
-  <div class="col-md-12 text-justify content">
-    
-    <nav id="TableOfContents">
-  <ul>
-    <li><a href="#はじめに">はじめに</a></li>
-    <li><a href="#century0事前準備">Century0（事前準備）</a></li>
-    <li><a href="#century1">Century1</a>
-      <ul>
-        <li><a href="#問題概要">問題概要</a></li>
-        <li><a href="#解法">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century2">Century2</a>
-      <ul>
-        <li><a href="#問題概要-1">問題概要</a></li>
-        <li><a href="#解法-1">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century3">Century3</a>
-      <ul>
-        <li><a href="#問題概要-2">問題概要</a></li>
-        <li><a href="#解法-2">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century4">Century4</a>
-      <ul>
-        <li><a href="#問題概要-3">問題概要</a></li>
-        <li><a href="#解法-3">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century5">Century5</a>
-      <ul>
-        <li><a href="#問題概要-4">問題概要</a></li>
-        <li><a href="#解法-4">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century6">Century6</a>
-      <ul>
-        <li><a href="#問題概要-5">問題概要</a></li>
-        <li><a href="#解法-5">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century7">Century7</a>
-      <ul>
-        <li><a href="#問題概要-6">問題概要</a></li>
-        <li><a href="#解法-6">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century8">Century8</a>
-      <ul>
-        <li><a href="#問題概要-7">問題概要</a></li>
-        <li><a href="#解法-7">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century9">Century9</a>
-      <ul>
-        <li><a href="#問題概要-8">問題概要</a></li>
-        <li><a href="#解法-8">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century10">Century10</a>
-      <ul>
-        <li><a href="#問題概要-9">問題概要</a></li>
-        <li><a href="#解法-9">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century11">Century11</a>
-      <ul>
-        <li><a href="#問題概要-10">問題概要</a></li>
-        <li><a href="#解法-10">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century12">Century12</a>
-      <ul>
-        <li><a href="#問題概要-11">問題概要</a></li>
-        <li><a href="#解法-11">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century13">Century13</a>
-      <ul>
-        <li><a href="#問題概要-12">問題概要</a></li>
-        <li><a href="#解法-12">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#century14">Century14</a>
-      <ul>
-        <li><a href="#問題概要-13">問題概要</a></li>
-        <li><a href="#解法-13">解法</a></li>
-      </ul>
-    </li>
-    <li><a href="#おわりに">おわりに</a></li>
-  </ul>
-</nav>
-    
-    <h2 id="はじめに">はじめに</h2>
+  
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="はじめに">はじめに</h2>
 <p>本記事は、<a href="https://adventar.org/calendars/4371">彌冨研 Advent Calendar 2019</a> の3日目の記事です。ちなみに2018年に彌冨研究室を卒業しました。卒業研究は、<a href="https://ieeexplore.ieee.org/document/8368693">One-dimensional convolutional neural networks for Android malware detection</a> でした。<br>
 みなさんは、Powershellはお好きですか？僕は嫌いでした。主にWindowsでしか使わない点やよくわからない構文など勉強したいと思う意欲すら浮かびませんでした。しかしながら、セキュリティ界隈だと特にペネトレーションテストなどでは、Windows に標準的に導入されているPowershellは非常に有効なツールです。またマルウェアなどもPowershellを使うケースが非常に多いためセキュリティ業界ではPowershellの理解は必須となるツールの1つです。そこで重い腰を上げて勉強しようとした際にとあるサイトを見つけました。それが<a href="https://underthewire.tech/">Under The Wire</a> です。このサイトは、CTF形式でPowershellについて学ぶことができるサイトです。本記事では、それの最初のレベルであるCenturyの解き方を紹介していきます。このサイトで提示されている環境へSSHでログインするとPowershellのプロンプトが表示されます。次の問題に進むためには、最初の問題を解く必要があり、その問題の答えが次の問題へのSSHパスワードになっています。</p>
 <h2 id="century0事前準備">Century0（事前準備）</h2>
@@ -485,104 +440,70 @@ Property :
 </code></pre><h2 id="おわりに">おわりに</h2>
 <p>これをやる前はあまり好きになれなかったPowershellもやってるうちに好きになることができました。このサイトではまだ次のレベルがあるので取り組んでみようと思います。もしセキュリティ系の職種に付きたい方は、Powershellわかるとなにかと便利なので勉強しておくことをおすすめします。</p>
 
-  </div>
-</section>
-<section id="tag-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-right meta">
-      
-    </h6>
-  </div>
-  
-</section>
-
-
-
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "alicemacs" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-<section id="menu-pane" class="row menu text-center">
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/passed_gxpn/">&lt; prev | </a></span>
-  
-  
-  <span><a class="menu-item" href="/blog/blog">blog</a></span>
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/playground_with_github_action/"> | next &gt;</a></span>
-  
-  
-  <h4 class="text-center"><a class="menu-item" href="https://owlinux1000.github.io/blog/">home</a></h4>
-</section>
-
-
-
-<footer class="row text-center footer">
-  <hr />
-  
-  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
-  
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.73.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
-  
-      
-      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
-    
-  
-</footer>
-
 </div>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   
-
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
-</script>
-
-
+<footer class='entry-footer'>
+  <div class='container sep-before'>
+  </div>
+</footer>
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-154126244-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+</article>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
-<script src="js/custom.js"></script>
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/blog/passed_gxpn/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/blog/playground_with_github_action/'>
+        <span class='screen-reader-text'>Next post: </span>GitHub Action を使ってみる<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
+
+
+
+
+      </main>
+
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p></p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/blog/assets/js/"</script>
+
+<script src='/blog/assets/js/main.c3bcf2df.js'></script>
+
 </body>
-</html>
 
+</html>
 

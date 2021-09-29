@@ -1,74 +1,116 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang='en' dir='auto'><head>
+  <meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta name='description' content='tl; dr  GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) に85% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 実技テスト対策に、模擬試験では環境に慣れておく    はじめに GIAC Reverse Engineering Malware（GREM）合格体験記 を書いてから約半年で2つ目のGIAC資格を取得することができた。前回は初めてのGIAC 試験だったのでたくさん文章を書いたが今回は簡単に勉強方法と感想だけ書いておこうと思う。
+GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Hacking に対応するGIAC資格で、主にペネトレーションテスト に関する分野の問題が出題される。前回同様、トレーニング自体も受講したのでテキストや模擬試験x2を受けることができた。どんな問題が出題されるかは、公式サイトを見てほしい。
+勉強方法 前回のGREMの記事で書いた事とまったく同じ感じの勉強を行った。しかしながら、GXPNでは実技テストが存在するため、具体的な中身については言えないが、トレーニングでやった演習などを通じて、「こういうことをやりたい場合、どのツールを使って、どうすればいいか」などがパッと浮かぶレベルには仕上げた（つもりだったがいくつかわからずもどかしかった）。また実技テストの環境が若干癖があるので、模擬試験を通してなれておくことをおすすめする。
+試験中 今回の試験自体は、3時間だったが2時間程度で終える事ができた。というのもわからない問題が多くて、結構な数をスキップしたためかなり早く進んでしまっていた。最後スキップした問題が10問残っている状態で1時間30経過とかだったので、落ち着きながらテキストを見返したりしてスキップした問題を解いた。前回もそうだったが、「この問題があってれば合格できる！」といった願掛けみたいなことを脳内で思って答えた。最後の問題に答えたら、画面には85%という文字が見えて一安心した
+おわりに 所感だが、10月7日~12日にトレーニングを受けて11月1日の試験だったので、かなり勉強時間が短くて大変だった。1日ガッツリ勉強して行けそうだと思ったので、パッと翌日受けることにしてしまったが、前回もそんな感じで受ける日程を決めていたし、そのほうが良いのかもしれない。まぁなんとか良い得点で合格することができたのでほんと良かった。最近は、家庭内も仕事も共にすごく忙しく大変な時期だったので、そういう中でもちゃんと合格できたのは結構嬉しかった。家事など全面的に協力してくれた奥さんには本当に感謝の気持ちしかない。'>
+<meta name='theme-color' content='#ffcd00'>
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-
-
-
-<base href="https://owlinux1000.github.io/blog/">
-
-<title>
-  $ make life - GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記 
-</title>
+<meta property='og:title' content='GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記 • $ make life'>
+<meta property='og:description' content='tl; dr  GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) に85% で合格した 勉強方法  受講したトレーニングのテキストを読み込むのと、演習をすべてやり直す 模擬試験を本番と同様の状況で受ける（紙の辞書やテキストを用意して） 実技テスト対策に、模擬試験では環境に慣れておく    はじめに GIAC Reverse Engineering Malware（GREM）合格体験記 を書いてから約半年で2つ目のGIAC資格を取得することができた。前回は初めてのGIAC 試験だったのでたくさん文章を書いたが今回は簡単に勉強方法と感想だけ書いておこうと思う。
+GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Hacking に対応するGIAC資格で、主にペネトレーションテスト に関する分野の問題が出題される。前回同様、トレーニング自体も受講したのでテキストや模擬試験x2を受けることができた。どんな問題が出題されるかは、公式サイトを見てほしい。
+勉強方法 前回のGREMの記事で書いた事とまったく同じ感じの勉強を行った。しかしながら、GXPNでは実技テストが存在するため、具体的な中身については言えないが、トレーニングでやった演習などを通じて、「こういうことをやりたい場合、どのツールを使って、どうすればいいか」などがパッと浮かぶレベルには仕上げた（つもりだったがいくつかわからずもどかしかった）。また実技テストの環境が若干癖があるので、模擬試験を通してなれておくことをおすすめする。
+試験中 今回の試験自体は、3時間だったが2時間程度で終える事ができた。というのもわからない問題が多くて、結構な数をスキップしたためかなり早く進んでしまっていた。最後スキップした問題が10問残っている状態で1時間30経過とかだったので、落ち着きながらテキストを見返したりしてスキップした問題を解いた。前回もそうだったが、「この問題があってれば合格できる！」といった願掛けみたいなことを脳内で思って答えた。最後の問題に答えたら、画面には85%という文字が見えて一安心した
+おわりに 所感だが、10月7日~12日にトレーニングを受けて11月1日の試験だったので、かなり勉強時間が短くて大変だった。1日ガッツリ勉強して行けそうだと思ったので、パッと翌日受けることにしてしまったが、前回もそんな感じで受ける日程を決めていたし、そのほうが良いのかもしれない。まぁなんとか良い得点で合格することができたのでほんと良かった。最近は、家庭内も仕事も共にすごく忙しく大変な時期だったので、そういう中でもちゃんと合格できたのは結構嬉しかった。家事など全面的に協力してくれた奥さんには本当に感謝の気持ちしかない。'>
+<meta property='og:url' content='https://owlinux1000.github.io/blog/blog/passed_gxpn/'>
+<meta property='og:site_name' content='$ make life'>
+<meta property='og:type' content='article'><meta property='article:section' content='blog'><meta property='article:tag' content='GIAC'><meta property='article:published_time' content='2019-11-01T21:15:46&#43;09:00'/><meta property='article:modified_time' content='2019-11-01T21:15:46&#43;09:00'/><meta name='twitter:card' content='summary'>
 
 <meta name="generator" content="Hugo 0.73.0" />
 
+  <title>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記 • $ make life</title>
+  <link rel='canonical' href='https://owlinux1000.github.io/blog/blog/passed_gxpn/'>
+  
+  
+  <link rel='icon' href='/blog/favicon.ico'>
+<link rel='stylesheet' href='/blog/assets/css/main.ab98e12b.css'><style>
+:root{--color-accent:#ffcd00;}
+</style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-154126244-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400|Roboto+Slab:400,700|Roboto:300,300i,400,400i,500,500i,700,700i">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/main.css">
-<link rel="stylesheet" href="https://owlinux1000.github.io/blog/css/custom.css">
-
-
-
-
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="theme-color" content="#ffffff">
+  
 
 </head>
-<body lang="ja">
-<div class="container">
+<body class='page type-blog'>
 
-
-<header class="row text-left title">
-  <h1 class="title">GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</h1>
-</header>
-<section id="category-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-left meta">
-        PUBLISHED ON NOV 1, 2019 
-      
-      
-      
-      —
-      
-      
-      <a class="meta" href="/blog/categories/certification">CERTIFICATION</a>
-      
-      
-      
-    </h6>
-  </div>
-  
-</section>
-<section id="content-pane" class="row">
-  <div class="col-md-12 text-justify content">
+  <div class='site'><a class='screen-reader-text' href='#content'>Skip to Content</a><div class='main'><nav id='main-menu' class='menu main-menu' aria-label='Main Menu'>
+  <div class='container'>
     
-    <h2 id="tl-dr">tl; dr</h2>
+    <ul><li class='item'>
+        <a href='/blog/blog/'>blog</a>
+      </li><li class='item'>
+        <a href='/blog/resume/'>résumé</a>
+      </li><li class='item'>
+        <a href='/blog/hobbies/'>hobbies</a>
+      </li></ul>
+  </div>
+</nav><div class='header-widgets'>
+        <div class='container'></div>
+      </div>
+
+      <header id='header' class='header site-header'>
+        <div class='container sep-after'>
+          <div class='header-info'><p class='site-title title'>$ make life</p><p class='desc site-desc'></p>
+          </div>
+        </div>
+      </header>
+
+      <main id='content'>
+
+
+<article lang='en' class='entry'>
+  <header class='header entry-header'>
+  <div class='container sep-after'>
+    <div class='header-info'>
+      <h1 class='title'>GIAC Exploit Researcher and Advanced Penetration Tester (GXPN) 合格体験記</h1>
+      
+
+    </div>
+    <div class='entry-meta'>
+  <span class='posted-on'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+<line x1="16" y1="2" x2="16" y2="6" />
+<line x1="8" y1="2" x2="8" y2="6" />
+<line x1="3" y1="10" x2="21" y2="10" />
+</svg>
+<span class='screen-reader-text'>Posted on </span>
+  <time class='entry-date' datetime='2019-11-01T21:15:46&#43;09:00'>2019, Nov 01</time>
+</span>
+
+  
+  
+
+</div>
+
+
+  </div>
+</header>
+
+  
+  
+
+  <div class='container entry-content'>
+  <h2 id="tl-dr">tl; dr</h2>
 <ul>
 <li><a href="https://www.giac.org/certification/exploit-researcher-advanced-penetration-tester-gxpn">GIAC Exploit Researcher and Advanced Penetration Tester (GXPN)</a> に85% で合格した</li>
 <li>勉強方法
@@ -90,113 +132,93 @@ GXPNは、SANS 660 Advanced Penetration Testing, Exploit Writing, and Ethical Ha
 <h2 id="おわりに">おわりに</h2>
 <p>所感だが、10月7日~12日にトレーニングを受けて11月1日の試験だったので、かなり勉強時間が短くて大変だった。1日ガッツリ勉強して行けそうだと思ったので、パッと翌日受けることにしてしまったが、前回もそんな感じで受ける日程を決めていたし、そのほうが良いのかもしれない。まぁなんとか良い得点で合格することができたのでほんと良かった。最近は、家庭内も仕事も共にすごく忙しく大変な時期だったので、そういう中でもちゃんと合格できたのは結構嬉しかった。家事など全面的に協力してくれた奥さんには本当に感謝の気持ちしかない。</p>
 
-  </div>
-</section>
-<section id="tag-pane" class="row meta">
-  
-  <div class="col-md-12">
-    <h6 class="text-right meta">
-      
-      
-      
-      TAGS:
-      
-      
-      <a class="meta" href="/blog/tags/giac">GIAC</a>
-      
-      
-      
-    </h6>
-  </div>
-  
-</section>
-
-
-
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "alicemacs" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-<section id="menu-pane" class="row menu text-center">
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/greenhornd_writeup/">&lt; prev | </a></span>
-  
-  
-  <span><a class="menu-item" href="/blog/blog">blog</a></span>
-  
-  
-  <span><a class="menu-item" href="https://owlinux1000.github.io/blog/blog/powershell_ctf_utw/"> | next &gt;</a></span>
-  
-  
-  <h4 class="text-center"><a class="menu-item" href="https://owlinux1000.github.io/blog/">home</a></h4>
-</section>
-
-
-
-<footer class="row text-center footer">
-  <hr />
-  
-  <h6 class="text-center copyright">© 2019. Chihiro Hasegawa. <a href="https://creativecommons.org/licenses/by/3.0/">Some Rights Reserved</a>.</h6>
-  
-  <h6 class="text-center powered">Powered by <a href="https://gohugo.io/">Hugo  v0.73.0</a> &amp; <a href="https://github.com/shenoybr/hugo-goa">Goa</a>.</h6>
-  
-      
-      <h6><a href="" aria-label="RSS Feed"><i class="fas fa-rss" aria-hidden="true"></i></a></h6>
-    
-  
-</footer>
-
 </div>
 
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   
+<footer class='entry-footer'>
+  <div class='container sep-before'><div class='categories'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M22,19a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V5A2,2,0,0,1,4,3H9l2,3h9a2,2,0,0,1,2,2Z" />
+</svg>
+<span class='screen-reader-text'>Categories: </span><a class='category' href='/blog/categories/certification/'>certification</a></div>
+<div class='tags'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><path d="M20.59,13.41l-7.17,7.17a2,2,0,0,1-2.83,0L2,12V2H12l8.59,8.59A2,2,0,0,1,20.59,13.41Z" />
+<line x1="7" y1="7" x2="7" y2="7" />
+</svg>
+<span class='screen-reader-text'>Tags: </span><a class='tag' href='/blog/tags/giac/'>GIAC</a></div>
 
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
-</script>
+  </div>
+</footer>
+
+
+</article>
+
+<nav class='entry-nav'>
+  <div class='container'><div class='prev-entry sep-before'>
+      <a href='/blog/blog/greenhornd_writeup/'>
+        <span aria-hidden='true'><svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="20" y1="12" x2="4" y2="12" />
+<polyline points="10 18 4 12 10 6" />
+</svg>
+ Previous</span>
+        <span class='screen-reader-text'>Previous post: </span>CSAW CTF 2014 Greenhornd writeup</a>
+    </div><div class='next-entry sep-before'>
+      <a href='/blog/blog/powershell_ctf_utw/'>
+        <span class='screen-reader-text'>Next post: </span>Powershell学習サイトUnder The Wireの問題を解く<span aria-hidden='true'>Next <svg
+  class="icon"
+  xmlns="http://www.w3.org/2000/svg"
+  viewbox="0 0 24 24"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  aria-hidden="true"
+><line x1="4" y1="12" x2="20" y2="12" />
+<polyline points="14 6 20 12 14 18" />
+</svg>
+</span>
+      </a>
+    </div></div>
+</nav>
 
 
 
 
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-154126244-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
+      </main>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="js/main.js"></script>
-<script src="js/custom.js"></script>
+      <footer id='footer' class='footer'>
+        <div class='container sep-before'><div class='copyright'>
+  <p></p>
+</div>
+
+        </div>
+      </footer>
+
+    </div>
+  </div><script>window.__assets_js_src="/blog/assets/js/"</script>
+
+<script src='/blog/assets/js/main.c3bcf2df.js'></script>
+
 </body>
-</html>
 
+</html>
 
